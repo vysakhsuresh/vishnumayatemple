@@ -9,95 +9,114 @@
 <style>
 body {
     margin:0;
-    font-family: 'Segoe UI', sans-serif;
-    background:#0d0d0d;
+    font-family: 'Georgia', serif;
     color:white;
 }
 
-/* TOP BAR */
-.topbar {
-    position:absolute;
-    top:15px;
-    right:20px;
-    z-index:10;
-}
-
-.topbar button {
-    background:rgba(0,0,0,0.7);
-    border:1px solid #ff9933;
-    color:#ff9933;
-    margin-left:10px;
-    padding:6px 12px;
-    cursor:pointer;
-    border-radius:6px;
-    font-weight:bold;
-}
-
-.topbar button:hover {
-    background:#ff9933;
-    color:black;
-}
-
-/* HERO */
+/* HERO BACKGROUND */
 .hero {
     height:100vh;
     display:flex;
     flex-direction:column;
     align-items:center;
-    justify-content:center;
+    justify-content:flex-start;
     text-align:center;
     position:relative;
     background:url('assets/vishnumaya.jpg') no-repeat center center;
     background-size:cover;
 }
 
+/* OVERLAY */
 .overlay {
     position:absolute;
     top:0;
     left:0;
     width:100%;
     height:100%;
-    background:rgba(0,0,0,0.75);
+    background:rgba(0,0,0,0.55);
 }
 
+/* TOP STRIP */
+.top-strip {
+    position:relative;
+    z-index:2;
+    width:100%;
+    padding-top:20px;
+}
+
+/* OM SYMBOL */
+.om {
+    font-size:42px;
+    color:#ffd700;
+}
+
+/* GOLD LINE */
+.line {
+    width:60%;
+    height:2px;
+    background:linear-gradient(to right, transparent, gold, transparent);
+    margin:10px auto 20px auto;
+}
+
+/* LANGUAGE BOX */
+.topbar {
+    position:absolute;
+    top:20px;
+    right:30px;
+    z-index:3;
+    border:1px solid #ff9933;
+    padding:6px 12px;
+    border-radius:10px;
+    background:rgba(0,0,0,0.6);
+}
+
+.topbar button {
+    background:none;
+    border:none;
+    color:#ffcc66;
+    margin:0 6px;
+    cursor:pointer;
+    font-weight:bold;
+}
+
+/* CONTENT */
 .content {
     position:relative;
     z-index:2;
-}
-
-/* IMAGE */
-.hero img {
-    width:300px;
-    border-radius:20px;
-    box-shadow:0 0 40px gold;
-}
-
-/* TEXT */
-h1 {
-    font-size:48px;
     margin-top:20px;
 }
 
+/* TITLE */
+h1 {
+    font-size:72px;
+    color:#ffd700;
+    text-shadow:0 0 20px rgba(255,215,0,0.8);
+    margin:10px 0;
+}
+
+/* TAGLINE */
 .tagline {
-    font-size:22px;
-    color:#ffcc66;
+    font-size:24px;
+    color:#ffe6a3;
     margin-top:10px;
 }
 
 /* BUTTON */
 .btn {
-    margin-top:25px;
-    padding:12px 25px;
-    background:#ff9933;
+    margin-top:40px;
+    padding:16px 40px;
+    background:linear-gradient(#8b5a2b,#c68c53);
     border:none;
-    color:black;
+    color:#fff;
     font-weight:bold;
+    font-size:18px;
     cursor:pointer;
-    border-radius:8px;
+    border-radius:10px;
+    box-shadow:0 0 20px rgba(255,180,80,0.6);
 }
 
 .btn:hover {
-    background:#ffaa44;
+    background:linear-gradient(#a86b2d,#e0a96d);
 }
 </style>
 
@@ -105,19 +124,26 @@ h1 {
 
 <body>
 
-<div class="topbar">
-    <button onclick="setLang('ml')">മലയാളം</button>
-    <button onclick="setLang('hi')">हिंदी</button>
-    <button onclick="setLang('ta')">தமிழ்</button>
-    <button onclick="setLang('en')">English</button>
-</div>
-
 <div class="hero">
 
 <div class="overlay"></div>
 
-<div class="content">
+<!-- TOP DESIGN -->
+<div class="top-strip">
+    <div class="om">ॐ</div>
+    <div class="line"></div>
+</div>
 
+<!-- LANGUAGE -->
+<div class="topbar">
+    <button onclick="setLang('ml')">മലയാളം</button> |
+    <button onclick="setLang('hi')">हिंदी</button> |
+    <button onclick="setLang('ta')">தமிழ்</button> |
+    <button onclick="setLang('en')">English</button>
+</div>
+
+<!-- CONTENT -->
+<div class="content">
 
     <h1 id="title">VISHNUMAYA</h1>
 
@@ -162,7 +188,6 @@ function setLang(lang) {
         tagline.innerHTML = "அவரை வெறும் வழிபடுவதில்லை…<br>அனுபவிக்கப்படுகிறார்";
         btn.innerText = "தெய்வீக உலகிற்குள் செல்லுங்கள்";
     }
-
 }
 </script>
 

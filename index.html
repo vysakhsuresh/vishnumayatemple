@@ -137,21 +137,31 @@ h1 {
 function setLang(lang) {
 
     const tagline = document.getElementById("tagline");
+    const title = document.getElementById("title");
+    const btn = document.getElementById("enterBtn");
 
     if(lang === "en") {
+        title.innerText = "VISHNUMAYA";
         tagline.innerHTML = "He is not just worshipped…<br>He is experienced";
+        btn.innerText = "Enter the Divine Space";
     }
 
     if(lang === "ml") {
+        title.innerText = "വിഷ്ണുമായ";
         tagline.innerHTML = "അവനെ പൂജിക്കുന്നതല്ല…<br>അനുഭവിക്കുന്നതാണ്";
+        btn.innerText = "ദിവ്യലോകത്തിലേക്ക് പ്രവേശിക്കുക";
     }
 
     if(lang === "hi") {
+        title.innerText = "विष्णुमाया";
         tagline.innerHTML = "इनकी पूजा मात्र नहीं की जाती…<br>इन्हें अनुभव किया जाता है";
+        btn.innerText = "दिव्य लोक में प्रवेश करें";
     }
 
     if(lang === "ta") {
+        title.innerText = "விஷ்ணுமாயா";
         tagline.innerHTML = "அவரை வெறும் வழிபடுவதில்லை…<br>அனுபவிக்கப்படுகிறார்";
+        btn.innerText = "தெய்வீக உலகிற்குள் செல்லுங்கள்";
     }
 
 }

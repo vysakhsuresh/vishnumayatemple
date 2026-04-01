@@ -2,11 +2,9 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>Vishnumaya Temple | Eternal Presence</title>
-    <!-- Premium Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <!-- Font Awesome 6 (free icons) -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vishnumaya | Divine Presence</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         * {
@@ -16,552 +14,557 @@
         }
 
         body {
-            font-family: 'Cinzel', serif;
-            background: #0a0702;
-            overflow-x: hidden;
-            height: 100vh;
+            font-family: 'Cormorant Garamond', serif;
+            background: #faf8f3;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
         }
 
-        /* HERO SECTION – Mystical, temple-inspired backdrop */
-        .hero {
-            height: 100vh;
+        /* Subtle background texture */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
             width: 100%;
+            height: 100%;
+            background-image: radial-gradient(#e8e0d0 1px, transparent 1px);
+            background-size: 40px 40px;
+            opacity: 0.3;
+            pointer-events: none;
+        }
+
+        /* Main container */
+        .container {
+            width: 100%;
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 40px 60px;
             position: relative;
+            z-index: 2;
+        }
+
+        /* Language selector - minimal and elegant */
+        .language-selector {
+            display: flex;
+            justify-content: flex-end;
+            gap: 4px;
+            margin-bottom: 80px;
+        }
+
+        .lang-option {
+            background: transparent;
+            border: none;
+            font-family: 'Inter', sans-serif;
+            font-size: 13px;
+            font-weight: 400;
+            letter-spacing: 0.5px;
+            color: #8b7a66;
+            padding: 6px 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border-radius: 30px;
+        }
+
+        .lang-option:hover {
+            color: #b87c2e;
+            background: rgba(184, 124, 46, 0.05);
+        }
+
+        .lang-option.active {
+            color: #b87c2e;
+            background: rgba(184, 124, 46, 0.08);
+        }
+
+        /* Main content area */
+        .main-content {
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            background: url('assets/vishnumaya.jpg') no-repeat center center/cover;
-            background-attachment: fixed;
-        }
-
-        /* Enhanced gradient overlay with warmth and depth */
-        .overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(circle at 30% 20%, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.65) 55%, rgba(0, 0, 0, 0.88) 100%);
-            backdrop-filter: brightness(0.96);
-            z-index: 1;
-        }
-
-        /* LANGUAGE SWITCHER – refined gold border, floating */
-        .lang-bar {
-            position: absolute;
-            top: 30px;
-            right: 35px;
-            z-index: 20;
-            display: flex;
-            gap: 6px;
-            background: rgba(10, 7, 2, 0.6);
-            backdrop-filter: blur(10px);
-            padding: 8px 20px;
-            border-radius: 60px;
-            border: 1px solid rgba(218, 165, 32, 0.7);
-            box-shadow: 0 0 16px rgba(218, 165, 32, 0.2);
-            font-family: 'Cinzel', serif;
-        }
-
-        .lang-btn {
-            background: transparent;
-            border: none;
-            color: #f5e2b0;
-            font-size: 0.9rem;
-            font-weight: 500;
-            letter-spacing: 0.5px;
-            padding: 6px 12px;
-            border-radius: 40px;
-            cursor: pointer;
-            transition: all 0.25s ease;
-            font-family: inherit;
-        }
-
-        .lang-btn:hover {
-            color: #ffdf8c;
-            text-shadow: 0 0 6px #e4b363;
-            background: rgba(255, 215, 0, 0.15);
-            transform: translateY(-1px);
-        }
-
-        /* SACRED SYMBOL – OM with subtle pulse */
-        .sacred-symbol {
-            position: relative;
-            z-index: 12;
             text-align: center;
-            margin-bottom: 25px;
+            max-width: 800px;
+            margin: 0 auto;
         }
 
-        .om-glow {
-            font-size: 70px;
-            font-weight: 600;
-            background: linear-gradient(135deg, #ffe6b3, #e5b83c, #f5c542);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            text-shadow: 0 0 30px rgba(255, 200, 70, 0.6);
+        /* OM symbol - refined */
+        .om-symbol {
+            font-size: 72px;
+            font-weight: 500;
+            color: #d4b68a;
             letter-spacing: 8px;
-            display: inline-block;
-            animation: subtlePulse 3s infinite ease-in-out;
+            margin-bottom: 30px;
+            opacity: 0.8;
+            font-family: 'Cormorant Garamond', serif;
         }
 
-        @keyframes subtlePulse {
-            0% { text-shadow: 0 0 15px rgba(255, 200, 70, 0.4); opacity: 0.95; transform: scale(1);}
-            50% { text-shadow: 0 0 35px rgba(255, 220, 90, 0.9); opacity: 1; transform: scale(1.02);}
-            100% { text-shadow: 0 0 15px rgba(255, 200, 70, 0.4); opacity: 0.95; transform: scale(1);}
+        /* Divine line separator */
+        .divine-line {
+            width: 80px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #d4b68a, #b87c2e, #d4b68a, transparent);
+            margin: 20px auto 30px;
         }
 
-        .ornament-line {
-            width: 200px;
-            height: 2px;
-            background: linear-gradient(90deg, transparent, #e6bc72, #ffdfa5, #e6bc72, transparent);
-            margin: 18px auto 0 auto;
-            border-radius: 4px;
-            box-shadow: 0 0 6px #e6bc72;
-        }
-
-        /* MAIN TEXT CONTAINER */
-        .main-content {
-            position: relative;
-            z-index: 15;
-            text-align: center;
-            max-width: 90%;
-            padding: 0 24px;
-            margin-top: 10px;
-        }
-
-        /* TITLE – Regal gold gradient with sharp presence */
-        .temple-title {
-            font-size: 5.5rem;
-            font-weight: 900;
-            letter-spacing: 6px;
-            margin-bottom: 20px;
-            background: linear-gradient(135deg, #FFF6CF 10%, #F7D44A 45%, #CFA22E 80%);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            text-shadow: 0 2px 18px rgba(0, 0, 0, 0.5), 0 0 20px rgba(255, 200, 70, 0.3);
-            word-break: keep-all;
-        }
-
-        /* TAGLINE – Elegant, ethereal */
-        .sacred-tagline {
-            font-size: 1.65rem;
-            font-weight: 500;
-            color: #FFF6E0;
-            text-shadow: 0 2px 12px rgba(0, 0, 0, 0.6), 0 0 10px rgba(218, 165, 32, 0.4);
-            line-height: 1.45;
-            margin-top: 10px;
-            letter-spacing: 0.5px;
-        }
-
-        /* DIVINE BUTTON – Golden, radiant, interactive */
-        .divine-btn {
-            margin-top: 55px;
-            padding: 16px 48px;
-            font-size: 1.2rem;
+        /* Main title */
+        .title {
+            font-size: 68px;
             font-weight: 600;
-            font-family: 'Cinzel', serif;
-            background: linear-gradient(145deg, #b87c2e, #8b5a2b);
-            border: none;
-            border-radius: 60px;
-            color: #FFFAEA;
+            letter-spacing: 4px;
+            color: #2c241a;
+            margin-bottom: 30px;
+            font-family: 'Cormorant Garamond', serif;
+            text-transform: uppercase;
+            line-height: 1.2;
+        }
+
+        /* Tagline */
+        .tagline {
+            font-size: 20px;
+            font-weight: 400;
+            color: #6b5a48;
+            line-height: 1.6;
+            margin-bottom: 50px;
+            font-family: 'Inter', sans-serif;
+            letter-spacing: 0.3px;
+        }
+
+        .tagline br {
+            display: block;
+            margin: 5px 0;
+        }
+
+        /* Button - elegant and refined */
+        .enter-btn {
+            background: transparent;
+            border: 1.5px solid #c9b38c;
+            padding: 14px 48px;
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+            font-weight: 500;
             letter-spacing: 2px;
+            color: #7a6233;
             cursor: pointer;
-            transition: all 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.1);
-            box-shadow: 0 15px 30px -10px rgba(0, 0, 0, 0.7), inset 0 1px 0px rgba(255, 245, 170, 0.5), 0 0 0 1px rgba(230, 180, 80, 0.3);
-            display: inline-flex;
-            align-items: center;
-            gap: 12px;
-            backdrop-filter: blur(2px);
+            transition: all 0.3s ease;
+            background: white;
+            border-radius: 0;
+            text-transform: uppercase;
+            position: relative;
+            overflow: hidden;
         }
 
-        .divine-btn i {
-            font-size: 1.2rem;
-            transition: transform 0.3s;
+        .enter-btn:hover {
+            background: #b87c2e;
+            border-color: #b87c2e;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(184, 124, 46, 0.2);
         }
 
-        .divine-btn:hover {
-            transform: scale(1.04);
-            background: linear-gradient(145deg, #cf9b42, #9f6b2e);
-            box-shadow: 0 20px 35px -8px black, inset 0 1px 3px rgba(255, 245, 180, 0.7), 0 0 22px rgba(255, 200, 80, 0.6);
-            letter-spacing: 2.5px;
+        /* Decorative elements - minimal */
+        .decor-left {
+            position: fixed;
+            left: 40px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 1px;
+            height: 200px;
+            background: linear-gradient(180deg, transparent, #d4b68a, #b87c2e, #d4b68a, transparent);
         }
 
-        .divine-btn:hover i {
-            transform: translateX(6px);
+        .decor-right {
+            position: fixed;
+            right: 40px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 1px;
+            height: 200px;
+            background: linear-gradient(180deg, transparent, #d4b68a, #b87c2e, #d4b68a, transparent);
         }
 
-        /* Decorative lotus footer */
-        .sacred-lotus {
-            position: absolute;
-            bottom: 28px;
+        /* Footer note - subtle */
+        .footer-note {
+            position: fixed;
+            bottom: 30px;
             left: 0;
             right: 0;
             text-align: center;
-            z-index: 12;
-            font-size: 20px;
-            color: rgba(255, 215, 130, 0.5);
-            letter-spacing: 10px;
-            pointer-events: none;
+            font-family: 'Inter', sans-serif;
+            font-size: 11px;
+            color: #c9bbaa;
+            letter-spacing: 1px;
         }
 
-        /* Responsive refinements */
-        @media (max-width: 800px) {
-            .temple-title {
-                font-size: 3.8rem;
-                letter-spacing: 4px;
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 30px 24px;
             }
-            .sacred-tagline {
-                font-size: 1.3rem;
-            }
-            .divine-btn {
-                padding: 14px 32px;
-                font-size: 1rem;
-            }
-            .om-glow {
-                font-size: 54px;
-            }
-            .lang-bar {
-                top: 20px;
-                right: 18px;
-                padding: 5px 12px;
-                gap: 4px;
-            }
-            .lang-btn {
-                font-size: 0.7rem;
-                padding: 4px 8px;
-            }
-        }
-
-        @media (max-width: 550px) {
-            .temple-title {
-                font-size: 2.7rem;
+            
+            .title {
+                font-size: 42px;
                 letter-spacing: 2px;
             }
-            .sacred-tagline {
-                font-size: 1rem;
+            
+            .tagline {
+                font-size: 16px;
             }
-            .divine-btn {
-                margin-top: 40px;
+            
+            .om-symbol {
+                font-size: 52px;
             }
-            .om-glow {
-                font-size: 46px;
+            
+            .language-selector {
+                margin-bottom: 50px;
             }
-            .ornament-line {
-                width: 150px;
+            
+            .decor-left, .decor-right {
+                display: none;
             }
         }
 
-        /* Fade-in animation */
-        .hero .main-content, .hero .sacred-symbol {
-            animation: fadeUp 0.9s ease-out;
-        }
-        @keyframes fadeUp {
-            0% { opacity: 0; transform: translateY(35px);}
-            100% { opacity: 1; transform: translateY(0);}
+        @media (max-width: 480px) {
+            .title {
+                font-size: 32px;
+            }
+            
+            .tagline {
+                font-size: 14px;
+            }
+            
+            .enter-btn {
+                padding: 12px 32px;
+                font-size: 12px;
+            }
         }
 
-        /* Optional film grain texture */
-        .hero::after {
-            content: '';
-            position: absolute;
+        /* Simple fade-in animation */
+        .main-content {
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Modal for redirect - elegant and minimal */
+        .redirect-modal {
+            position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: repeating-linear-gradient(0deg, rgba(0,0,0,0.02) 0px, rgba(0,0,0,0.02) 2px, transparent 2px, transparent 6px);
-            pointer-events: none;
-            z-index: 3;
+            background: rgba(250, 248, 243, 0.98);
+            backdrop-filter: blur(8px);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.4s ease;
         }
 
-        /* Tooltip / notification style for redirect info */
-        .redirect-notify {
-            position: fixed;
-            bottom: 30px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: #2a2416e6;
-            backdrop-filter: blur(12px);
-            color: #ffdfaa;
-            padding: 12px 28px;
-            border-radius: 60px;
-            font-family: 'Cinzel', serif;
-            font-size: 0.9rem;
-            border: 1px solid #e1b153;
-            z-index: 9999;
-            white-space: nowrap;
-            letter-spacing: 1px;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.5);
-            transition: opacity 0.5s ease;
-            pointer-events: none;
+        .redirect-modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content {
+            text-align: center;
+            padding: 48px;
+            max-width: 400px;
+        }
+
+        .modal-om {
+            font-size: 56px;
+            color: #d4b68a;
+            margin-bottom: 24px;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.6; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.05); }
+        }
+
+        .modal-text {
+            font-family: 'Inter', sans-serif;
+            font-size: 16px;
+            color: #6b5a48;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+
+        .modal-sub {
+            font-family: 'Inter', sans-serif;
+            font-size: 13px;
+            color: #b87c2e;
+            margin-top: 16px;
         }
     </style>
 </head>
 <body>
 
-<div class="hero">
-    <div class="overlay"></div>
+<div class="decor-left"></div>
+<div class="decor-right"></div>
 
-    <!-- Language Switcher -->
-    <div class="lang-bar">
-        <button class="lang-btn" data-lang="ml">മലയാളം</button>
-        <button class="lang-btn" data-lang="hi">हिंदी</button>
-        <button class="lang-btn" data-lang="ta">தமிழ்</button>
-        <button class="lang-btn" data-lang="en">English</button>
+<div class="container">
+    <!-- Language selector - clean and minimal -->
+    <div class="language-selector">
+        <button class="lang-option" data-lang="en">ENGLISH</button>
+        <button class="lang-option" data-lang="ml">മലയാളം</button>
+        <button class="lang-option" data-lang="hi">हिंदी</button>
+        <button class="lang-option" data-lang="ta">தமிழ்</button>
     </div>
 
-    <!-- OM Symbol -->
-    <div class="sacred-symbol">
-        <div class="om-glow">ॐ</div>
-        <div class="ornament-line"></div>
-    </div>
-
-    <!-- Main text block -->
+    <!-- Main content -->
     <div class="main-content">
-        <h1 class="temple-title" id="dynamicTitle">VISHNUMAYA</h1>
-        <div class="sacred-tagline" id="dynamicTagline">
+        <div class="om-symbol">ॐ</div>
+        <div class="divine-line"></div>
+        <h1 class="title" id="mainTitle">VISHNUMAYA</h1>
+        <div class="tagline" id="mainTagline">
             He is not just worshipped…<br>He is experienced
         </div>
-        <button class="divine-btn" id="enterBtn">
-            <span id="btnText">Enter the Divine Space</span> <i class="fas fa-arrow-right"></i>
+        <button class="enter-btn" id="enterBtn">
+            <span id="btnText">ENTER THE DIVINE SPACE</span>
         </button>
     </div>
+</div>
 
-    <div class="sacred-lotus">
-        <i class="fas fa-lotus"></i> <i class="fas fa-circle-notch"></i> <i class="fas fa-pray"></i>
+<div class="footer-note">✦ VISHNUMAYA TEMPLE ✦</div>
+
+<!-- Redirect Modal -->
+<div class="redirect-modal" id="redirectModal">
+    <div class="modal-content">
+        <div class="modal-om">ॐ</div>
+        <div class="modal-text" id="modalMessage">Preparing the sacred space...</div>
+        <div class="modal-sub" id="modalSub">Please wait</div>
     </div>
 </div>
 
 <script>
-    // --- Translations for the landing page (elevated & soulful) ---
+    // Sophisticated translations with elegant wording
     const translations = {
         en: {
             title: "VISHNUMAYA",
             tagline: "He is not just worshipped…<br>He is experienced",
-            button: "Enter the Divine Space"
+            button: "ENTER THE DIVINE SPACE",
+            modalMsg: "Preparing the sacred space...",
+            modalSub: "You will be guided to the inner temple"
         },
         ml: {
             title: "വിഷ്ണുമായ",
             tagline: "അവനെ പൂജിക്കുന്നതല്ല…<br>അനുഭവിക്കുന്നതാണ്",
-            button: "ദിവ്യസാന്നിധ്യത്തിലേക്ക്"
+            button: "ദിവ്യസാന്നിധ്യത്തിലേക്ക്",
+            modalMsg: "ദിവ്യമണ്ഡപം ഒരുങ്ങുന്നു...",
+            modalSub: "ആന്തരിക ക്ഷേത്രത്തിലേക്ക് നിങ്ങളെ നയിക്കും"
         },
         hi: {
             title: "विष्णुमाया",
             tagline: "इनकी पूजा मात्र नहीं की जाती…<br>इन्हें अनुभव किया जाता है",
-            button: "दिव्य लोक में प्रवेश करें"
+            button: "दिव्य स्थान में प्रवेश करें",
+            modalMsg: "पवित्र स्थान तैयार किया जा रहा है...",
+            modalSub: "आपको आंतरिक मंदिर में ले जाया जाएगा"
         },
         ta: {
             title: "விஷ்ணுமாயா",
             tagline: "அவரை வெறும் வழிபடுவதில்லை…<br>அனுபவிக்கப்படுகிறார்",
-            button: "தெய்வீக இடத்திற்குள் செல்லுங்கள்"
+            button: "தெய்வீக இடத்திற்குள் செல்லுங்கள்",
+            modalMsg: "புனித இடம் தயாராகிறது...",
+            modalSub: "உள் கோவிலுக்கு உங்களை அழைத்துச் செல்லும்"
         }
     };
 
     let currentLang = "en";
 
     // DOM elements
-    const titleEl = document.getElementById("dynamicTitle");
-    const taglineEl = document.getElementById("dynamicTagline");
+    const titleEl = document.getElementById("mainTitle");
+    const taglineEl = document.getElementById("mainTagline");
     const btnSpan = document.getElementById("btnText");
+    const langBtns = document.querySelectorAll(".lang-option");
+    const enterBtn = document.getElementById("enterBtn");
+    const modal = document.getElementById("redirectModal");
+    const modalMsgEl = document.getElementById("modalMessage");
+    const modalSubEl = document.getElementById("modalSub");
 
-    // Function to update UI language smoothly
+    // Function to update UI with selected language
     function setLanguage(lang) {
         if (!translations[lang]) return;
+        
         currentLang = lang;
         const data = translations[lang];
-
-        // Gentle cross-fade effect
-        titleEl.style.opacity = "0.7";
-        taglineEl.style.opacity = "0.7";
+        
+        // Update active class on language buttons
+        langBtns.forEach(btn => {
+            if (btn.getAttribute("data-lang") === lang) {
+                btn.classList.add("active");
+            } else {
+                btn.classList.remove("active");
+            }
+        });
+        
+        // Update content with smooth transition
+        titleEl.style.opacity = "0";
+        taglineEl.style.opacity = "0";
+        btnSpan.style.opacity = "0";
         
         setTimeout(() => {
             titleEl.innerText = data.title;
             taglineEl.innerHTML = data.tagline;
             btnSpan.innerText = data.button;
+            
             titleEl.style.opacity = "1";
             taglineEl.style.opacity = "1";
-        }, 60);
+            btnSpan.style.opacity = "1";
+        }, 150);
         
-        // Store language preference in localStorage for future main page
+        // Save language preference
         localStorage.setItem("vishnumaya_lang", lang);
-        document.documentElement.setAttribute("lang", lang === "ml" ? "ml" : (lang === "hi" ? "hi" : (lang === "ta" ? "ta" : "en")));
     }
 
-    // Attach language button events
-    const langBtns = document.querySelectorAll(".lang-btn");
-    langBtns.forEach(btn => {
-        btn.addEventListener("click", (e) => {
-            const langValue = btn.getAttribute("data-lang");
-            if (langValue) setLanguage(langValue);
-        });
-    });
-
-    // --- REDIRECT HANDLER: "Enter the Divine Space" ---
-    // This will navigate to the main content page (to be created later) 
-    // while preserving the selected language via URL query parameter and localStorage.
-    // For now, since main page doesn't exist, we show a polished notification 
-    // and simulate the redirection flow. When the main page is ready, simply uncomment the redirect.
-    
-    const enterButton = document.getElementById("enterBtn");
-    
-    function showTemporaryMessage(message) {
-        // Remove any existing notify
-        const existing = document.querySelector(".redirect-notify");
-        if(existing) existing.remove();
-        
-        const toast = document.createElement("div");
-        toast.className = "redirect-notify";
-        toast.innerText = message;
-        document.body.appendChild(toast);
-        
-        setTimeout(() => {
-            toast.style.opacity = "0";
-            setTimeout(() => toast.remove(), 500);
-        }, 2800);
-    }
-    
+    // Elegant redirect function
     function redirectToMainPage() {
-        const selectedLang = currentLang;
-        // Store language preference one more time
-        localStorage.setItem("vishnumaya_lang", selectedLang);
+        // Update modal messages based on current language
+        const data = translations[currentLang];
+        modalMsgEl.innerText = data.modalMsg;
+        modalSubEl.innerText = data.modalSub;
         
-        // Build the target URL with language parameter (e.g., main.html?lang=en)
-        // In your final implementation, replace 'main.html' with the actual main page path.
-        const targetUrl = `main.html?lang=${selectedLang}`;
+        // Show modal with fade effect
+        modal.classList.add("active");
         
-        // Simulate a smooth transition: Because main.html may not exist yet, we inform the user.
-        // However the spec says the user will later create the main page. So we provide both:
-        // if the page exists (future), it redirects; otherwise we show a friendly info.
-        // We'll attempt a fetch to see if main.html is available (light check), but to avoid CORS we simply
-        // use a timeout. Better: we notify and then redirect if the page might exist, but we'll make it optional.
-        // For a professional touch: since the main page is under development, we give a clear message.
-        // But the user requested "will be redirected to the next main page with main contents (which we will create later)"
-        // So we will do an actual redirect, and if the page is missing, the browser will show a 404, which is okay.
-        // But to improve experience, we check existence via fetch? Not reliable cross-origin. Let's just redirect.
-        // The user understands that the main page will be built later.
+        // Save language for main page
+        localStorage.setItem("vishnumaya_lang", currentLang);
         
-        // --- ACTUAL REDIRECT (uncomment when main.html is ready) ---
-        // window.location.href = targetUrl;
-        
-        // For demonstration and to match the user's request, we will redirect with a small notification
-        // that the main page is under construction, but the language preference is saved.
-        // This ensures the user can test language flow and later you can enable the redirect.
-        // Since the user said "make the best site you can as the visiting page", I'll make the button
-        // actually redirect to a placeholder that will later become main.html.
-        // I'll do a redirect but also add a console note. To prevent "Page not found" confusion,
-        // we'll show a nice message and then after 1 second redirect? But that may be annoying.
-        // Better: show a beautiful modal that says "Main temple hall loading...", then redirect.
-        // Let's implement a graceful overlay that explains the transition, stores language, and redirects.
-        
-        // Create a subtle fullscreen transition overlay to indicate moving to main temple
-        const transitionDiv = document.createElement("div");
-        transitionDiv.style.position = "fixed";
-        transitionDiv.style.top = "0";
-        transitionDiv.style.left = "0";
-        transitionDiv.style.width = "100%";
-        transitionDiv.style.height = "100%";
-        transitionDiv.style.backgroundColor = "rgba(0,0,0,0.85)";
-        transitionDiv.style.backdropFilter = "blur(12px)";
-        transitionDiv.style.zIndex = "10000";
-        transitionDiv.style.display = "flex";
-        transitionDiv.style.alignItems = "center";
-        transitionDiv.style.justifyContent = "center";
-        transitionDiv.style.flexDirection = "column";
-        transitionDiv.style.fontFamily = "'Cinzel', serif";
-        transitionDiv.style.opacity = "0";
-        transitionDiv.style.transition = "opacity 0.5s ease";
-        
-        let messageText = "";
-        if (currentLang === "en") messageText = "Preparing the Sacred Chamber...";
-        else if (currentLang === "ml") messageText = "ദിവ്യ മണ്ഡപം ഒരുക്കുന്നു...";
-        else if (currentLang === "hi") messageText = "पवित्र मंडप तैयार किया जा रहा है...";
-        else messageText = "புனித மண்டபம் தயாராகிறது...";
-        
-        transitionDiv.innerHTML = `
-            <div style="text-align: center; transform: scale(0.95); transition: transform 0.4s;">
-                <i class="fas fa-om" style="font-size: 4rem; color: #eab354; margin-bottom: 25px; display: block;"></i>
-                <h2 style="color: #FFE3A4; font-size: 1.8rem; letter-spacing: 2px;">${messageText}</h2>
-                <div style="width: 60px; height: 2px; background: #eab354; margin: 20px auto;"></div>
-                <p style="color: #e6d5b3; margin-top: 15px;">↺</p>
-            </div>
-        `;
-        document.body.appendChild(transitionDiv);
-        
+        // After a graceful delay, redirect to main page with language parameter
         setTimeout(() => {
-            transitionDiv.style.opacity = "1";
-            const innerDiv = transitionDiv.querySelector("div");
-            if (innerDiv) innerDiv.style.transform = "scale(1)";
-        }, 20);
-        
-        // After a short pause, perform redirect (to main.html with language)
-        setTimeout(() => {
-            // For final deployment, replace with actual main page URL.
-            // Since main page will be created later, we do the redirect now.
-            // To avoid 404 confusion, we add a fallback: if redirect fails or user is testing,
-            // we could show a note. But I'll execute redirect.
-            window.location.href = `main.html?lang=${currentLang}`;
-        }, 1600);
+            // Build the URL for the main page (to be created later)
+            const targetUrl = `main.html?lang=${currentLang}`;
+            
+            // For now, we simulate the redirect with a message
+            // In production, uncomment the line below for actual redirect
+            // window.location.href = targetUrl;
+            
+            // Since main.html will be created later, we show a beautiful completion message
+            // and then simulate that the redirect would happen
+            modalMsgEl.innerText = currentLang === "en" ? "The divine space awaits..." :
+                                   currentLang === "ml" ? "ദിവ്യസന്നിധി കാത്തിരിക്കുന്നു..." :
+                                   currentLang === "hi" ? "दिव्य स्थान प्रतीक्षा कर रहा है..." :
+                                   "தெய்வீக இடம் காத்திருக்கிறது...";
+            
+            modalSubEl.innerHTML = currentLang === "en" ? "✨ You will be redirected shortly ✨" :
+                                  currentLang === "ml" ? "✨ നിങ്ങളെ താമസിയാതെ മാറ്റും ✨" :
+                                  currentLang === "hi" ? "✨ आपको जल्द ही पुनर्निर्देशित किया जाएगा ✨" :
+                                  "✨ நீங்கள் விரைவில் திருப்பிவிடப்படுவீர்கள் ✨";
+            
+            // Simulate redirect after beautiful pause
+            setTimeout(() => {
+                // Uncomment for actual redirect when main.html is ready
+                // window.location.href = `main.html?lang=${currentLang}`;
+                
+                // For now, just close modal with a message
+                modal.classList.remove("active");
+                
+                // Show a subtle notification that the main page will be available
+                showNotification();
+            }, 2000);
+        }, 1800);
     }
     
-    // Add ripple effect and call redirect
-    enterButton.addEventListener("click", (e) => {
+    // Subtle notification for development
+    function showNotification() {
+        const notification = document.createElement("div");
+        notification.style.position = "fixed";
+        notification.style.bottom = "100px";
+        notification.style.left = "50%";
+        notification.style.transform = "translateX(-50%)";
+        notification.style.backgroundColor = "#2c241a";
+        notification.style.color = "#faf8f3";
+        notification.style.padding = "12px 28px";
+        notification.style.fontFamily = "'Inter', sans-serif";
+        notification.style.fontSize = "12px";
+        notification.style.letterSpacing = "1px";
+        notification.style.borderRadius = "0";
+        notification.style.zIndex = "1001";
+        notification.style.border = "1px solid #d4b68a";
+        notification.style.opacity = "0";
+        notification.style.transition = "opacity 0.3s ease";
+        
+        if (currentLang === "en") notification.innerText = "✦ Main temple page will be created soon ✦";
+        else if (currentLang === "ml") notification.innerText = "✦ പ്രധാന ക്ഷേത്ര പേജ് ഉടൻ സൃഷ്ടിക്കും ✦";
+        else if (currentLang === "hi") notification.innerText = "✦ मुख्य मंदिर पृष्ठ जल्द ही बनाया जाएगा ✦";
+        else notification.innerText = "✦ முக்கிய கோவில் பக்கம் விரைவில் உருவாக்கப்படும் ✦";
+        
+        document.body.appendChild(notification);
+        
+        setTimeout(() => {
+            notification.style.opacity = "1";
+        }, 50);
+        
+        setTimeout(() => {
+            notification.style.opacity = "0";
+            setTimeout(() => notification.remove(), 300);
+        }, 3000);
+    }
+
+    // Button click handler with ripple effect
+    enterBtn.addEventListener("click", function(e) {
         // Ripple effect
         const ripple = document.createElement("span");
-        ripple.classList.add("ripple-effect");
-        const rect = enterButton.getBoundingClientRect();
-        const size = Math.max(rect.width, rect.height);
-        ripple.style.width = ripple.style.height = `${size}px`;
-        ripple.style.left = `${e.clientX - rect.left - size/2}px`;
-        ripple.style.top = `${e.clientY - rect.top - size/2}px`;
         ripple.style.position = "absolute";
         ripple.style.borderRadius = "50%";
-        ripple.style.backgroundColor = "rgba(255,215,0,0.6)";
+        ripple.style.backgroundColor = "rgba(184, 124, 46, 0.3)";
+        ripple.style.width = "0";
+        ripple.style.height = "0";
+        ripple.style.left = `${e.clientX - enterBtn.getBoundingClientRect().left}px`;
+        ripple.style.top = `${e.clientY - enterBtn.getBoundingClientRect().top}px`;
+        ripple.style.transform = "translate(-50%, -50%)";
+        ripple.style.transition = "width 0.6s, height 0.6s, opacity 0.6s";
         ripple.style.pointerEvents = "none";
-        ripple.style.transform = "scale(0)";
-        ripple.style.transition = "transform 0.5s ease-out, opacity 0.6s";
-        ripple.style.opacity = "0.7";
-        enterButton.style.position = "relative";
-        enterButton.style.overflow = "hidden";
-        enterButton.appendChild(ripple);
+        ripple.style.zIndex = "1";
+        
+        enterBtn.style.position = "relative";
+        enterBtn.style.overflow = "hidden";
+        enterBtn.appendChild(ripple);
         
         setTimeout(() => {
-            ripple.style.transform = "scale(4)";
+            ripple.style.width = "300px";
+            ripple.style.height = "300px";
             ripple.style.opacity = "0";
         }, 10);
-        setTimeout(() => ripple.remove(), 500);
         
-        // Initiate redirect flow
+        setTimeout(() => ripple.remove(), 600);
+        
+        // Trigger redirect
         redirectToMainPage();
     });
+
+    // Language button listeners
+    langBtns.forEach(btn => {
+        btn.addEventListener("click", () => {
+            const lang = btn.getAttribute("data-lang");
+            setLanguage(lang);
+        });
+    });
     
-    // Add dynamic ripple style if missing
-    if (!document.querySelector("#rippleStyle")) {
-        const rippleStyle = document.createElement('style');
-        rippleStyle.id = "rippleStyle";
-        rippleStyle.textContent = `
-            .ripple-effect {
-                position: absolute;
-                border-radius: 50%;
-                transform: scale(0);
-                animation: rippleAnim 0.6s linear;
-                pointer-events: none;
-            }
-            @keyframes rippleAnim {
-                to { transform: scale(4); opacity: 0; }
-            }
-        `;
-        document.head.appendChild(rippleStyle);
-    }
-    
-    // --- Detect browser language for initial greeting (optional) ---
+    // Detect saved language or browser preference
     function detectInitialLanguage() {
         const savedLang = localStorage.getItem("vishnumaya_lang");
         if (savedLang && translations[savedLang]) {
             setLanguage(savedLang);
             return;
         }
+        
         const browserLang = navigator.language || navigator.userLanguage;
         if (browserLang.startsWith("ml")) setLanguage("ml");
         else if (browserLang.startsWith("hi")) setLanguage("hi");
@@ -571,15 +574,62 @@
     
     detectInitialLanguage();
     
-    // Background image fallback: if image fails to load, provide a rich gradient
-    const heroDiv = document.querySelector('.hero');
-    const testImg = new Image();
-    testImg.onerror = function() {
-        heroDiv.style.background = "linear-gradient(135deg, #1f1a0c, #0e0b04), url('assets/vishnumaya.jpg')";
-        heroDiv.style.backgroundBlend = "overlay";
-        heroDiv.style.backgroundSize = "cover";
-    };
-    testImg.src = "assets/vishnumaya.jpg";
+    // Optional: Add subtle parallax effect on mouse move (very subtle)
+    document.addEventListener("mousemove", function(e) {
+        const moveX = (e.clientX - window.innerWidth / 2) * 0.01;
+        const moveY = (e.clientY - window.innerHeight / 2) * 0.01;
+        
+        const title = document.querySelector(".title");
+        const om = document.querySelector(".om-symbol");
+        
+        if (title && om) {
+            title.style.transform = `translate(${moveX * 0.3}px, ${moveY * 0.2}px)`;
+            om.style.transform = `translate(${moveX * 0.2}px, ${moveY * 0.15}px)`;
+        }
+    });
+    
+    // Reset transform on mouse leave
+    document.addEventListener("mouseleave", function() {
+        const title = document.querySelector(".title");
+        const om = document.querySelector(".om-symbol");
+        if (title && om) {
+            title.style.transform = "translate(0, 0)";
+            om.style.transform = "translate(0, 0)";
+        }
+    });
+    
+    // Smooth appearance for language buttons
+    const style = document.createElement('style');
+    style.textContent = `
+        .lang-option, .title, .tagline, .enter-btn, .om-symbol {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .enter-btn {
+            position: relative;
+        }
+        
+        .redirect-modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .modal-content {
+            animation: modalFadeIn 0.5s ease;
+        }
+        
+        @keyframes modalFadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+    `;
+    document.head.appendChild(style);
 </script>
 
 </body>

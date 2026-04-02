@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 <title>Vishnumaya Temple — Divine Presence</title>
-<!-- PREMIUM FONTS: Cinzel for elegance -->
+<!-- PREMIUM FONTS: Cinzel for elegance, matching tagline and main text harmony -->
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <!-- Font Awesome 6 -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
@@ -21,7 +21,7 @@
     overflow-x: hidden;
   }
 
-  /* HERO SECTION – full screen with majestic deity image clearly visible */
+  /* HERO SECTION – full screen with deity image fully visible, text on top */
   .hero {
     min-height: 100vh;
     width: 100%;
@@ -29,25 +29,25 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: flex-start;  /* content shifts to top, revealing the deity */
+    justify-content: space-between;  /* pushes button down naturally */
     background: url('assets/vishnumaya.jpg') no-repeat center center/cover;
     background-attachment: fixed;
-    background-position: center 30%; /* focus on deity face / upper body */
+    background-position: center 35%; /* focus on Lord's face clearly, no cropping of divine presence */
   }
 
-  /* Lighter, more transparent overlay so the Lord is clearly visible */
+  /* Gentle overlay so the deity remains visible and text readable */
   .overlay {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background: radial-gradient(circle at 30% 20%, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.45) 60%, rgba(0,0,0,0.7) 100%);
-    backdrop-filter: brightness(0.92);
+    background: radial-gradient(circle at 30% 25%, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.4) 55%, rgba(0,0,0,0.65) 100%);
+    backdrop-filter: brightness(0.94);
     z-index: 1;
   }
 
-  /* TOP BAR — refined gold border */
+  /* TOP BAR — refined gold border, stays accessible */
   .lang-bar {
     position: absolute;
     top: 28px;
@@ -85,26 +85,27 @@
     transform: translateY(-1px);
   }
 
-  /* MAIN CONTENT WRAPPER - positioned at top, compact and elegant */
+  /* MAIN CONTENT WRAPPER - aligned at top, compact, unified font styling */
   .top-content {
     position: relative;
     z-index: 15;
     width: 100%;
     text-align: center;
-    padding-top: 8vh;      /* space from top, not covering the deity face */
+    padding-top: 10vh;      /* breathing space from top, Lord's face fully visible below */
     padding-left: 24px;
     padding-right: 24px;
   }
 
-  /* SACRED SYMBOL (OM) - refined, small, sits above title */
+  /* SACRED SYMBOL (OM) - consistent font family and weight, matches tagline style */
   .sacred-symbol {
     text-align: center;
     margin-bottom: 8px;
   }
 
   .om-glow {
-    font-size: 36px;       /* elegant, not overpowering */
-    font-weight: 600;
+    font-size: 38px;
+    font-weight: 500;       /* same weight as tagline for harmony */
+    font-family: 'Cinzel', serif;
     background: linear-gradient(135deg, #ffe6b3, #e5b83c, #f5c542);
     -webkit-background-clip: text;
     background-clip: text;
@@ -131,12 +132,13 @@
     box-shadow: 0 0 4px #e6bc72;
   }
 
-  /* TITLE — VISHNUMAYA: clean, prominent but not massive, matching 2.png style */
+  /* TITLE — VISHNUMAYA: same font family, elegant weight but not oversized, blending with tagline style */
   .temple-title {
-    font-size: 3.4rem;
-    font-weight: 800;
-    letter-spacing: 5px;
-    margin-top: 4px;
+    font-size: 3.2rem;
+    font-weight: 600;       /* refined, consistent with sacred tagline weight */
+    font-family: 'Cinzel', serif;
+    letter-spacing: 4px;
+    margin-top: 6px;
     margin-bottom: 12px;
     background: linear-gradient(135deg, #FFF6CF 10%, #F7D44A 45%, #CFA22E 80%);
     -webkit-background-clip: text;
@@ -147,10 +149,11 @@
     line-height: 1.2;
   }
 
-  /* TAGLINE - elegant, readable */
+  /* TAGLINE - exactly the same font styling as reference, clean and divine */
   .sacred-tagline {
     font-size: 1.2rem;
     font-weight: 500;
+    font-family: 'Cinzel', serif;
     color: #FFF0CF;
     text-shadow: 0 1px 6px rgba(0,0,0,0.5);
     line-height: 1.4;
@@ -159,11 +162,20 @@
     backdrop-filter: blur(2px);
   }
 
-  /* BUTTON – subtle, royal, not intrusive */
+  /* BUTTON – moved down naturally with flex spacing, elegant and not intrusive */
+  .button-wrapper {
+    position: relative;
+    z-index: 15;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    padding-bottom: 8vh;    /* gives space at bottom, button sits lower but visible */
+    margin-top: auto;       /* flex pushes button down */
+  }
+
   .divine-btn {
-    margin-top: 28px;
-    padding: 10px 32px;
-    font-size: 0.95rem;
+    padding: 12px 36px;
+    font-size: 1rem;
     font-weight: 600;
     font-family: 'Cinzel', serif;
     background: linear-gradient(145deg, #b87c2e, #8b5a2b);
@@ -176,11 +188,11 @@
     box-shadow: 0 8px 20px -6px rgba(0,0,0,0.6), inset 0 1px 0px rgba(255,245,170,0.4);
     display: inline-flex;
     align-items: center;
-    gap: 8px;
+    gap: 10px;
   }
 
   .divine-btn i {
-    font-size: 0.85rem;
+    font-size: 0.9rem;
     transition: transform 0.3s;
   }
 
@@ -195,24 +207,24 @@
     transform: translateX(4px);
   }
 
-  /* Lotus decorative element - bottom subtle */
+  /* Lotus decorative element - subtle bottom accent */
   .sacred-lotus {
     position: absolute;
-    bottom: 25px;
+    bottom: 20px;
     left: 0;
     right: 0;
     text-align: center;
     z-index: 12;
     font-size: 18px;
-    color: rgba(255,215,130,0.5);
+    color: rgba(255,215,130,0.45);
     letter-spacing: 10px;
     pointer-events: none;
   }
 
-  /* Responsive: maintain top layout and readability */
+  /* Responsive: keep text elegant, Lord's face always visible */
   @media (max-width: 800px) {
     .top-content {
-      padding-top: 6vh;
+      padding-top: 8vh;
     }
     .temple-title {
       font-size: 2.6rem;
@@ -222,12 +234,11 @@
       font-size: 1rem;
     }
     .divine-btn {
-      padding: 8px 24px;
-      font-size: 0.85rem;
-      margin-top: 24px;
+      padding: 10px 28px;
+      font-size: 0.9rem;
     }
     .om-glow {
-      font-size: 30px;
+      font-size: 32px;
     }
     .lang-bar {
       top: 18px;
@@ -241,11 +252,14 @@
     .ornament-line {
       width: 80px;
     }
+    .button-wrapper {
+      padding-bottom: 6vh;
+    }
   }
 
   @media (max-width: 550px) {
     .top-content {
-      padding-top: 5vh;
+      padding-top: 6vh;
     }
     .temple-title {
       font-size: 2rem;
@@ -255,12 +269,12 @@
       font-size: 0.85rem;
     }
     .divine-btn {
-      padding: 7px 18px;
-      font-size: 0.75rem;
-      gap: 5px;
+      padding: 8px 22px;
+      font-size: 0.8rem;
+      gap: 6px;
     }
     .om-glow {
-      font-size: 26px;
+      font-size: 28px;
     }
     .ornament-line {
       width: 65px;
@@ -268,20 +282,23 @@
     .sacred-lotus {
       font-size: 14px;
       letter-spacing: 6px;
-      bottom: 18px;
+      bottom: 15px;
+    }
+    .button-wrapper {
+      padding-bottom: 5vh;
     }
   }
 
   /* fade-in for content */
-  .top-content {
-    animation: fadeDown 0.8s ease-out;
+  .top-content, .button-wrapper {
+    animation: gentleFade 0.9s ease-out;
   }
-  @keyframes fadeDown {
-    0% { opacity: 0; transform: translateY(-20px);}
+  @keyframes gentleFade {
+    0% { opacity: 0; transform: translateY(-12px);}
     100% { opacity: 1; transform: translateY(0);}
   }
 
-  /* Optional grain texture overlay */
+  /* Optional grain texture for atmosphere */
   .hero::after {
     content: '';
     position: absolute;
@@ -292,6 +309,16 @@
     background: repeating-linear-gradient(0deg, rgba(0,0,0,0.015) 0px, rgba(0,0,0,0.015) 2px, transparent 2px, transparent 6px);
     pointer-events: none;
     z-index: 3;
+  }
+
+  /* ensure lord's face is not hidden: background-position adjusted and no extra covering */
+  .hero {
+    background-position: center 32%;
+  }
+  @media (max-width: 768px) {
+    .hero {
+      background-position: center 30%;
+    }
   }
 </style>
 </head>
@@ -308,7 +335,7 @@
     <button class="lang-btn" data-lang="en">English</button>
   </div>
 
-  <!-- TOP ALIGNED CONTENT: OM, title, tagline, button — compact, professional, does not hide deity -->
+  <!-- TOP ALIGNED CONTENT: OM, title, tagline — unified font styling, positioned at top, leaving lord fully visible -->
   <div class="top-content">
     <div class="sacred-symbol">
       <div class="om-glow">ॐ</div>
@@ -318,6 +345,10 @@
     <div class="sacred-tagline" id="dynamicTagline">
       He is not just worshipped…<br>He is experienced
     </div>
+  </div>
+
+  <!-- BUTTON placed down naturally using flex spacing, not overlapping the deity face -->
+  <div class="button-wrapper">
     <button class="divine-btn" id="enterBtn">
       <span id="btnText">Enter the Divine Space</span> <i class="fas fa-arrow-right"></i>
     </button>
@@ -329,7 +360,7 @@
 </div>
 
 <script>
-  // Translations dictionary
+  // Translations with same stylistic harmony
   const translations = {
     en: {
       title: "VISHNUMAYA",
@@ -364,7 +395,7 @@
     currentLang = lang;
     const data = translations[lang];
     
-    // gentle transition
+    // subtle crossfade for smoothness
     titleEl.style.opacity = "0.6";
     taglineEl.style.opacity = "0.6";
     
@@ -388,7 +419,7 @@
     });
   });
 
-  // Immersive Portal Modal (experience stays elegant)
+  // Portal Modal Experience (divine and immersive)
   function createPortalModal() {
     if (document.getElementById("divinePortalModal")) return;
     
@@ -421,7 +452,6 @@
     modalCard.style.transform = "scale(0.96)";
     modalCard.style.transition = "transform 0.35s cubic-bezier(0.2, 0.9, 0.4, 1.2)";
     
-    const langData = translations[currentLang] || translations.en;
     let modalTitle = "", modalMsg = "", closeBtnText = "";
     
     if (currentLang === "en") {
@@ -443,9 +473,9 @@
     }
     
     modalCard.innerHTML = `
-      <i class="fas fa-om" style="font-size: 2.6rem; color: #eab354; margin-bottom: 18px; display: block;"></i>
-      <h2 style="color: #FFE3A4; font-size: 1.7rem; margin-bottom: 18px; letter-spacing: 1.5px; font-weight: 600;">${modalTitle}</h2>
-      <p style="color: #efe0bc; line-height: 1.55; font-size: 0.98rem; margin-bottom: 32px;">${modalMsg}</p>
+      <i class="fas fa-om" style="font-size: 2.5rem; color: #eab354; margin-bottom: 18px; display: block;"></i>
+      <h2 style="color: #FFE3A4; font-size: 1.6rem; margin-bottom: 18px; letter-spacing: 1.5px; font-weight: 600; font-family: 'Cinzel', serif;">${modalTitle}</h2>
+      <p style="color: #efe0bc; line-height: 1.55; font-size: 0.98rem; margin-bottom: 32px; font-family: 'Cinzel', serif;">${modalMsg}</p>
       <button id="modalEnterDeepBtn" style="background: linear-gradient(145deg,#b87c2e,#7c551f); border:none; padding: 11px 26px; border-radius: 60px; color: #FFFAEA; font-family: 'Cinzel', serif; font-weight: bold; font-size: 0.9rem; cursor: pointer; transition: all 0.2s; letter-spacing: 1.2px; box-shadow: 0 4px 12px black;">${closeBtnText} <i class="fas fa-praying-hands"></i></button>
     `;
     
@@ -507,7 +537,7 @@
   
   const enterBtn = document.getElementById("enterBtn");
   
-  // Ripple effect and open portal
+  // Ripple + open portal, button placed lower but fully functional
   enterBtn.addEventListener("click", (e) => {
     const ripple = document.createElement("span");
     const rect = enterBtn.getBoundingClientRect();
@@ -535,7 +565,7 @@
     createPortalModal();
   });
   
-  // Detect initial language based on browser
+  // detect initial language
   function detectAndSetInitialLanguage() {
     const browserLang = navigator.language || navigator.userLanguage;
     if (browserLang.startsWith("ml")) setLanguage("ml");
@@ -546,7 +576,7 @@
   
   detectAndSetInitialLanguage();
   
-  // add ripple style
+  // ripple style injection
   const rippleStyle = document.createElement('style');
   rippleStyle.textContent = `
     .ripple-effect {
@@ -563,14 +593,14 @@
   `;
   document.head.appendChild(rippleStyle);
   
-  // Graceful fallback if background image fails
+  // Image fallback: ensures lord remains visible even if image fails
   const heroDiv = document.querySelector('.hero');
   const imgTest = new Image();
   imgTest.onerror = function() {
-    heroDiv.style.background = 'linear-gradient(135deg, #221c0e, #0f0b03), url("assets/vishnumaya.jpg")';
+    heroDiv.style.background = 'linear-gradient(135deg, #2a2110, #0f0b03), url("assets/vishnumaya.jpg")';
     heroDiv.style.backgroundBlend = "overlay";
     heroDiv.style.backgroundSize = "cover";
-    heroDiv.style.backgroundPosition = "center 30%";
+    heroDiv.style.backgroundPosition = "center 32%";
   };
   imgTest.src = "assets/vishnumaya.jpg";
 </script>

@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 <title>Vishnumaya Temple — Divine Presence</title>
-<!-- PREMIUM FONTS: Cinzel for elegance + optional subtle fallback -->
+<!-- PREMIUM FONTS: Cinzel for elegance + subtle fallback -->
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <!-- Font Awesome 6 (free icons) for subtle decorative elements -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
@@ -84,38 +84,39 @@
     transform: translateY(-1px);
   }
 
-  /* central OM & divine aura */
+  /* central OM — balanced, refined, no oversized look — similar to 2.png */
   .sacred-symbol {
     position: relative;
     z-index: 12;
     text-align: center;
-    margin-bottom: 20px;
+    margin-bottom: 16px;
   }
 
   .om-glow {
-    font-size: 68px;
+    font-size: 52px;
     font-weight: 600;
     background: linear-gradient(135deg, #ffe6b3, #e5b83c, #f5c542);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
-    text-shadow: 0 0 28px rgba(255, 200, 70, 0.7);
-    letter-spacing: 8px;
+    text-shadow: 0 0 20px rgba(255, 200, 70, 0.5);
+    letter-spacing: 4px;
     display: inline-block;
     animation: subtlePulse 3s infinite ease-in-out;
+    line-height: 1.2;
   }
 
   @keyframes subtlePulse {
-    0% { text-shadow: 0 0 15px rgba(255, 200, 70, 0.4); opacity: 0.95; transform: scale(1);}
-    50% { text-shadow: 0 0 32px rgba(255, 220, 90, 0.9); opacity: 1; transform: scale(1.02);}
-    100% { text-shadow: 0 0 15px rgba(255, 200, 70, 0.4); opacity: 0.95; transform: scale(1);}
+    0% { text-shadow: 0 0 12px rgba(255, 200, 70, 0.3); opacity: 0.95; transform: scale(1);}
+    50% { text-shadow: 0 0 24px rgba(255, 220, 90, 0.7); opacity: 1; transform: scale(1.01);}
+    100% { text-shadow: 0 0 12px rgba(255, 200, 70, 0.3); opacity: 0.95; transform: scale(1);}
   }
 
   .ornament-line {
-    width: 180px;
+    width: 140px;
     height: 2px;
     background: linear-gradient(90deg, transparent, #e6bc72, #ffdfa5, #e6bc72, transparent);
-    margin: 20px auto 0 auto;
+    margin: 12px auto 0 auto;
     border-radius: 4px;
     box-shadow: 0 0 6px #e6bc72;
   }
@@ -126,33 +127,34 @@
     z-index: 15;
     text-align: center;
     max-width: 95%;
-    margin-top: 20px;
+    margin-top: 8px;
     padding: 0 24px;
   }
 
-  /* TITLE — MAJESTIC GOLDEN TEXT WITH DEPTH (2.png style) */
+  /* TITLE — refined, majestic but not oversized, matches 2.png harmony */
   .temple-title {
-    font-size: 5.6rem;
-    font-weight: 900;
-    letter-spacing: 8px;
-    margin-bottom: 20px;
+    font-size: 4.2rem;
+    font-weight: 800;
+    letter-spacing: 6px;
+    margin-bottom: 16px;
     background: linear-gradient(135deg, #FFF6CF 10%, #F7D44A 45%, #CFA22E 80%);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
-    text-shadow: 0 2px 15px rgba(0,0,0,0.4), 0 0 25px rgba(255,200,70,0.3);
+    text-shadow: 0 2px 12px rgba(0,0,0,0.3), 0 0 18px rgba(255,200,70,0.2);
     word-break: keep-all;
+    line-height: 1.2;
   }
 
-  /* tagline with refined spacing and glow */
+  /* tagline with refined spacing — exactly as reference: clean and elegant */
   .sacred-tagline {
-    font-size: 1.6rem;
+    font-size: 1.35rem;
     font-weight: 500;
     color: #FFF0CF;
-    text-shadow: 0 2px 12px rgba(0,0,0,0.5), 0 0 8px rgba(218,165,32,0.5);
-    line-height: 1.4;
-    margin-top: 15px;
-    letter-spacing: 1px;
+    text-shadow: 0 2px 10px rgba(0,0,0,0.5), 0 0 6px rgba(218,165,32,0.4);
+    line-height: 1.5;
+    margin-top: 8px;
+    letter-spacing: 0.5px;
     backdrop-filter: blur(2px);
   }
 
@@ -160,37 +162,37 @@
     display: inline-block;
   }
 
-  /* BUTTON – handcrafted royal look with subtle shimmer */
+  /* BUTTON – handcrafted royal look with subtle shimmer, proportionate */
   .divine-btn {
-    margin-top: 58px;
-    padding: 18px 48px;
-    font-size: 1.2rem;
+    margin-top: 48px;
+    padding: 14px 42px;
+    font-size: 1.1rem;
     font-weight: 600;
     font-family: 'Cinzel', serif;
     background: linear-gradient(145deg, #b87c2e, #8b5a2b);
     border: none;
     border-radius: 60px;
     color: #FFFAEA;
-    letter-spacing: 2px;
+    letter-spacing: 1.8px;
     cursor: pointer;
     transition: all 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.1);
-    box-shadow: 0 15px 30px -10px rgba(0,0,0,0.7), inset 0 1px 0px rgba(255,245,170,0.5), 0 0 0 1px rgba(230,180,80,0.3);
+    box-shadow: 0 12px 28px -8px rgba(0,0,0,0.7), inset 0 1px 0px rgba(255,245,170,0.5), 0 0 0 1px rgba(230,180,80,0.3);
     backdrop-filter: blur(2px);
     display: inline-flex;
     align-items: center;
-    gap: 12px;
+    gap: 10px;
   }
 
   .divine-btn i {
-    font-size: 1.2rem;
+    font-size: 1rem;
     transition: transform 0.3s;
   }
 
   .divine-btn:hover {
-    transform: scale(1.04);
+    transform: scale(1.02);
     background: linear-gradient(145deg, #cf9b42, #9f6b2e);
-    box-shadow: 0 20px 35px -8px black, inset 0 1px 3px rgba(255,245,180,0.7), 0 0 20px rgba(255,200,80,0.6);
-    letter-spacing: 2.5px;
+    box-shadow: 0 18px 32px -8px black, inset 0 1px 3px rgba(255,245,180,0.7), 0 0 18px rgba(255,200,80,0.5);
+    letter-spacing: 2px;
   }
 
   .divine-btn:hover i {
@@ -205,27 +207,28 @@
     right: 0;
     text-align: center;
     z-index: 12;
-    font-size: 22px;
-    color: rgba(255,215,130,0.5);
+    font-size: 20px;
+    color: rgba(255,215,130,0.45);
     letter-spacing: 12px;
     pointer-events: none;
   }
 
-  /* responsive adjustments */
+  /* responsive adjustments — maintain professional proportions */
   @media (max-width: 800px) {
     .temple-title {
-      font-size: 3.8rem;
+      font-size: 3.2rem;
       letter-spacing: 4px;
     }
     .sacred-tagline {
-      font-size: 1.25rem;
+      font-size: 1.15rem;
     }
     .divine-btn {
-      padding: 14px 32px;
+      padding: 12px 32px;
       font-size: 1rem;
+      margin-top: 40px;
     }
     .om-glow {
-      font-size: 52px;
+      font-size: 44px;
     }
     .lang-bar {
       top: 18px;
@@ -237,30 +240,45 @@
       font-size: 0.7rem;
       padding: 3px 8px;
     }
+    .ornament-line {
+      width: 110px;
+    }
   }
 
   @media (max-width: 550px) {
     .temple-title {
-      font-size: 2.8rem;
-      letter-spacing: 3px;
+      font-size: 2.4rem;
+      letter-spacing: 2px;
     }
     .sacred-tagline {
-      font-size: 1rem;
+      font-size: 0.95rem;
+      line-height: 1.4;
     }
     .divine-btn {
-      margin-top: 40px;
+      margin-top: 32px;
+      padding: 10px 24px;
+      font-size: 0.85rem;
+      gap: 6px;
     }
     .om-glow {
-      font-size: 44px;
+      font-size: 38px;
+    }
+    .ornament-line {
+      width: 90px;
+    }
+    .sacred-lotus {
+      font-size: 16px;
+      letter-spacing: 8px;
+      bottom: 20px;
     }
   }
 
   /* subtle fade-in effect for hero items */
   .hero .main-content, .hero .sacred-symbol {
-    animation: fadeUp 1s ease-out;
+    animation: fadeUp 0.9s ease-out;
   }
   @keyframes fadeUp {
-    0% { opacity: 0; transform: translateY(30px);}
+    0% { opacity: 0; transform: translateY(20px);}
     100% { opacity: 1; transform: translateY(0);}
   }
 
@@ -276,8 +294,6 @@
     pointer-events: none;
     z-index: 3;
   }
-
-  /* language-specific tagline line-height */
 </style>
 </head>
 <body>
@@ -293,13 +309,13 @@
     <button class="lang-btn" data-lang="en">English</button>
   </div>
 
-  <!-- OM Symbol + divine aura -->
+  <!-- OM Symbol + divine aura — balanced sizing, professional elegance -->
   <div class="sacred-symbol">
     <div class="om-glow">ॐ</div>
     <div class="ornament-line"></div>
   </div>
 
-  <!-- Main text area -->
+  <!-- Main text area — refined typography exactly as 2.png reference -->
   <div class="main-content">
     <h1 class="temple-title" id="dynamicTitle">VISHNUMAYA</h1>
     <div class="sacred-tagline" id="dynamicTagline">
@@ -316,7 +332,7 @@
 </div>
 
 <script>
-  // Multi-lingual dictionary with exact refined translations matching 2.png spirit and cultural depth
+  // Multi-lingual dictionary with refined translations matching 2.png spirit
   const translations = {
     en: {
       title: "VISHNUMAYA",
@@ -340,21 +356,18 @@
     }
   };
 
-  // current language variable
   let currentLang = "en";
 
-  // DOM elements
   const titleEl = document.getElementById("dynamicTitle");
   const taglineEl = document.getElementById("dynamicTagline");
   const btnSpan = document.getElementById("btnText");
 
-  // Function to apply language without reload, smooth transition + maintain subtle fade
   function setLanguage(lang) {
     if (!translations[lang]) return;
     currentLang = lang;
     const data = translations[lang];
     
-    // apply text updates with gentle crossfade effect (optional)
+    // gentle crossfade for smooth transition
     titleEl.style.opacity = "0.7";
     taglineEl.style.opacity = "0.7";
     
@@ -367,17 +380,9 @@
       taglineEl.style.opacity = "1";
     }, 50);
     
-    // add small accessibility: update html lang attribute optionally
     document.documentElement.setAttribute("lang", lang === "ml" ? "ml" : (lang === "hi" ? "hi" : (lang === "ta" ? "ta" : "en")));
-    
-    // also update button icon feel (just for consistency)
-    const btnIcon = document.querySelector("#enterBtn i");
-    if (btnIcon) {
-      // little flourish: no change needed
-    }
   }
 
-  // attach event listeners to language buttons
   const langBtns = document.querySelectorAll(".lang-btn");
   langBtns.forEach(btn => {
     btn.addEventListener("click", (e) => {
@@ -386,27 +391,8 @@
     });
   });
 
-  // "Enter the Divine Space" button - action that simulates moving to a temple interior / main page
-  // Since we need to replicate the immersive experience but keep within single page (no external link yet)
-  // For demonstration: smooth scroll to a subtle reveal or show an alert that transitions to a new chapter.
-  // To align with temple style: we can open a modal / or transition to an info section, but to stay true to the request,
-  // we can simply show an elegant notification that the pilgrimage begins. However given that the base index.html didn't have
-  // further pages, we will make it feel like a portal: adds a ripple effect and could redirect (but let's implement a tasteful 
-  // interactive element – a floating mantra or optional redirect if desired? but better: show a divine message and then maybe 
-  // redirect to another page? but for now, create a subtle immersive animation and a console log. 
-  // But to respect the user requirement: "help me" to match 2.png – the button should be functional and take to a "Temple interior"
-  // but since assets missing, we create a smooth full-screen transition effect to a second page? However I will create a mini 
-  // overlay that displays a deeper message without leaving the page (to preserve the elegance).
-  
-  // Additional: we can extend the functionality so that after pressing enter, it shows a sacred experience overlay 
-  // or navigates to a new page. Since original design might have future pages, I'll implement a modal that announces entering 
-  // the divine presence and allows user to stay or explore (user-friendly).
-  
-  const enterBtn = document.getElementById("enterBtn");
-  
-  // Create a subtle modal container if not present (dynamic for immersive experience)
+  // Immersive portal modal for "Enter the Divine Space"
   function createPortalModal() {
-    // check if modal already exists
     if (document.getElementById("divinePortalModal")) return;
     
     const modalDiv = document.createElement("div");
@@ -438,7 +424,6 @@
     modalCard.style.transform = "scale(0.95)";
     modalCard.style.transition = "transform 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.2)";
     
-    // content based on current language
     const langData = translations[currentLang] || translations.en;
     let modalTitle = "";
     let modalMsg = "";
@@ -463,43 +448,37 @@
     }
     
     modalCard.innerHTML = `
-      <i class="fas fa-om" style="font-size: 3rem; color: #eab354; margin-bottom: 20px; display: block;"></i>
-      <h2 style="color: #FFE3A4; font-size: 1.9rem; margin-bottom: 20px; letter-spacing: 2px;">${modalTitle}</h2>
-      <p style="color: #efe0bc; line-height: 1.6; font-size: 1.05rem; margin-bottom: 35px;">${modalMsg}</p>
-      <button id="modalEnterDeepBtn" style="background: linear-gradient(145deg,#b87c2e,#7c551f); border:none; padding: 14px 28px; border-radius: 60px; color: #FFFAEA; font-family: 'Cinzel', serif; font-weight: bold; font-size: 1rem; cursor: pointer; transition: all 0.2s; letter-spacing: 1.5px; box-shadow: 0 5px 12px black;">${closeBtnText} <i class="fas fa-praying-hands"></i></button>
+      <i class="fas fa-om" style="font-size: 2.8rem; color: #eab354; margin-bottom: 20px; display: block;"></i>
+      <h2 style="color: #FFE3A4; font-size: 1.8rem; margin-bottom: 20px; letter-spacing: 2px; font-weight: 600;">${modalTitle}</h2>
+      <p style="color: #efe0bc; line-height: 1.6; font-size: 1rem; margin-bottom: 35px;">${modalMsg}</p>
+      <button id="modalEnterDeepBtn" style="background: linear-gradient(145deg,#b87c2e,#7c551f); border:none; padding: 12px 28px; border-radius: 60px; color: #FFFAEA; font-family: 'Cinzel', serif; font-weight: bold; font-size: 0.95rem; cursor: pointer; transition: all 0.2s; letter-spacing: 1.5px; box-shadow: 0 5px 12px black;">${closeBtnText} <i class="fas fa-praying-hands"></i></button>
     `;
     
     modalDiv.appendChild(modalCard);
     document.body.appendChild(modalDiv);
     
-    // animate in
     setTimeout(() => {
       modalDiv.style.opacity = "1";
       modalCard.style.transform = "scale(1)";
     }, 20);
     
-    // handle close / enter deeper: remove modal and optionally show a message or simulate a page transition
     const enterDeepBtn = modalCard.querySelector("#modalEnterDeepBtn");
     const closeModal = () => {
       modalDiv.style.opacity = "0";
       modalCard.style.transform = "scale(0.95)";
       setTimeout(() => {
         if (modalDiv && modalDiv.parentNode) modalDiv.remove();
-        // After closing, show a small toast indicating we have entered the temple ambiance
         showBriefToast();
       }, 400);
     };
     
     enterDeepBtn.addEventListener("click", closeModal);
-    
-    // optional click outside to close? not required but user friendly, but not necessary.
     modalDiv.addEventListener("click", (e) => {
       if (e.target === modalDiv) closeModal();
     });
   }
   
   function showBriefToast() {
-    // lightweight notification to mimic "entering divine space"
     const toast = document.createElement("div");
     toast.innerText = currentLang === "en" ? "🕉️ You have entered the sacred realm of Vishnumaya" : 
                       (currentLang === "ml" ? "🕉️ വിഷ്ണുമായയുടെ പുണ്യഭൂമിയിൽ പ്രവേശിച്ചു" :
@@ -514,7 +493,7 @@
     toast.style.padding = "12px 28px";
     toast.style.borderRadius = "60px";
     toast.style.fontFamily = "'Cinzel', serif";
-    toast.style.fontSize = "0.9rem";
+    toast.style.fontSize = "0.85rem";
     toast.style.fontWeight = "500";
     toast.style.border = "1px solid #e1b153";
     toast.style.backdropFilter = "blur(10px)";
@@ -531,9 +510,10 @@
     }, 2800);
   }
   
-  // Also add a subtle ripple effect on button click
+  const enterBtn = document.getElementById("enterBtn");
+  
+  // Ripple effect and modal trigger
   enterBtn.addEventListener("click", (e) => {
-    // create ripple element
     const ripple = document.createElement("span");
     ripple.classList.add("ripple-effect");
     const rect = enterBtn.getBoundingClientRect();
@@ -558,12 +538,9 @@
     }, 10);
     
     setTimeout(() => ripple.remove(), 500);
-    
-    // open divine portal modal for immersive journey
     createPortalModal();
   });
   
-  // optional: add preload or default language based on browser (simple)
   function detectAndSetInitialLanguage() {
     const browserLang = navigator.language || navigator.userLanguage;
     if (browserLang.startsWith("ml")) setLanguage("ml");
@@ -574,7 +551,6 @@
   
   detectAndSetInitialLanguage();
   
-  // small style addition for ripple container
   const styleRipple = document.createElement('style');
   styleRipple.textContent = `
     .ripple-effect {
@@ -591,12 +567,13 @@
   `;
   document.head.appendChild(styleRipple);
   
-  // adjust any missing image fallback: if background image fails, add a dark solid fallback
+  // graceful image fallback: ensure background remains elegant
   const heroDiv = document.querySelector('.hero');
   const imgTest = new Image();
   imgTest.onerror = function() {
     heroDiv.style.background = 'linear-gradient(145deg, #1f180c, #0c0903), url("assets/vishnumaya.jpg")';
     heroDiv.style.backgroundBlend = "overlay";
+    heroDiv.style.backgroundSize = "cover";
   };
   imgTest.src = "assets/vishnumaya.jpg";
 </script>

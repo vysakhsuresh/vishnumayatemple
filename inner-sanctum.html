@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Inner Sanctum | Vishnumaya</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Noto+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<style>
+  :root {
+    --bg-color: #0a0702;
+    --gold-light: #FFF6CF;
+    --gold-mid: #eab354;
+    --gold-dark: #8b5a2b;
+    --text-muted: #a89f91;
+  }
+
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    font-family: 'Noto Sans', sans-serif;
+    background-color: var(--bg-color);
+    color: var(--gold-light);
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+  }
+
+  h1, h2, h3, .cinzel {
+    font-family: 'Cinzel', serif;
+  }
+
+  /* Custom Scrollbar */
+  ::-webkit-scrollbar { width: 8px; }
+  ::-webkit-scrollbar-track { background: var(--bg-color); }
+  ::-webkit-scrollbar-thumb { background: var(--gold-dark); border-radius: 4px; }
+
+  /* Navbar */
+  nav {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    padding: 20px 50px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(10, 7, 2, 0.8);
+    backdrop-filter: blur(10px);
+    z-index: 100;
+    border-bottom: 1px solid rgba(234, 179, 84, 0.2);
+    transition: all 0.3s ease;
+  }
+
+  .nav-logo {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--gold-mid);
+    text-decoration: none;
+    letter-spacing: 2px;
+  }
+
+  .nav-links a {
+    color: var(--gold-light);
+    text-decoration: none;
+    margin-left: 30px;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: color 0.3s;
+  }
+
+  .nav-links a:hover { color: var(--gold-mid); }
+
+  /* Section Styling */
+  section {
+    min-height: 100vh;
+    padding: 120px 10%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+  }
+
+  .text-center { text-align: center; }
+  
+  .section-title {
+    font-size: 3rem;
+    margin-bottom: 20px;
+    background: linear-gradient(135deg, #FFF6CF, #eab354);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .section-subtitle {
+    font-size: 1.2rem;
+    color: var(--text-muted);
+    max-width: 600px;
+    margin: 0 auto 50px auto;
+    line-height: 1.6;
+  }
+
+  /* Scroll Reveal Classes (The "Apple" Effect) */
+  .reveal {
+    opacity: 0;
+    transform: translateY(60px);
+    transition: all 1s cubic-bezier(0.25, 1, 0.5, 1);
+  }
+
+  .reveal.active {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .reveal-left { transform: translateX(-60px); }
+  .reveal-right { transform: translateX(60px); }
+  .reveal-scale { transform: scale(0.9); }
+
+  /* Interactive Verse Picker */
+  .picker-container {
+    display: flex;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(234, 179, 84, 0.2);
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+  }
+
+  .picker-nav {
+    width: 30%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+  }
+
+  .picker-btn {
+    padding: 25px;
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid rgba(234, 179, 84, 0.1);
+    color: var(--text-muted);
+    font-family: 'Cinzel', serif;
+    font-size: 1.1rem;
+    text-align: left;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+
+  .picker-btn.active, .picker-btn:hover {
+    background: rgba(234, 179, 84, 0.1);
+    color: var(--gold-mid);
+    border-left: 4px solid var(--gold-mid);
+  }
+
+  .picker-content-area {
+    width: 70%;
+    padding: 50px;
+    position: relative;
+  }
+
+  .verse-content {
+    display: none;
+    animation: fadeIn 0.5s ease;
+  }
+
+  .verse-content.active {
+    display: block;
+  }
+
+  .verse-sanskrit {
+    font-size: 1.8rem;
+    color: var(--gold-light);
+    margin-bottom: 20px;
+    line-height: 1.5;
+  }
+
+  .verse-english {
+    font-size: 1.1rem;
+    color: var(--gold-mid);
+    margin-bottom: 20px;
+    font-style: italic;
+  }
+
+  .verse-meaning {
+    color: var(--text-muted);
+    line-height: 1.8;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Ashtotharam Grid */
+  .ashtotharam-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px;
+    margin-top: 40px;
+    max-height: 500px;
+    overflow-y: auto;
+    padding-right: 15px;
+  }
+
+  .name-card {
+    background: linear-gradient(145deg, #151109, #0a0702);
+    border: 1px solid rgba(234, 179, 84, 0.15);
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+
+  .name-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(234, 179, 84, 0.1);
+    border-color: rgba(234, 179, 84, 0.4);
+  }
+
+  .name-number {
+    font-size: 0.8rem;
+    color: var(--gold-dark);
+    margin-bottom: 5px;
+    font-family: 'Cinzel', serif;
+  }
+
+  .name-sanskrit {
+    font-size: 1.2rem;
+    color: var(--gold-light);
+    margin-bottom: 5px;
+  }
+
+  .name-meaning {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+  }
+
+  /* Footer */
+  footer {
+    text-align: center;
+    padding: 40px;
+    border-top: 1px solid rgba(234, 179, 84, 0.2);
+    font-family: 'Cinzel', serif;
+    color: var(--text-muted);
+  }
+
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .nav-links { display: none; }
+    .picker-container { flex-direction: column; }
+    .picker-nav { width: 100%; flex-direction: row; overflow-x: auto; }
+    .picker-btn { border-bottom: none; border-right: 1px solid rgba(234, 179, 84, 0.1); white-space: nowrap; }
+    .picker-btn.active { border-left: none; border-bottom: 4px solid var(--gold-mid); }
+    .picker-content-area { width: 100%; padding: 30px 20px; }
+    .section-title { font-size: 2.2rem; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="#" class="nav-logo cinzel">VISHNUMAYA</a>
+  <div class="nav-links cinzel">
+    <a href="#sanctum">Sanctum</a>
+    <a href="#mantras">Sacred Verses</a>
+    <a href="#ashtotharam">108 Names</a>
+  </div>
+</nav>
+
+<section id="sanctum" class="text-center">
+  <div class="reveal reveal-scale">
+    <div style="font-size: 4rem; color: var(--gold-mid); margin-bottom: 20px;">ॐ</div>
+    <h1 class="section-title">The Inner Sanctum</h1>
+    <p class="section-subtitle">
+      You have crossed the threshold. Feel the resonance of the divine presence. 
+      Lord Vishnumaya, the embodiment of cosmic magic and martial grace, resides within the silence of your devotion.
+    </p>
+    <div style="width: 2px; height: 100px; background: linear-gradient(to bottom, var(--gold-mid), transparent); margin: 0 auto;"></div>
+  </div>
+</section>
+
+<section id="mantras">
+  <div class="reveal reveal-left">
+    <h2 class="section-title text-center">Sacred Mantras</h2>
+    <p class="section-subtitle text-center">Select a verse to reveal its resonance and meaning.</p>
+    
+    <div class="picker-container">
+      <div class="picker-nav">
+        <button class="picker-btn active" onclick="openVerse(event, 'moola')">Moola Mantra</button>
+        <button class="picker-btn" onclick="openVerse(event, 'gayatri')">Vishnumaya Gayatri</button>
+        <button class="picker-btn" onclick="openVerse(event, 'dhyanam')">Dhyana Sloka</button>
+      </div>
+      
+      <div class="picker-content-area">
+        <div id="moola" class="verse-content active">
+          <div class="verse-sanskrit cinzel">ॐ ஹ்ரீம் ஸ்ரீம் க்லீம் விஷ்ணுமாயாயை நம:</div>
+          <div class="verse-english">"Om Hreem Shreem Kleem Vishnumayayai Namaha"</div>
+          <div class="verse-meaning">
+            <strong>Meaning:</strong> The fundamental seed sound (Bija) mantra invoking the supreme illusionary and protective power of the Lord. 'Hreem' invokes cosmic energy, 'Shreem' invokes prosperity, and 'Kleem' invokes magnetic attraction and fulfillment of desires.
+          </div>
+        </div>
+
+        <div id="gayatri" class="verse-content">
+          <div class="verse-sanskrit cinzel">ॐ தத் புருஷாய வித்மஹே<br>மகா மாயாய தீமஹி<br>தன்னோ விஷ்ணுமாய ப்ரசோதயாத்</div>
+          <div class="verse-english">"Om Tat Purushaya Vidmahe<br>Maha Mayaya Dheemahi<br>Tanno Vishnumaya Prachodayat"</div>
+          <div class="verse-meaning">
+            <strong>Meaning:</strong> Let me meditate on that Supreme Being. Oh, Great Creator of Illusion, give me higher intellect. And let Lord Vishnumaya illuminate my mind.
+          </div>
+        </div>
+
+        <div id="dhyanam" class="verse-content">
+          <div class="verse-sanskrit cinzel">சாஸ்தாரம் தர்மபாலம்...</div>
+          <div class="verse-english">"Sastharam Dharmapalam..."</div>
+          <div class="verse-meaning">
+            <strong>Meaning:</strong> A meditative verse describing the physical and spiritual form of the Lord—riding the majestic buffalo, holding the mystic wand, protecting dharma, and dispelling the darkest of evils from the lives of devotees.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="ashtotharam">
+  <div class="reveal reveal-right">
+    <h2 class="section-title text-center">Ashtothara Shatanamavali</h2>
+    <p class="section-subtitle text-center">The 108 Sacred Names of Lord Vishnumaya. Scroll to explore the divine attributes.</p>
+    
+    <div class="ashtotharam-grid" id="namesGrid">
+      </div>
+  </div>
+</section>
+
+<footer>
+  <p>May the Grace of the Lord protect and guide you.</p>
+  <p style="margin-top: 10px; font-size: 0.8rem; color: #555;">© 2026 Vishnumaya Divine Space</p>
+</footer>
+
+<script>
+  // --- 1. SCROLL REVEAL ANIMATIONS (The Phone/Apple Effect) ---
+  function revealOnScroll() {
+    var reveals = document.querySelectorAll('.reveal');
+    var windowHeight = window.innerHeight;
+    
+    reveals.forEach(reveal => {
+      var elementTop = reveal.getBoundingClientRect().top;
+      var elementVisible = 150; // trigger point
+      
+      if (elementTop < windowHeight - elementVisible) {
+        reveal.classList.add('active');
+      }
+    });
+  }
+  
+  // Trigger once on load, then on scroll
+  window.addEventListener('scroll', revealOnScroll);
+  revealOnScroll();
+
+  // --- 2. INTERACTIVE VERSE PICKER ---
+  function openVerse(evt, verseName) {
+    // Hide all contents
+    var contents = document.getElementsByClassName("verse-content");
+    for (var i = 0; i < contents.length; i++) {
+      contents[i].classList.remove("active");
+    }
+    
+    // Remove active class from all buttons
+    var btns = document.getElementsByClassName("picker-btn");
+    for (var i = 0; i < btns.length; i++) {
+      btns[i].className = btns[i].className.replace(" active", "");
+    }
+    
+    // Show current tab, and add "active" to the button
+    document.getElementById(verseName).classList.add("active");
+    evt.currentTarget.className += " active";
+  }
+
+  // --- 3. POPULATE 108 NAMES (Sample Data Generation for UI) ---
+  const namesGrid = document.getElementById('namesGrid');
+  const sacredNames = [
+    { s: "Om Vishnumayayai Namaha", m: "Salutations to the Illusion of Vishnu" },
+    { s: "Om Dharma Sasthave Namaha", m: "The Protector of Dharma" },
+    { s: "Om Mahabalaya Namaha", m: "The One of Supreme Strength" },
+    { s: "Om Bhoota Nathaya Namaha", m: "Lord of the Elements/Spirits" },
+    { s: "Om Kali Yuga Varadaya Namaha", m: "Granter of Boons in Kali Yuga" },
+    { s: "Om Kula Daivataya Namaha", m: "The Family Deity" },
+    { s: "Om Shatru Samharakaya Namaha", m: "Destroyer of Enemies" },
+    { s: "Om Roga Nivaranaaya Namaha", m: "Curer of Diseases" },
+    { s: "Om Sarva Abhishta Pradayakaya Namaha", m: "Fulfiller of All Desires" },
+    { s: "Om Mahamaya Swaroopaya Namaha", m: "Embodiment of the Great Illusion" },
+    { s: "Om Bhakta Rakshakaya Namaha", m: "Protector of Devotees" },
+    { s: "Om Chathan Swamiye Namaha", m: "Salutations to Lord Chathan" }
+  ];
+
+  // We loop to simulate a rich list of 108 items for the visual scroll effect
+  for (let i = 1; i <= 108; i++) {
+    // Use modulo to cycle through our sample array
+    let data = sacredNames[(i - 1) % sacredNames.length]; 
+    
+    let card = document.createElement('div');
+    card.className = 'name-card';
+    card.innerHTML = `
+      <div class="name-number">NAME ${i}</div>
+      <div class="name-sanskrit cinzel">${data.s}</div>
+      <div class="name-meaning">${data.m}</div>
+    `;
+    namesGrid.appendChild(card);
+  }
+</script>
+
+</body>
+</html>

@@ -529,12 +529,25 @@
     }, 20);
     
     const enterDeepBtn = modalCard.querySelector("#modalEnterDeepBtn");
+    
     const closeModal = () => {
+      // 1. Fade out the modal card
       modalDiv.style.opacity = "0";
       modalCard.style.transform = "scale(0.96)";
+      
       setTimeout(() => {
+        // Remove the modal from the DOM
         if (modalDiv && modalDiv.parentNode) modalDiv.remove();
-        showBriefToast();
+        
+        // 2. Cinematic Fade-to-Black for the whole page
+        document.body.style.transition = "opacity 1.2s ease-in-out";
+        document.body.style.opacity = "0"; 
+        
+        // 3. Route to the new page after the fade finishes
+        setTimeout(() => {
+          window.location.href = "inner-sanctum.html"; // Make sure this matches your file name exactly!
+        }, 1200); 
+
       }, 400);
     };
     

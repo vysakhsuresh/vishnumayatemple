@@ -246,6 +246,127 @@
     color: var(--text-muted);
   }
 
+  /* Floating Buttons & Modal (Sanctum Theme) */
+  .fab-home {
+    position: fixed;
+    bottom: 30px;
+    left: 30px;
+    width: 50px;
+    height: 50px;
+    background: linear-gradient(145deg, #151109, #0a0702);
+    border: 1px solid rgba(234, 179, 84, 0.4);
+    color: var(--gold-mid);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    text-decoration: none;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+    z-index: 9999;
+    transition: transform 0.3s, box-shadow 0.3s, color 0.3s;
+  }
+
+  .fab-home:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(234, 179, 84, 0.2);
+    color: var(--gold-light);
+  }
+
+  .fab-chat {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 50px;
+    height: 50px;
+    background: linear-gradient(145deg, #151109, #0a0702);
+    border: 1px solid rgba(234, 179, 84, 0.4);
+    color: var(--gold-mid);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+    z-index: 9999;
+    transition: transform 0.3s, box-shadow 0.3s, color 0.3s;
+  }
+
+  .fab-chat:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(234, 179, 84, 0.2);
+    color: var(--gold-light);
+  }
+
+  /* Chat Modal Styling */
+  #chatModal {
+    display: none;
+    position: fixed;
+    z-index: 10000;
+    left: 0; top: 0;
+    width: 100%; height: 100%;
+    background: rgba(10, 7, 2, 0.8);
+    backdrop-filter: blur(5px);
+  }
+
+  #chatModalContent {
+    background: var(--bg-color);
+    border: 1px solid rgba(234, 179, 84, 0.3);
+    margin: 15% auto;
+    padding: 30px;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 360px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.9);
+    text-align: center;
+  }
+
+  #chatModalContent h3 {
+    margin-bottom: 20px;
+    color: var(--gold-mid);
+  }
+
+  .chat-option {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin: 15px auto;
+    padding: 12px 20px;
+    border: 1px solid rgba(234, 179, 84, 0.2);
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.03);
+    color: var(--gold-light);
+    font-family: 'Cinzel', serif;
+    text-decoration: none;
+    transition: all 0.3s;
+  }
+
+  .chat-option:hover {
+    background: rgba(234, 179, 84, 0.1);
+    border-color: var(--gold-mid);
+    color: var(--gold-mid);
+  }
+
+  .chat-option.whatsapp:hover {
+    border-color: #25D366;
+    color: #25D366;
+  }
+
+  #closeChatModal {
+    float: right;
+    font-size: 28px;
+    line-height: 1;
+    cursor: pointer;
+    color: var(--text-muted);
+    transition: color 0.3s;
+  }
+
+  #closeChatModal:hover {
+    color: var(--gold-light);
+  }
+
   /* Responsive Design */
   @media (max-width: 768px) {
     .nav-links { display: none; }
@@ -261,7 +382,7 @@
 <body>
 
 <nav>
-  <a href="#" class="nav-logo cinzel">VISHNUMAYA</a>
+  <a href="index.html" class="nav-logo cinzel">VISHNUMAYA</a>
   <div class="nav-links cinzel">
     <a href="#sanctum">Sanctum</a>
     <a href="#mantras">Sacred Verses</a>
@@ -336,6 +457,27 @@
   <p>May the Grace of the Lord protect and guide you.</p>
   <p style="margin-top: 10px; font-size: 0.8rem; color: #555;">© 2026 Vishnumaya Divine Space</p>
 </footer>
+
+<a href="index.html" class="fab-home" title="Return Home">
+  <i class="fas fa-home"></i>
+</a>
+
+<button id="chatFab" class="fab-chat" title="Seek Guidance">
+  <i class="fas fa-comment-dots"></i>
+</button>
+
+<div id="chatModal">
+  <div id="chatModalContent">
+    <span id="closeChatModal">&times;</span>
+    <h3 class="cinzel">Seek Guidance</h3>
+    <a href="mailto:ceo@layerbit.co.in?subject=Sanctum%20Inquiry" class="chat-option">
+      <i class="fas fa-envelope"></i> Email Us
+    </a>
+    <a href="https://wa.me/916282595823" target="_blank" class="chat-option whatsapp">
+      <i class="fab fa-whatsapp"></i> WhatsApp
+    </a>
+  </div>
+</div>
 
 <script>
   // --- 1. SCROLL REVEAL ANIMATIONS (The Phone/Apple Effect) ---
@@ -499,6 +641,25 @@
     `;
     namesGrid.appendChild(card);
   });
+
+  // --- 4. CHAT MODAL LOGIC ---
+  const chatFab = document.getElementById("chatFab");
+  const chatModal = document.getElementById("chatModal");
+  const closeChatModal = document.getElementById("closeChatModal");
+
+  chatFab.onclick = function() {
+    chatModal.style.display = "block";
+  };
+  
+  closeChatModal.onclick = function() {
+    chatModal.style.display = "none";
+  };
+  
+  window.onclick = function(event) {
+    if (event.target === chatModal) {
+      chatModal.style.display = "none";
+    }
+  };
 </script>
 
 </body>

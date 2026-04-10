@@ -34,12 +34,11 @@
     font-family: 'Cinzel', serif;
   }
 
-
-  /* Matching Buy Me a Coffee FAB */
-  .fab-coffee {
+/* Optimized Floating Buttons */
+  .fab-home, .fab-chat, .fab-coffee {
     position: fixed;
-    bottom: 30px;
-    left: 95px; /* Positioned next to the Home button */
+    /* Increased from 30px to 40px to clear mobile home bars */
+    bottom: 40px; 
     width: 50px;
     height: 50px;
     background: linear-gradient(145deg, #151109, #0a0702);
@@ -54,7 +53,29 @@
     box-shadow: 0 4px 15px rgba(0,0,0,0.5);
     z-index: 9999;
     transition: transform 0.3s, box-shadow 0.3s, color 0.3s;
+    /* This ensures it respects mobile "notches" and bottom bars */
+    margin-bottom: env(safe-area-inset-bottom); 
   }
+
+  .fab-home { left: 30px; }
+  .fab-coffee { left: 90px; }
+  .fab-chat { right: 30px; }
+
+  /* Mobile Fix: Stack them or lift them higher */
+  @media (max-width: 768px) {
+    .fab-home, .fab-chat, .fab-coffee {
+      bottom: 30px; /* Adjusting for mobile specific view */
+    }
+    
+    /* If they still feel too low on mobile, 
+       we can stack the coffee button above the home button */
+    .fab-coffee {
+      bottom: 95px; 
+      left: 30px;
+    }
+  }
+  /* Matching Buy Me a Coffee FAB */
+ 
 
   .fab-coffee:hover {
     transform: translateY(-5px);
@@ -282,25 +303,7 @@
   }
 
   /* Floating Buttons & Modal (Sanctum Theme) */
-  .fab-home {
-    position: fixed;
-    bottom: 30px;
-    left: 30px;
-    width: 50px;
-    height: 50px;
-    background: linear-gradient(145deg, #151109, #0a0702);
-    border: 1px solid rgba(234, 179, 84, 0.4);
-    color: var(--gold-mid);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.2rem;
-    text-decoration: none;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-    z-index: 9999;
-    transition: transform 0.3s, box-shadow 0.3s, color 0.3s;
-  }
+
 
   .fab-home:hover {
     transform: translateY(-5px);
@@ -308,25 +311,7 @@
     color: var(--gold-light);
   }
 
-  .fab-chat {
-    position: fixed;
-    bottom: 30px;
-    right: 30px;
-    width: 50px;
-    height: 50px;
-    background: linear-gradient(145deg, #151109, #0a0702);
-    border: 1px solid rgba(234, 179, 84, 0.4);
-    color: var(--gold-mid);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.2rem;
-    cursor: pointer;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-    z-index: 9999;
-    transition: transform 0.3s, box-shadow 0.3s, color 0.3s;
-  }
+
 
   .fab-chat:hover {
     transform: translateY(-5px);

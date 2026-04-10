@@ -35,10 +35,11 @@
   }
 
 /* Optimized Floating Buttons */
+/* Optimized Floating Action Buttons */
   .fab-home, .fab-chat, .fab-coffee {
     position: fixed;
-    /* Increased from 30px to 40px to clear mobile home bars */
-    bottom: 40px; 
+    /* Lifted significantly to clear the mobile browser's 'active' zone */
+    bottom: 45px; 
     width: 50px;
     height: 50px;
     background: linear-gradient(145deg, #151109, #0a0702);
@@ -53,25 +54,26 @@
     box-shadow: 0 4px 15px rgba(0,0,0,0.5);
     z-index: 9999;
     transition: transform 0.3s, box-shadow 0.3s, color 0.3s;
-    /* This ensures it respects mobile "notches" and bottom bars */
-    margin-bottom: env(safe-area-inset-bottom); 
+    /* Fix for iOS/Android bottom bars */
+    padding-bottom: env(safe-area-inset-bottom);
   }
 
+  /* Desktop/Default Positions */
   .fab-home { left: 30px; }
-  .fab-coffee { left: 90px; }
+  .fab-coffee { left: 95px; }
   .fab-chat { right: 30px; }
 
-  /* Mobile Fix: Stack them or lift them higher */
+  /* Mobile-Specific Stability Fix */
   @media (max-width: 768px) {
     .fab-home, .fab-chat, .fab-coffee {
-      bottom: 30px; /* Adjusting for mobile specific view */
+      /* Higher positioning ensures they never sit 'behind' the browser UI */
+      bottom: 55px; 
     }
     
-    /* If they still feel too low on mobile, 
-       we can stack the coffee button above the home button */
+    /* On mobile, stacking the coffee button above Home prevents horizontal clutter */
     .fab-coffee {
-      bottom: 95px; 
       left: 30px;
+      bottom: 120px; 
     }
   }
   /* Matching Buy Me a Coffee FAB */
@@ -130,9 +132,9 @@
   .nav-links a:hover { color: var(--gold-mid); }
 
   /* Section Styling */
-  section {
+section {
     min-height: 100vh;
-    min-height: 100svh; /* Use 'Small Viewport Height' for mobile stability */
+    min-height: 100svh; /* New standard for mobile stability */
     padding: 120px 10%;
     display: flex;
     flex-direction: column;

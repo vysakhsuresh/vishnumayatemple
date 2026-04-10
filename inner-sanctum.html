@@ -34,6 +34,39 @@
     font-family: 'Cinzel', serif;
   }
 
+
+  /* Matching Buy Me a Coffee FAB */
+  .fab-coffee {
+    position: fixed;
+    bottom: 30px;
+    left: 95px; /* Positioned next to the Home button */
+    width: 50px;
+    height: 50px;
+    background: linear-gradient(145deg, #151109, #0a0702);
+    border: 1px solid rgba(234, 179, 84, 0.4);
+    color: var(--gold-mid);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    text-decoration: none;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+    z-index: 9999;
+    transition: transform 0.3s, box-shadow 0.3s, color 0.3s;
+  }
+
+  .fab-coffee:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(234, 179, 84, 0.2);
+    color: var(--gold-light);
+  }
+
+  /* Responsive adjustment for mobile */
+  @media (max-width: 768px) {
+    .fab-coffee { bottom: 90px; left: 30px; } /* Stack above Home on mobile */
+  }
+
   /* Custom Scrollbar */
   ::-webkit-scrollbar { width: 8px; }
   ::-webkit-scrollbar-track { background: var(--bg-color); }
@@ -472,6 +505,10 @@
 
 <a href="index.html" class="fab-home" title="Return Home">
   <i class="fas fa-home"></i>
+</a>
+
+<a href="https://www.buymeacoffee.com/layerbit" target="_blank" class="fab-coffee" title="Support the Sanctum">
+  <i class="fas fa-coffee"></i>
 </a>
 
 <button id="chatFab" class="fab-chat" title="Seek Guidance">

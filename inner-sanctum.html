@@ -116,6 +116,24 @@
     letter-spacing: 1px;
     transition: color 0.3s;
   }
+  
+  
+  .close-modal {
+    position: fixed; /* This keeps it on the screen even when scrolling */
+    top: 30px;
+    right: 40px;
+    font-size: 50px; /* Made larger for easier clicking/tapping */
+    cursor: pointer;
+    color: var(--gold-mid); /* Gold color to match the theme */
+    transition: all 0.3s;
+    z-index: 10002; /* Ensures it stays above all content */
+    text-shadow: 0 0 20px rgba(0,0,0,0.8); /* Adds depth so it's visible over names */
+  }
+
+  .close-modal:hover {
+    color: var(--gold-light);
+    transform: scale(1.2);
+  }
 
   .nav-links a:hover { color: var(--gold-mid); }
 
@@ -139,6 +157,28 @@
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
   }
+  
+  /* Sahasranamam Layout */
+  .chapter-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 25px; margin-top: 50px; }
+  
+  .chapter-card { 
+    background: rgba(255, 255, 255, 0.03); 
+    border: 1px solid rgba(234, 179, 84, 0.15); 
+    border-radius: 15px; 
+    padding: 35px; 
+    cursor: pointer; 
+    transition: 0.3s; 
+  }
+  
+  .chapter-card:hover { 
+    border-color: var(--gold-mid); 
+    transform: translateY(-5px); 
+    background: rgba(234, 179, 84, 0.05); 
+  }
+  
+  .chapter-name { font-family: 'Cinzel', serif; color: var(--gold-mid); font-size: 1.4rem; margin-bottom: 12px; }
+  
+  .chapter-desc { color: var(--text-muted); font-size: 0.95rem; line-height: 1.5; }
 
   .section-subtitle {
     font-size: 1.2rem;
@@ -240,23 +280,24 @@
   }
 
   /* Ashtotharam Grid */
-  .ashtotharam-grid {
+.ashtotharam-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); /* Slightly wider for longer names */
     gap: 20px;
     margin-top: 40px;
-    max-height: 500px;
-    overflow-y: auto;
-    padding-right: 15px;
   }
 
   .name-card {
     background: linear-gradient(145deg, #151109, #0a0702);
     border: 1px solid rgba(234, 179, 84, 0.15);
     border-radius: 12px;
-    padding: 20px;
+    padding: 25px; /* More breathing room */
     text-align: center;
     transition: transform 0.3s, box-shadow 0.3s;
+    height: 100%; /* Ensures all cards in a row have same height */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
   }
 
   .name-card:hover {
@@ -273,14 +314,18 @@
   }
 
   .name-sanskrit {
-    font-size: 1.2rem;
+    font-size: 1.1rem; /* Slightly smaller to fit long names */
     color: var(--gold-light);
-    margin-bottom: 5px;
+    margin-bottom: 10px;
+    word-wrap: break-word;      /* Crucial: Breaks long words */
+    overflow-wrap: break-word; /* Crucial: Breaks long words */
+    line-height: 1.4;
   }
 
   .name-meaning {
     font-size: 0.85rem;
     color: var(--text-muted);
+    line-height: 1.5;
   }
 
   /* Footer */
@@ -379,6 +424,7 @@
     <a href="#sanctum">Sanctum</a>
     <a href="#mantras">Sacred Verses</a>
     <a href="#ashtotharam">108 Names</a>
+	<a href="#sahasranamam">Sahasranamam</a>
   </div>
 </nav>
 
@@ -455,6 +501,29 @@
   </div>
 </section>
 
+
+<section id="sahasranamam">
+  <div class="reveal">
+    <h2 class="section-title text-center">Sri Vishnumaya Sahasranamam</h2>
+    <p class="section-subtitle text-center">The 1008 Sacred Names organized into nine phases of spiritual evolution.</p>
+    
+    <div class="chapter-grid" id="chapterGrid">
+       </div>
+  </div>
+</section>
+
+
+<div id="sahasraModal" style="display: none; position: fixed; z-index: 10001; left: 0; top: 0; width: 100%; height: 100%; background: rgba(10, 7, 2, 0.98); backdrop-filter: blur(15px); overflow-y: auto; padding: 100px 5%;">
+  <span onclick="closeSahasra()" style="position: fixed; top: 30px; right: 40px; font-size: 3rem; color: var(--gold-mid); cursor: pointer; z-index: 10002;">&times;</span>
+  <div class="text-center" style="margin-bottom: 50px;">
+    <h2 id="modalTitle" class="section-title"></h2>
+    <p id="modalPhase" class="cinzel" style="color: var(--gold-dark); letter-spacing: 3px;"></p>
+  </div>
+  <div class="ashtotharam-grid" id="sahasraDisplay">
+     </div>
+</div>
+
+
 <footer>
   <p>May the Grace of the Lord Vishnumaya protect and guide you.</p>
   <p style="margin-top: 10px; font-size: 0.8rem; color: #555;">Vishnumaya Divine Space</p>
@@ -487,38 +556,32 @@
 </div>
 
 <script>
+// 1. SCROLL REVEAL LOGIC
   function revealOnScroll() {
     var reveals = document.querySelectorAll('.reveal');
     var windowHeight = window.innerHeight;
-    
     reveals.forEach(reveal => {
       var elementTop = reveal.getBoundingClientRect().top;
       var elementVisible = 150;
-      
       if (elementTop < windowHeight - elementVisible) {
         reveal.classList.add('active');
       }
     });
   }
-  
   window.addEventListener('scroll', revealOnScroll);
   revealOnScroll();
 
+  // 2. VERSE PICKER LOGIC
   function openVerse(evt, verseName) {
     var contents = document.getElementsByClassName("verse-content");
-    for (var i = 0; i < contents.length; i++) {
-      contents[i].classList.remove("active");
-    }
-    
+    for (var i = 0; i < contents.length; i++) { contents[i].classList.remove("active"); }
     var btns = document.getElementsByClassName("picker-btn");
-    for (var i = 0; i < btns.length; i++) {
-      btns[i].className = btns[i].className.replace(" active", "");
-    }
-    
+    for (var i = 0; i < btns.length; i++) { btns[i].className = btns[i].className.replace(" active", ""); }
     document.getElementById(verseName).classList.add("active");
     evt.currentTarget.className += " active";
   }
 
+  // 3. POPULATE 108 NAMES (Ashtotharam)
   const namesGrid = document.getElementById('namesGrid');
   const sacredNames = [
     { s: "Om Vishnumayaya Namaha", m: "Salutations to Lord Vishnumaya" },
@@ -634,27 +697,1121 @@
   sacredNames.forEach((data, index) => {
     let card = document.createElement('div');
     card.className = 'name-card';
-    card.innerHTML = `
-      <div class="name-number">NAMA ${index + 1}</div>
-      <div class="name-sanskrit cinzel">${data.s}</div>
-      <div class="name-meaning">${data.m}</div>
-    `;
+    card.innerHTML = `<div class="name-number">NAMA ${index + 1}</div><div class="name-sanskrit cinzel">${data.s}</div><div class="name-meaning">${data.m}</div>`;
     namesGrid.appendChild(card);
   });
 
+  // 4. DATA: THE 9 PHASES OF SAHASRANAMAM
+  const sahasraPhases = [
+    {
+      title: "Invocation & Presence",
+      desc: "Opening the divine window and calling the Lord into the heart.",
+      names: [
+        { s: "Om Vishnumayaya Namaha", m: "Vishnu’s cosmic power" },
+        { s: "Om Avanagatasthitaya Namaha", m: "Present when called" },
+        { s: "Om Bhaktasannidhikartre Namaha", m: "Manifests near devotees" },
+        { s: "Om Hridayanilayaya Namaha", m: "Dweller in the heart" },
+        { s: "Om Chaitanyaroopaya Namaha", m: "Pure consciousness" },
+        { s: "Om Sarvavyapine Namaha", m: "Present everywhere" },
+        { s: "Om Antarjyotishe Namaha", m: "Inner divine light" },
+        { s: "Om Bhaktachittavibhavaya Namaha", m: "Manifests in the devotee’s mind" },
+        { s: "Om Sharanagatarakshakaya Namaha", m: "Protector of those who surrender" },
+        { s: "Om Kripasindhave Namaha", m: "Ocean of compassion" },
+        { s: "Om Anugrahakaraya Namaha", m: "Giver of divine grace" },
+        { s: "Om Bhayavinashine Namaha", m: "Destroyer of fear" },
+        { s: "Om Manovanchitapradaya Namaha", m: "Fulfiller of heartfelt desires" },
+        { s: "Om Divyadarshanapradaaya Namaha", m: "Giver of divine vision" },
+        { s: "Om Satyaswaroopaya Namaha", m: "Embodiment of truth" },
+        { s: "Om Nityasannidhaye Namaha", m: "Always present" },
+        { s: "Om Premamurtaye Namaha", m: "Embodiment of love" },
+        { s: "Om Dayanidhaye Namaha", m: "Treasure of compassion" },
+        { s: "Om Bhaktabandhave Namaha", m: "Friend of devotees" },
+        { s: "Om Atmasakshine Namaha", m: "Inner witness" },
+        { s: "Om Nityaprakashaya Namaha", m: "Eternal light" },
+        { s: "Om Shantidayakaya Namaha", m: "Giver of peace" },
+        { s: "Om Sukhadaya Namaha", m: "Giver of happiness" },
+        { s: "Om Hridayapriyakaya Namaha", m: "Beloved of the heart" },
+        { s: "Om Anantashaktaye Namaha", m: "Infinite power" },
+        { s: "Om Sarvagnaya Namaha", m: "All-knowing one" },
+        { s: "Om Karmasakshine Namaha", m: "Witness of all actions" },
+        { s: "Om Bhaktabhishtapradaya Namaha", m: "Fulfiller of devotees’ wishes" },
+        { s: "Om Divyasannidhikartre Namaha", m: "Makes divine presence felt" },
+        { s: "Om Avanagataprasannaya Namaha", m: "Pleased when called near" },
+        { s: "Om Hridayasphuradbhavaya Namaha", m: "Shines within the heart" },
+        { s: "Om Chittaprakashakaya Namaha", m: "Illuminates the mind" },
+        { s: "Om Antaryamine Namaha", m: "Inner controller" },
+        { s: "Om Pranadharakaya Namaha", m: "Sustainer of life force" },
+        { s: "Om Jnanapradaya Namaha", m: "Giver of wisdom" },
+        { s: "Om Avidyanashakaya Namaha", m: "Destroyer of ignorance" },
+        { s: "Om Chetanaroopaya Namaha", m: "Embodiment of awareness" },
+        { s: "Om Nityabodhaya Namaha", m: "Eternal consciousness" },
+        { s: "Om Sukshmavasine Namaha", m: "Dwells subtly within" },
+        { s: "Om Manoniyantrine Namaha", m: "Controller of the mind" },
+        { s: "Om Indriyajitaya Namaha", m: "Conqueror of senses" },
+        { s: "Om Antarshuddhikaraya Namaha", m: "Purifier within" },
+        { s: "Om Hridayaguhavasine Namaha", m: "Residing in the cave of the heart" },
+        { s: "Om Divyachaitanyamurtaye Namaha", m: "Embodiment of divine consciousness" },
+        { s: "Om Smritidayakaya Namaha", m: "Giver of right remembrance" },
+        { s: "Om Vivekapradaya Namaha", m: "Giver of discernment" },
+        { s: "Om Manoshantikaraya Namaha", m: "Calms the mind" },
+        { s: "Om Hridayaprakashine Namaha", m: "Illuminator of the heart" },
+        { s: "Om Atmabodhakaraya Namaha", m: "Awakens the self" },
+        { s: "Om Nityasakshine Namaha", m: "Eternal witness" },
+        { s: "Om Sukshmadrishtaye Namaha", m: "One with subtle vision" },
+        { s: "Om Chittasakshine Namaha", m: "Witness of the mind" },
+        { s: "Om Pranashaktaye Namaha", m: "Life energy itself" },
+        { s: "Om Hridayaspandaya Namaha", m: "Pulse within the heart" },
+        { s: "Om Bhavashuddhikaraya Namaha", m: "Purifier of emotions" },
+        { s: "Om Dhyanagamyaya Namaha", m: "Meditation path" },
+        { s: "Om Yogasswaroopaya Namaha", m: "Essence of union" },
+        { s: "Om Samadhisthitaya Namaha", m: "Deep stillness" },
+        { s: "Om Nityashantaya Namaha", m: "Eternal peace" },
+        { s: "Om Anandaroopaya Namaha", m: "Embodiment of bliss" },
+        { s: "Om Sukshmachaitanyaya Namaha", m: "Subtle consciousness" },
+        { s: "Om Hridayadarshakaya Namaha", m: "Revealer within" },
+        { s: "Om Jnanadeepaya Namaha", m: "Lamp of wisdom" },
+        { s: "Om Tattvabodhakaya Namaha", m: "Revealer of truth" },
+        { s: "Om AhamkaraNashakaya Namaha", m: "Destroyer of ego" },
+        { s: "Om Chittashuddhikaraya Namaha", m: "Purifier of mind" },
+        { s: "Om Nityavivekaya Namaha", m: "Eternal discernment" },
+        { s: "Om Antarjyotirmayaya Namaha", m: "Inner radiant light" },
+        { s: "Om Hridayaprasadaya Namaha", m: "Grace in the heart" },
+        { s: "Om Manonirmalakaya Namaha", m: "Purifier of thoughts" },
+        { s: "Om Bhaktachittavasine Namaha", m: "Dwelling in devotee mind" },
+        { s: "Om Hridayviharine Namaha", m: "Moves in the heart" },
+        { s: "Om Antarbhavapradaya Namaha", m: "Giver of inner feeling" },
+        { s: "Om Premavardhanaya Namaha", m: "Increaser of love" },
+        { s: "Om Shantidatre Namaha", m: "Giver of peace" },
+        { s: "Om Sukhadatre Namaha", m: "Giver of joy" },
+        { s: "Om Hridayabandhave Namaha", m: "Companion of the heart" },
+        { s: "Om Nitysannidhikaraya Namaha", m: "Constant presence" },
+        { s: "Om Bhaktapriyakaya Namaha", m: "Dear to devotees" },
+        { s: "Om Dayapradaya Namaha", m: "Giver of compassion" },
+        { s: "Om Chittasthirakaraya Namaha", m: "Stabilizer of mind" },
+        { s: "Om Manonigrahaya Namaha", m: "Controller of thoughts" },
+        { s: "Om Antarshantidaya Namaha", m: "Giver of inner peace" },
+        { s: "Om Hridayapavanaya Namaha", m: "Purifier of heart" },
+        { s: "Om Bhavaprakashaya Namaha", m: "Illuminator of emotions" },
+        { s: "Om Nityachaitanyaya Namaha", m: "Eternal awareness" },
+        { s: "Om Atmaprakashaya Namaha", m: "Self-revealing light" },
+        { s: "Om Hridayasthitaya Namaha", m: "Established in the heart" },
+        { s: "Om Bhaktahridayasakhaya Namaha", m: "Friend within devotees" },
+        { s: "Om Anandapradaya Namaha", m: "Giver of bliss" },
+        { s: "Om Shantipradaya Namaha", m: "Giver of peace" },
+        { s: "Om Hridayachaitanyaya Namaha", m: "Heart consciousness" },
+        { s: "Om Manodarpanashodhakaya Namaha", m: "Cleanser of mind mirror" },
+        { s: "Om Bhaktachittaprasadaya Namaha", m: "Calms devotees' minds" },
+        { s: "Om Antarjyotirdarshakaya Namaha", m: "Revealer of inner light" },
+        { s: "Om Dhyanaswaroopaya Namaha", m: "Embodiment of meditation" },
+        { s: "Om Nityanandaya Namaha", m: "Eternal bliss" },
+        { s: "Om Hridayanathaya Namaha", m: "Lord of the heart" },
+        { s: "Om Chittaprasannaya Namaha", m: "Makes the mind peaceful" },
+        { s: "Om Antarsukhapradaya Namaha", m: "Giver of inner joy" },
+        { s: "Om Bhaktasannidhikaraya Namaha", m: "Creates presence" },
+        { s: "Om Hridayapriyaya Namaha", m: "Beloved within" },
+        { s: "Om Atmaniveditapriyaya Namaha", m: "Loves surrender" },
+        { s: "Om Shuddhachaitanyaya Namaha", m: "Pure consciousness" },
+        { s: "Om Hridayaprakashaya Namaha", m: "Light within" },
+        { s: "Om Nityasakhaya Namaha", m: "Eternal companion" },
+        { s: "Om Antarvasine Namaha", m: "Indwelling presence" },
+        { s: "Om Avanagataprasannaya Namaha", m: "Pleased when called near" }
+      ]
+    },
+    {
+      title: "Protection & Ugra Power",
+      desc: "Raising the shield, uprooting fear, and guarding the spiritual path.",
+      names: [
+        { s: "Om Ugratejase Namaha", m: "Intense divine radiance" },
+        { s: "Om Rakshanatatparaya Namaha", m: "Ever ready to protect" },
+        { s: "Om Bhayabhanjanaya Namaha", m: "Breaker of fear" },
+        { s: "Om Dushtavidwamsine Namaha", m: "Destroyer of wicked forces" },
+        { s: "Om Shatrukshayanakaya Namaha", m: "Dissolves enemies" },
+        { s: "Om Mahapratapaya Namaha", m: "Great valor" },
+        { s: "Om Rakshachakradharaya Namaha", m: "Protective circle wielder" },
+        { s: "Om Vajrakayaya Namaha", m: "Indestructible form" },
+        { s: "Om Agninetraaya Namaha", m: "Fire-like eyes" },
+        { s: "Om Krodhasamyamaya Namaha", m: "Controls divine wrath" },
+        { s: "Om Rakshoghnaya Namaha", m: "Destroyer of harmful entities" },
+        { s: "Om Bhutavidravakaya Namaha", m: "Drives away negative forces" },
+        { s: "Om Grahadoshanivarakaya Namaha", m: "Remover of adverse influences" },
+        { s: "Om Kaalajitaya Namaha", m: "Conqueror of time" },
+        { s: "Om Mahavegaya Namaha", m: "Unstoppable force" },
+        { s: "Om Dushtadamanaya Namaha", m: "Subduer of evil" },
+        { s: "Om Rakshasaghnaaya Namaha", m: "Destroyer of demonic tendencies" },
+        { s: "Om Mahaghoraaya Namaha", m: "Intensely fierce one" },
+        { s: "Om Bhayankaraya Namaha", m: "Terrifying presence to negativity" },
+        { s: "Om Tejopunjaya Namaha", m: "Mass of divine energy" },
+        { s: "Om Sarvayuddhajayine Namaha", m: "Victor in all battles" },
+        { s: "Om Parashaktidharaaya Namaha", m: "Holder of supreme power" },
+        { s: "Om Divyastradharaya Namaha", m: "Bearer of divine weapons" },
+        { s: "Om Rakshakavachaya Namaha", m: "Protective armor" },
+        { s: "Om Aparajitaya Namaha", m: "Undefeatable one" },
+        { s: "Om Veeraroopaya Namaha", m: "Heroic form" },
+        { s: "Om Simhagarjanaya Namaha", m: "Lion-like roar" },
+        { s: "Om Kshatradharmapalakaya Namaha", m: "Protector of righteousness" },
+        { s: "Om Vajravegaya Namaha", m: "Lightning-like speed" },
+        { s: "Om Mahaparakramaya Namaha", m: "Supreme courage" },
+        { s: "Om Mahakrodhaya Namaha", m: "Divine controlled fury" },
+        { s: "Om Shatrunirmoolakaya Namaha", m: "Uprooter of enemies" },
+        { s: "Om Sarvavighnaharaya Namaha", m: "Remover of all obstacles" },
+        { s: "Om Bhayanashakaya Namaha", m: "Destroyer of fear" },
+        { s: "Om Rakshachakranirmatakaya Namaha", m: "Creator of protective shields" },
+        { s: "Om Karmavighnanashakaya Namaha", m: "Remover of karmic obstacles" },
+        { s: "Om Dushtachittavinashakaya Namaha", m: "Destroyer of negative thoughts" },
+        { s: "Om Mahavegashaktaye Namaha", m: "Force of unstoppable energy" },
+        { s: "Om Ugraprakashaya Namaha", m: "Intense radiant presence" },
+        { s: "Om Sarvopadravanashakaya Namaha", m: "Destroyer of all disturbances" },
+        { s: "Om Durgatinashakaya Namaha", m: "Remover of misfortune" },
+        { s: "Om Bhayapranashakaya Namaha", m: "Complete remover of fear" },
+        { s: "Om Rakshavidaranaya Namaha", m: "Tears apart evil forces" },
+        { s: "Om Mahasuraghnaaya Namaha", m: "Destroyer of great negativity" },
+        { s: "Om Tejodharaya Namaha", m: "Bearer of divine light" },
+        { s: "Om Sarvashaktisamanvitaya Namaha", m: "Endowed with all powers" },
+        { s: "Om Mahabhayaharaya Namaha", m: "Remover of great fears" },
+        { s: "Om Sankatamochakaya Namaha", m: "Liberator from danger" },
+        { s: "Om Kaaladahanaya Namaha", m: "Burns limitations" },
+        { s: "Om Sarvagrahashantikaraya Namaha", m: "Pacifier of disturbances" },
+        { s: "Om Maharakshanaya Namaha", m: "Supreme protector" },
+        { s: "Om Bhayabhedakaya Namaha", m: "Breaker of fear at its root" },
+        { s: "Om Shatrubhanjanaya Namaha", m: "Destroyer of enemies" },
+        { s: "Om Tejovardhanaya Namaha", m: "Increaser of inner strength" },
+        { s: "Om Rakshashaktipradaya Namaha", m: "Giver of protective energy" },
+        { s: "Om Sarvadoshanivarakaya Namaha", m: "Remover of all defects" },
+        { s: "Om Bhaktarakshanashilaya Namaha", m: "Natural devotee protector" },
+        { s: "Om Mahaveeryapradaya Namaha", m: "Giver of courage" },
+        { s: "Om Dushtasamhartre Namaha", m: "Destroyer of wickedness" },
+        { s: "Om Rakshakiranaya Namaha", m: "Radiating protection" },
+        { s: "Om Sarvashatruvighatakaya Namaha", m: "Breaks all opposition" },
+        { s: "Om Bhayavinashakaraya Namaha", m: "Remover of fear completely" },
+        { s: "Om Rakshachakrapravartakaya Namaha", m: "Activator of protective shield" },
+        { s: "Om Tejodharaya Namaha", m: "Holder of divine light" },
+        { s: "Om Dushtavidaranaya Namaha", m: "Tears apart evil" },
+        { s: "Om Sarvvighnanivarakaya Namaha", m: "Remover of all obstacles" },
+        { s: "Om Bhayashamanaya Namaha", m: "Calms fear" },
+        { s: "Om Rakshakavachaya Namaha", m: "Protective armor" },
+        { s: "Om Tejoprakashaya Namaha", m: "Radiating brilliance" },
+        { s: "Om Dushtbhanjanaya Namaha", m: "Breaker of evil" },
+        { s: "Om Sarvopadravanashakaya Namaha", m: "Destroyer of all disturbances" },
+        { s: "Om Bhayaharaya Namaha", m: "Remover of fear" },
+        { s: "Om Rakshavistarakaya Namaha", m: "Expander of protection" },
+        { s: "Om Tejaswaroopaya Namaha", m: "Embodiment of energy" },
+        { s: "Om Dushtakshapakaraya Namaha", m: "Destroyer of wicked forces" },
+        { s: "Om Sarvashatrunivarakaya Namaha", m: "Remover of all enemies" },
+        { s: "Om Bhayanashanaya Namaha", m: "Destroys fear" },
+        { s: "Om Rakshadharayine Namaha", m: "Holder of protection" },
+        { s: "Om Tejovistarakaya Namaha", m: "Expander of radiance" },
+        { s: "Om Dushtavidwamsine Namaha", m: "Destroyer of negativity" },
+        { s: "Om Sarvakleshanivarakaya Namaha", m: "Remover of suffering" },
+        { s: "Om Bhayapranashakaya Namaha", m: "Destroyer of fear" },
+        { s: "Om Rakshapradaya Namaha", m: "Giver of protection" },
+        { s: "Om Tejodipaya Namaha", m: "Flame of energy" },
+        { s: "Om Dushtaghnaaya Namaha", m: "Destroyer of evil" },
+        { s: "Om Sarvabhayanivarakaya Namaha", m: "Remover of all fear" },
+        { s: "Om Bhayashunyakaraya Namaha", m: "Makes fearless" },
+        { s: "Om Rakshapoorakaya Namaha", m: "Fulfiller of protection" },
+        { s: "Om Tejovardhakaya Namaha", m: "Increaser of energy" },
+        { s: "Om Dushtakshayakaraya Namaha", m: "Destroyer of evil roots" },
+        { s: "Om Sarvasankatanivarakaya Namaha", m: "Remover of all troubles" },
+        { s: "Om Bhayanivarakaya Namaha", m: "Remover of fear" },
+        { s: "Om Rakshaswaroopaya Namaha", m: "Embodiment of protection" },
+        { s: "Om Tejopunjaya Namaha", m: "Mass of divine energy" },
+        { s: "Om Dushtavidarakaya Namaha", m: "Tears apart negativity" },
+        { s: "Om Sarvavighnashamanaya Namaha", m: "Calmer of all obstacles" },
+        { s: "Om Bhayaharakaya Namaha", m: "Remover of fear" },
+        { s: "Om Rakshaprakashaya Namaha", m: "Shining protection" },
+        { s: "Om Tejodharaya Namaha", m: "Holder of radiance" },
+        { s: "Om Dushtanashakaya Namaha", m: "Destroyer of evil" },
+        { s: "Om Sarvopadravashamanaya Namaha", m: "Calms all disturbances" },
+        { s: "Om Bhayanivrittihetave Namaha", m: "Cause of fearlessness" },
+        { s: "Om Rakshasthirakaraya Namaha", m: "Stabilizer of protection" },
+        { s: "Om Tejovardhanaya Namaha", m: "Increaser of radiance" },
+        { s: "Om Dushtakshayaya Namaha", m: "Ends evil" },
+        { s: "Om Sarvashatrunashakaya Namaha", m: "Destroyer of all enemies" },
+        { s: "Om Bhayashantikaraya Namaha", m: "Peace from fear" },
+        { s: "Om Rakshasampoorakaya Namaha", m: "Completes protection" }
+      ]
+    },
+    {
+      title: "Grace & Fulfillment",
+      desc: "Softening the energy where prayers flow and inner prosperity aligns.",
+      names: [
+        { s: "Om Anugrahapradaya Namaha", m: "Giver of divine blessings" },
+        { s: "Om Kripakatakshaya Namaha", m: "Glance grants grace" },
+        { s: "Om Bhaktabhishtapoorakaya Namaha", m: "Fulfiller of devotees’ wishes" },
+        { s: "Om Mangalaswaroopaya Namaha", m: "Auspiciousness itself" },
+        { s: "Om Saubhagyadayakaya Namaha", m: "Giver of good fortune" },
+        { s: "Om Aishwaryapradaya Namaha", m: "Giver of prosperity" },
+        { s: "Om Sampatpradaya Namaha", m: "Bestower of wealth" },
+        { s: "Om Sukhaswaroopaya Namaha", m: "Embodiment of happiness" },
+        { s: "Om Anandavardhanaya Namaha", m: "Increases joy" },
+        { s: "Om Shantipradaya Namaha", m: "Giver of peace" },
+        { s: "Om Punyavardhanaya Namaha", m: "Increaser of merit" },
+        { s: "Om Dharmapradaya Namaha", m: "Giver of righteousness" },
+        { s: "Om Bhagyavardhanaya Namaha", m: "Enhancer of fortune" },
+        { s: "Om Sukhavardhanaya Namaha", m: "Increaser of happiness" },
+        { s: "Om Santoshadayakaya Namaha", m: "Giver of contentment" },
+        { s: "Om Manorathasiddhidaya Namaha", m: "Fulfiller of heartfelt wishes" },
+        { s: "Om Ishtasiddhipradaya Namaha", m: "Granter of desired success" },
+        { s: "Om Kalyanapradaya Namaha", m: "Giver of well-being" },
+        { s: "Om Mangalanidhaye Namaha", m: "Treasure of auspiciousness" },
+        { s: "Om Subhapradaya Namaha", m: "Giver of goodness" },
+        { s: "Om Harshavardhanaya Namaha", m: "Increaser of joy" },
+        { s: "Om Dukhanivarakaya Namaha", m: "Remover of sorrow" },
+        { s: "Om Sankatavimochakaya Namaha", m: "Liberator from troubles" },
+        { s: "Om Ashirvadapradaya Namaha", m: "Bestower of blessings" },
+        { s: "Om Bhaktasampatpradaya Namaha", m: "Prosperity to devotees" },
+        { s: "Om Sukhapradaya Namaha", m: "Giver of comfort" },
+        { s: "Om Anandadayakaya Namaha", m: "Giver of bliss" },
+        { s: "Om Shreyahpradaya Namaha", m: "Giver of ultimate good" },
+        { s: "Om Bhaktarakshapradaya Namaha", m: "Grants protection" },
+        { s: "Om Chintamaniroopaya Namaha", m: "Wish-fulfilling divine form" },
+        { s: "Om Kamadhenuswaroopaya Namaha", m: "Fulfiller of all desires" },
+        { s: "Om Varapradaya Namaha", m: "Granter of boons" },
+        { s: "Om Sarvakamapradaya Namaha", m: "Fulfiller of all desires" },
+        { s: "Om Bhaktanugrahakaraya Namaha", m: "Blesses devotees" },
+        { s: "Om Sukhashantipradaya Namaha", m: "Happiness and peace" },
+        { s: "Om Anandapoorakaya Namaha", m: "Fills with bliss" },
+        { s: "Om Jeevanasampatpradaya Namaha", m: "Life prosperity" },
+        { s: "Om Hridayaprasadaya Namaha", m: "Grants inner satisfaction" },
+        { s: "Om Bhagyapradaya Namaha", m: "Giver of fortune" },
+        { s: "Om Mangalamayaya Namaha", m: "All-auspicious one" },
+        { s: "Om Subhakaraya Namaha", m: "Doer of good" },
+        { s: "Om Dhanyapradaya Namaha", m: "Giver of fulfillment" },
+        { s: "Om Samruddhipradaya Namaha", m: "Giver of abundance" },
+        { s: "Om Bhaktasamruddhikaraya Namaha", m: "Enriches devotees" },
+        { s: "Om Punyaphalapradaya Namaha", m: "Good results" },
+        { s: "Om Sukhaprasavaya Namaha", m: "Source of happiness" },
+        { s: "Om Mangalahetave Namaha", m: "Cause of auspiciousness" },
+        { s: "Om Ashrithavatsalaya Namaha", m: "Loving protector" },
+        { s: "Om Dayapoorakaya Namaha", m: "Fulfills with compassion" },
+        { s: "Om Hridayasukhadaya Namaha", m: "Heartful happiness" },
+        { s: "Om Bhaktavanchitapoorakaya Namaha", m: "Fulfiller of devotee desires" },
+        { s: "Om Mangalasanchayaya Namaha", m: "Accumulator of auspiciousness" },
+        { s: "Om Sukhasampadpradaya Namaha", m: "Giver of joyful prosperity" },
+        { s: "Om Anandavistaraya Namaha", m: "Expander of bliss" },
+        { s: "Om Shreyovardhanaya Namaha", m: "Increaser of higher good" },
+        { s: "Om Subhalakshanaya Namaha", m: "Marked by auspicious signs" },
+        { s: "Om Bhaktasaukhyapradaya Namaha", m: "Comfort to devotees" },
+        { s: "Om Kalyanavardhanaya Namaha", m: "Increaser of well-being" },
+        { s: "Om Mangalamoolaya Namaha", m: "Root of auspiciousness" },
+        { s: "Om Sukhashrayaya Namaha", m: "Refuge of happiness" },
+        { s: "Om Anandadharayine Namaha", m: "Holder of bliss" },
+        { s: "Om Bhaktamangalaroopaya Namaha", m: "Auspicious devotee form" },
+        { s: "Om Saubhagyaswaroopaya Namaha", m: "Embodiment of fortune" },
+        { s: "Om Shubhasankalpaya Namaha", m: "Auspicious intent" },
+        { s: "Om Bhagyasanchayaya Namaha", m: "Gatherer of fortune" },
+        { s: "Om Sukhavistarakaya Namaha", m: "Expander of happiness" },
+        { s: "Om Anandaprakashaya Namaha", m: "Light of bliss" },
+        { s: "Om Mangalapradarshakaya Namaha", m: "Revealer of auspicious paths" },
+        { s: "Om Subhaprasavaya Namaha", m: "Source of goodness" },
+        { s: "Om Bhaktasampatvardhanaya Namaha", m: "Increaser of devotee prosperity" },
+        { s: "Om Kalyanakaraya Namaha", m: "Doer of welfare" },
+        { s: "Om Anandabodhakaya Namaha", m: "Awakener of bliss" },
+        { s: "Om Sukhasanchalakaya Namaha", m: "Mover of happiness" },
+        { s: "Om Mangalanidhaye Namaha", m: "Treasure of auspiciousness" },
+        { s: "Om Bhaktahridayahladaya Namaha", m: "Delights devotees’ hearts" },
+        { s: "Om Shubhapoorakaya Namaha", m: "Fulfiller of goodness" },
+        { s: "Om Anandavardhakaya Namaha", m: "Increaser of bliss" },
+        { s: "Om Sukhadarshakaya Namaha", m: "Reveals happiness" },
+        { s: "Om Mangalaswabhavaya Namaha", m: "Nature is auspicious" },
+        { s: "Om Bhagyaprasarakaya Namaha", m: "Spreader of fortune" },
+        { s: "Om Sukhasthapanaya Namaha", m: "Establisher of happiness" },
+        { s: "Om Anandapravahaya Namaha", m: "Flow of bliss" },
+        { s: "Om Shubhavardhanaya Namaha", m: "Increaser of goodness" },
+        { s: "Om Mangalahetave Namaha", m: "Cause of auspiciousness" },
+        { s: "Om Bhaktasaukhyvardhanaya Namaha", m: "Increaser of devotee happiness" },
+        { s: "Om Kalyanaprakashaya Namaha", m: "Light of well-being" },
+        { s: "Om Anandakaraya Namaha", m: "Giver of joy" },
+        { s: "Om Sukhanirmatakaya Namaha", m: "Creator of happiness" },
+        { s: "Om Mangalasanchalakaya Namaha", m: "Mover of auspiciousness" },
+        { s: "Om Bhagyadayakaya Namaha", m: "Giver of fortune" },
+        { s: "Om Sukhashuddhikaraya Namaha", m: "Purifier of happiness" },
+        { s: "Om Anandaroopaya Namaha", m: "Embodiment of bliss" },
+        { s: "Om Shubhapradaya Namaha", m: "Giver of goodness" },
+        { s: "Om Mangalasthirakaraya Namaha", m: "Stabilizer of auspiciousness" },
+        { s: "Om Bhaktamangalakaraya Namaha", m: "Doer of good for devotees" },
+        { s: "Om Kalyanasanchayaya Namaha", m: "Collector of well-being" },
+        { s: "Om Anandavistarakaya Namaha", m: "Expander of bliss" },
+        { s: "Om Sukhadayine Namaha", m: "Giver of happiness" },
+        { s: "Om Mangalarakshakaya Namaha", m: "Protector of auspiciousness" },
+        { s: "Om Bhagyavardhanaya Namaha", m: "Increaser of fortune" },
+        { s: "Om Sukhaswaroopine Namaha", m: "Form of happiness" },
+        { s: "Om Anandaprasarakaya Namaha", m: "Spreader of bliss" },
+        { s: "Om Shubhaswaroopaya Namaha", m: "Embodiment of goodness" },
+        { s: "Om Mangalamayaya Namaha", m: "All-auspicious one" },
+        { s: "Om Bhaktasukhadaya Namaha", m: "Giver of joy to devotees" },
+        { s: "Om Kalyanadayakaya Namaha", m: "Giver of well-being" },
+        { s: "Om Anandapoorakaya Namaha", m: "Fills with bliss" },
+        { s: "Om Shubhasampatpradaya Namaha", m: "Auspicious prosperity" }
+      ]
+    },
+    {
+      title: "Wisdom, Dharma & Clarity",
+      desc: "Melting confusion and illuminating the path of truth.",
+      names: [
+        { s: "Om Jnanaswaroopaya Namaha", m: "Embodiment of knowledge" },
+        { s: "Om Tattvabodhakaya Namaha", m: "Revealer of truth" },
+        { s: "Om Vivekadayakaya Namaha", m: "Giver of discernment" },
+        { s: "Om Avidyanashakaya Namaha", m: "Destroyer of ignorance" },
+        { s: "Om Dharmasthapakaya Namaha", m: "Establisher of righteousness" },
+        { s: "Om Satyanishthaya Namaha", m: "Rooted in truth" },
+        { s: "Om Buddhipradaya Namaha", m: "Giver of intelligence" },
+        { s: "Om Medhakaraya Namaha", m: "Enhancer of intellect" },
+        { s: "Om Jnanadeepaya Namaha", m: "Lamp of wisdom" },
+        { s: "Om Antarjnanapradaya Namaha", m: "Giver of inner knowledge" },
+        { s: "Om Chittashuddhikaraya Namaha", m: "Purifier of mind" },
+        { s: "Om Dharmachakrapravartakaya Namaha", m: "Mover of righteousness" },
+        { s: "Om Satyadarshakaya Namaha", m: "Revealer of truth" },
+        { s: "Om Mohanashakaya Namaha", m: "Destroyer of delusion" },
+        { s: "Om Vivekavardhanaya Namaha", m: "Increaser of wisdom" },
+        { s: "Om Shuddhabodhaya Namaha", m: "Pure awareness" },
+        { s: "Om Jnanachakshuse Namaha", m: "Eye of wisdom" },
+        { s: "Om Dharmapathapradarshakaya Namaha", m: "Guide of righteous path" },
+        { s: "Om Antarvivekaya Namaha", m: "Inner discernment" },
+        { s: "Om Satyabodhakaraya Namaha", m: "Awakener of truth" },
+        { s: "Om Jnanaprakashaya Namaha", m: "Light of knowledge" },
+        { s: "Om Mohavidwamsine Namaha", m: "Destroyer of illusion" },
+        { s: "Om Nityabodhaya Namaha", m: "Eternal awareness" },
+        { s: "Om Dharmarakshakaya Namaha", m: "Protector of righteousness" },
+        { s: "Om Satyahetave Namaha", m: "Cause of truth" },
+        { s: "Om Buddhiprakashaya Namaha", m: "Illuminator of intellect" },
+        { s: "Om Medhavardhanaya Namaha", m: "Increaser of intelligence" },
+        { s: "Om Jnanagamyaya Namaha", m: "Reached through knowledge" },
+        { s: "Om Tattvaswaroopaya Namaha", m: "Essence of reality" },
+        { s: "Om Dharmaswaroopaya Namaha", m: "Embodiment of righteousness" },
+        { s: "Om Satyanveshakaya Namaha", m: "Seeker of truth" },
+        { s: "Om Jnanasanchayaya Namaha", m: "Storehouse of wisdom" },
+        { s: "Om Vivekashaktaye Namaha", m: "Power of discernment" },
+        { s: "Om Dharmapalanaya Namaha", m: "Sustainer of dharma" },
+        { s: "Om Satyanishchayaya Namaha", m: "Firm in truth" },
+        { s: "Om Jnanavistaraya Namaha", m: "Expander of knowledge" },
+        { s: "Om Buddhivardhanaya Namaha", m: "Enhancer of intellect" },
+        { s: "Om Dharmabodhakaya Namaha", m: "Teacher of righteousness" },
+        { s: "Om Satyaswaroopine Namaha", m: "Form of truth" },
+        { s: "Om Jnanapravahaya Namaha", m: "Flow of knowledge" },
+        { s: "Om Vivekachakshuse Namaha", m: "Eye of discernment" },
+        { s: "Om Dharmavardhanaya Namaha", m: "Increaser of righteousness" },
+        { s: "Om Satyadarshane Namaha", m: "Vision of truth" },
+        { s: "Om Jnanamurtaye Namaha", m: "Embodiment of knowledge" },
+        { s: "Om Mohaharaya Namaha", m: "Remover of confusion" },
+        { s: "Om Vivekaroopaya Namaha", m: "Form of wisdom" },
+        { s: "Om Dharmachintakaya Namaha", m: "Thinker of righteousness" },
+        { s: "Om Satyapradaya Namaha", m: "Giver of truth" },
+        { s: "Om Jnanaprabhave Namaha", m: "Source of knowledge" },
+        { s: "Om Vivekadayine Namaha", m: "Giver of discernment" },
+        { s: "Om Dharmarakshakaya Namaha", m: "Protector of dharma" },
+        { s: "Om Satyavicharakaya Namaha", m: "Examines truth deeply" },
+        { s: "Om Jnanavardhanaya Namaha", m: "Increases knowledge" },
+        { s: "Om Vivekaprakashaya Namaha", m: "Light of discernment" },
+        { s: "Om Dharmasthirakaraya Namaha", m: "Stabilizes righteousness" },
+        { s: "Om Satyachaitanyaya Namaha", m: "Consciousness of truth" },
+        { s: "Om Jnanasanchalakaya Namaha", m: "Moves knowledge within" },
+        { s: "Om Vivekabodhakaya Namaha", m: "Awakener of discernment" },
+        { s: "Om Dharmamargadarshakaya Namaha", m: "Guide on the path" },
+        { s: "Om Satyasphuradaya Namaha", m: "Reveals truth clearly" },
+        { s: "Om Jnanachaitanyaya Namaha", m: "Living consciousness of knowledge" },
+        { s: "Om Vivekanishchayaya Namaha", m: "Establishes firm discernment" },
+        { s: "Om Dharmapravartakaya Namaha", m: "Sets dharma into motion" },
+        { s: "Om Satyapratishthitaya Namaha", m: "Firmly established in truth" },
+        { s: "Om Jnanadharayine Namaha", m: "Holder of knowledge" },
+        { s: "Om Vivekaswaroopaya Namaha", m: "Embodiment of discernment" },
+        { s: "Om Dharmaprakashaya Namaha", m: "Illuminates righteousness" },
+        { s: "Om Satyavardhanaya Namaha", m: "Increases truth" },
+        { s: "Om Jnanashuddhikaraya Namaha", m: "Purifier of knowledge" },
+        { s: "Om Vivekachakshuse Namaha", m: "Eye of wisdom" },
+        { s: "Om Dharmasanchayaya Namaha", m: "Collector of righteousness" },
+        { s: "Om Satyaprakashakaya Namaha", m: "Revealer of truth" },
+        { s: "Om Jnanagamyaya Namaha", m: "Reached through knowledge" },
+        { s: "Om Vivekavistarakaya Namaha", m: "Expander of discernment" },
+        { s: "Om Dharmarakshanatatparaya Namaha", m: "Devoted to protecting dharma" },
+        { s: "Om Satyabodhaya Namaha", m: "Pure awareness of truth" },
+        { s: "Om Jnanavivekasamyuktaya Namaha", m: "United with knowledge" },
+        { s: "Om Vivekadarshakaya Namaha", m: "Revealer of wisdom" },
+        { s: "Om Dharmasthapanakartre Namaha", m: "Establisher of righteousness" },
+        { s: "Om Satyaswaroopine Namaha", m: "Embodiment of truth" },
+        { s: "Om Jnanaprakashine Namaha", m: "Shines as knowledge" },
+        { s: "Om Vivekavardhakaya Namaha", m: "Strengthens discernment" },
+        { s: "Om Dharmapalanatatparaya Namaha", m: "Preserving dharma" },
+        { s: "Om Satyanishthaya Namaha", m: "Firmly rooted in truth" },
+        { s: "Om Jnanabodhakaya Namaha", m: "Awakener of knowledge" },
+        { s: "Om Vivekaprakashakaya Namaha", m: "Illuminator of discernment" },
+        { s: "Om Dharmapradarshakaya Namaha", m: "Path shower of dharma" },
+        { s: "Om Satyadarshakaya Namaha", m: "Revealer of truth" },
+        { s: "Om Jnanaswaroopine Namaha", m: "Form of knowledge" },
+        { s: "Om Vivekanirmatakaya Namaha", m: "Creator of discernment" },
+        { s: "Om Dharmasthitikaraya Namaha", m: "Maintains righteousness" },
+        { s: "Om Satyavikasaya Namaha", m: "Expands truth" },
+        { s: "Om Jnanasanchayakaya Namaha", m: "Gatherer of knowledge" },
+        { s: "Om Vivekashaktipradaya Namaha", m: "Discernment power" },
+        { s: "Om Dharmchachakrasthitaya Namaha", m: "Established in dharma cycle" },
+        { s: "Om Satyachaitanyapradaya Namaha", m: "Truth-consciousness" },
+        { s: "Om Jnanasthirakaraya Namaha", m: "Stabilizer of knowledge" },
+        { s: "Om Vivekaniyamakaya Namaha", m: "Regulator of discernment" },
+        { s: "Om Dharmabodhakaraya Namaha", m: "Awakener of righteousness" },
+        { s: "Om Satyaprakashaya Namaha", m: "Radiant truth" },
+        { s: "Om Jnanavikasaya Namaha", m: "Expander of knowledge" },
+        { s: "Om Vivekavardhanashilaya Namaha", m: "Naturally increases wisdom" },
+        { s: "Om Dharmasankalpaya Namaha", m: "Righteous resolve" },
+        { s: "Om Satyanirmalakaya Namaha", m: "Purifier of truth" },
+        { s: "Om Jnanaprasaraya Namaha", m: "Spreader of knowledge" },
+        { s: "Om Vivekadarshaya Namaha", m: "Mirror of discernment" },
+        { s: "Om Dharmaswaroopaya Namaha", m: "Embodiment of righteousness" },
+        { s: "Om Satyabodhapradaya Namaha", m: "Giver of truth realization" }
+      ]
+    },
+    {
+      title: "Detachment & Freedom",
+      desc: "Releasing ego anchors and stepping into inner liberation.",
+      names: [
+        { s: "Om Ahankaranashakaya Namaha", m: "Destroyer of ego" },
+        { s: "Om Mamakaranivartakaya Namaha", m: "Remover of possessiveness" },
+        { s: "Om Asaktinashakaya Namaha", m: "Removes attachment" },
+        { s: "Om Vairagyapradaya Namaha", m: "Giver of detachment" },
+        { s: "Om Mohavinashakaya Namaha", m: "Destroyer of delusion" },
+        { s: "Om Bandhamochakaya Namaha", m: "Liberator from bondage" },
+        { s: "Om Samsarabandhavicchedakaya Namaha", m: "Cutter of worldly ties" },
+        { s: "Om Karmabandhavimochakaya Namaha", m: "Releaser from karma" },
+        { s: "Om Vasanasuddhikaraya Namaha", m: "Purifier of tendencies" },
+        { s: "Om Chittavimuktidaya Namaha", m: "Giver of mental freedom" },
+        { s: "Om Asangaroopaya Namaha", m: "Untouched by attachment" },
+        { s: "Om Nirmamatvapradaaya Namaha", m: "Giver of selflessness" },
+        { s: "Om Shuddhaswaroopaya Namaha", m: "Pure essence" },
+        { s: "Om Nirahankaraya Namaha", m: "Beyond ego" },
+        { s: "Om Nirliptaya Namaha", m: "Untouched by actions" },
+        { s: "Om Gunateetaya Namaha", m: "Beyond qualities" },
+        { s: "Om Dwandvatitaya Namaha", m: "Beyond dualities" },
+        { s: "Om Shuddhabodhaya Namaha", m: "Pure awareness" },
+        { s: "Om Vairagyasthapakaya Namaha", m: "Establisher of detachment" },
+        { s: "Om Mohanirmoolakaya Namaha", m: "Uprooter of illusion" },
+        { s: "Om Bandhanivartakaya Namaha", m: "Remover of bondage" },
+        { s: "Om Samsaranivarakaya Namaha", m: "Removes worldly cycles" },
+        { s: "Om Karmakshayahetave Namaha", m: "Cause of karmic dissolution" },
+        { s: "Om VasanaKshayakaraya Namaha", m: "Destroyer of desires" },
+        { s: "Om Chittashuddhipradaya Namaha", m: "Giver of pure mind" },
+        { s: "Om Nirmohaya Namaha", m: "Free from delusion" },
+        { s: "Om Nissangaya Namaha", m: "Unattached one" },
+        { s: "Om Atmavivekapradaya Namaha", m: "Self-discrimination" },
+        { s: "Om Ahamtyagakaraya Namaha", m: "Remover of ego identity" },
+        { s: "Om Mamatatyagakaraya Namaha", m: "Remover of possessiveness" },
+        { s: "Om Asaktibhedakaya Namaha", m: "Breaker of attachment" },
+        { s: "Om Vairagyavardhanaya Namaha", m: "Increaser of detachment" },
+        { s: "Om Mohabhedakaya Namaha", m: "Breaker of illusion" },
+        { s: "Om Bandhachchedakaya Namaha", m: "Cutter of bondage" },
+        { s: "Om Samsaratarakaya Namaha", m: "Helps cross worldly life" },
+        { s: "Om Karmavimuktidaya Namaha", m: "Freedom from karma" },
+        { s: "Om Vasanasamharakaya Namaha", m: "Destroyer of tendencies" },
+        { s: "Om Chittavishuddhikaraya Namaha", m: "Purifier of mind" },
+        { s: "Om Nirliptaswaroopaya Namaha", m: "Detached essence" },
+        { s: "Om Gunarahitaya Namaha", m: "Beyond qualities" },
+        { s: "Om Dwandvavinirmuktaya Namaha", m: "Free from duality" },
+        { s: "Om Shuddhachaitanyaya Namaha", m: "Pure consciousness" },
+        { s: "Om Vairagyasampannaya Namaha", m: "Full of detachment" },
+        { s: "Om Mohashunyaya Namaha", m: "Free from illusion" },
+        { s: "Om Bandhamuktaya Namaha", m: "Liberated one" },
+        { s: "Om Samsarateetaya Namaha", m: "Beyond worldly cycle" },
+        { s: "Om Karmateetaya Namaha", m: "Beyond karma" },
+        { s: "Om Vasanasunyaya Namaha", m: "Free from desires" },
+        { s: "Om Chittnirmalaya Namaha", m: "Pure mind" },
+        { s: "Om Nissangachaitanyaya Namaha", m: "Unattached consciousness" },
+        { s: "Om Atmabodhaya Namaha", m: "Self-awareness" },
+        { s: "Om Ahamrahitaya Namaha", m: "Without ego" },
+        { s: "Om Mamatavinirmuktaya Namaha", m: "Free from possessiveness" },
+        { s: "Om Asaktirahitaaya Namaha", m: "Free from attachment" },
+        { s: "Om Vairagyaswaroopaya Namaha", m: "Embodiment of detachment" },
+        { s: "Om Moharahitaya Namaha", m: "Free from illusion" },
+        { s: "Om Bandhavinirmuktaya Namaha", m: "Free from bondage" },
+        { s: "Om Samsaranirmuktaya Namaha", m: "Free from worldly cycle" },
+        { s: "Om Karmavinirmuktaya Namaha", m: "Free from karma" },
+        { s: "Om Vasananirmuktaya Namaha", m: "Free from tendencies" },
+        { s: "Om Chittashuddhaswaroopaya Namaha", m: "Pure mind essence" },
+        { s: "Om Nirliptachaitanyaya Namaha", m: "Untouched consciousness" },
+        { s: "Om Atmavivekaswaroopaya Namaha", m: "Self-discrimination form" },
+        { s: "Om Ahamtyagashilaya Namaha", m: "Naturally dissolves ego" },
+        { s: "Om Mamatatyagashilaya Namaha", m: "Removes possessiveness" },
+        { s: "Om Asaktinivartakaya Namaha", m: "Turns away attachment" },
+        { s: "Om Vairagyasanchayaya Namaha", m: "Accumulates detachment" },
+        { s: "Om Mohanivartakaya Namaha", m: "Remover of delusion" },
+        { s: "Om Bandhanivrittihetave Namaha", m: "Cause of liberation" },
+        { s: "Om Samsaranivrittihetave Namaha", m: "Ends worldly cycle" },
+        { s: "Om Karmanishkramanaya Namaha", m: "Leads beyond karma" },
+        { s: "Om Vasanasamkshayaya Namaha", m: "Destroyer of tendencies" },
+        { s: "Om Chittavimuktiswaroopaya Namaha", m: "Essence of mental freedom" },
+        { s: "Om Ahamnivartakaya Namaha", m: "Remover of ego identity" },
+        { s: "Om Mamatavinashakaya Namaha", m: "Destroyer of possessiveness" },
+        { s: "Om Asakticchedakaya Namaha", m: "Cutter of attachment" },
+        { s: "Om Vairagyavikasaya Namaha", m: "Expands detachment" },
+        { s: "Om Mohashamanaya Namaha", m: "Calms delusion" },
+        { s: "Om Bandhamochanaya Namaha", m: "Releaser from bondage" },
+        { s: "Om Samsaravimuktidaya Namaha", m: "Freedom from worldly cycle" },
+        { s: "Om Karmakshapanaya Namaha", m: "Destroyer of karma" },
+        { s: "Om Vasanasodhanaya Namaha", m: "Purifier of tendencies" },
+        { s: "Om Chittavishrantihetave Namaha", m: "Cause of inner rest" },
+        { s: "Om Ahamrahityapradaya Namaha", m: "Giver of egolessness" },
+        { s: "Om Mamatashunyakaya Namaha", m: "Makes free from possessiveness" },
+        { s: "Om Asaktimuktidaya Namaha", m: "Freedom from attachment" },
+        { s: "Om Vairagyasthirakaraya Namaha", m: "Stabilizer of detachment" },
+        { s: "Om Mohapranashakaya Namaha", m: "Destroyer of delusion" },
+        { s: "Om Bandhachchedanaya Namaha", m: "Cutter of bondage" },
+        { s: "Om Samsarabandhanirmuktaya Namaha", m: "Free from worldly ties" },
+        { s: "Om Karmavimuktiswaroopaya Namaha", m: "Karmic freedom" },
+        { s: "Om Vasananirmoolakaya Namaha", m: "Uprooter of tendencies" },
+        { s: "Om Chittashantipradaya Namaha", m: "Giver of mental peace" },
+        { s: "Om Ahamkshapanaya Namaha", m: "Destroyer of ego" },
+        { s: "Om Mamatakshapanaya Namaha", m: "Destroyer of possessiveness" },
+        { s: "Om Asaktivimocakaya Namaha", m: "Releaser from attachment" },
+        { s: "Om Vairagyabodhakaya Namaha", m: "Awakener of detachment" },
+        { s: "Om Mohavimocakaya Namaha", m: "Releaser from illusion" },
+        { s: "Om Bandhavinashakaya Namaha", m: "Destroyer of bondage" },
+        { s: "Om Samsaranashakaya Namaha", m: "Destroyer of worldly cycle" },
+        { s: "Om Karmavinirmuktidaya Namaha", m: "Giver of karmic freedom" },
+        { s: "Om Vasanasunyakaraya Namaha", m: "Empties tendencies" },
+        { s: "Om Chittaprasadaya Namaha", m: "Clarity to mind" },
+        { s: "Om Ahamrahitachaitanyaya Namaha", m: "Consciousness beyond ego" },
+        { s: "Om Mamatavinirmuktachaitanyaya Namaha", m: "Consciousness free from possessiveness" },
+        { s: "Om Asaktirahitaswaroopaya Namaha", m: "Form free from attachment" },
+        { s: "Om Vairagyamurtaye Namaha", m: "Embodiment of detachment" },
+        { s: "Om Moharahitaswaroopaya Namaha", m: "Completely free from illusion" }
+      ]
+    },
+    {
+      title: "Divine Oneness",
+      desc: "Dissolving separation to experience the Lord as everything.",
+      names: [
+        { s: "Om Sarvavyapine Namaha", m: "Present everywhere" },
+        { s: "Om Sarvantaratmane Namaha", m: "Indwelling self of all" },
+        { s: "Om Ekaswaroopaya Namaha", m: "Without a second" },
+        { s: "Om Advaitaroopaya Namaha", m: "Non dual reality" },
+        { s: "Om Sarvbhutatmane Namaha", m: "Soul in all beings" },
+        { s: "Om Vishwaroopaya Namaha", m: "Universal form" },
+        { s: "Om Sarvadharasthitaya Namaha", m: "Support of everything" },
+        { s: "Om Brahmaswaroopaya Namaha", m: "Absolute reality" },
+        { s: "Om Paramatmane Namaha", m: "Supreme self" },
+        { s: "Om Sarvachaitanyaya Namaha", m: "Consciousness in all" },
+        { s: "Om Nityaswaroopaya Namaha", m: "Eternal form" },
+        { s: "Om Anantaroopaya Namaha", m: "Infinite one" },
+        { s: "Om Sarvabhavaya Namaha", m: "Essence of all states" },
+        { s: "Om Ekachaitanyaya Namaha", m: "One consciousness" },
+        { s: "Om Sarvavasturoopaya Namaha", m: "Form of all existence" },
+        { s: "Om Vishwachaitanyaya Namaha", m: "Universal consciousness" },
+        { s: "Om Sarvagatatmane Namaha", m: "Present everywhere within" },
+        { s: "Om Ekamevadvitiyaya Namaha", m: "One without a second" },
+        { s: "Om Sarvadarshakaya Namaha", m: "Seer of everything" },
+        { s: "Om Chaitanyaghanaya Namaha", m: "Dense mass of consciousness" },
+        { s: "Om Sarvavibhutaye Namaha", m: "Manifest as all powers" },
+        { s: "Om Vishwadharaya Namaha", m: "Support of the universe" },
+        { s: "Om Sarvavyapakaya Namaha", m: "All pervading one" },
+        { s: "Om Ekasattaya Namaha", m: "One existence" },
+        { s: "Om Sarvabhootasasthitaya Namaha", m: "Present in all beings" },
+        { s: "Om Vishwavyaptaya Namaha", m: "Pervades all" },
+        { s: "Om Sarvabodhaya Namaha", m: "Awareness in all" },
+        { s: "Om Ekajyotishe Namaha", m: "One light" },
+        { s: "Om Sarvadrishte Namaha", m: "Seer of all" },
+        { s: "Om Chaitanyamurtaye Namaha", m: "Embodiment of consciousness" },
+        { s: "Om Sarvavyuhaya Namaha", m: "Manifest in all forms" },
+        { s: "Om Vishwasakshine Namaha", m: "Witness of the universe" },
+        { s: "Om Sarvadhishthanaya Namaha", m: "Foundation of all" },
+        { s: "Om Ekaroopaya Namaha", m: "One essence in all" },
+        { s: "Om Sarvachaitanyasthitaya Namaha", m: "Established everywhere" },
+        { s: "Om Vishwaroopadharaya Namaha", m: "Universal form holder" },
+        { s: "Om Sarvabhavapradaya Namaha", m: "Giver of all existence" },
+        { s: "Om Ekabrahmane Namaha", m: "One absolute" },
+        { s: "Om Sarvaswaroopaya Namaha", m: "One as all forms" },
+        { s: "Om Chaitanyaswaroopaya Namaha", m: "Pure consciousness" },
+        { s: "Om Sarvavyaptachaitanyaya Namaha", m: "All pervading awareness" },
+        { s: "Om Vishwajeevaya Namaha", m: "Life in all" },
+        { s: "Om Sarvabhootaswaroopaya Namaha", m: "Form of all beings" },
+        { s: "Om Ekasakshine Namaha", m: "One witness" },
+        { s: "Om Sarvadarshanaya Namaha", m: "Vision of all" },
+        { s: "Om Vishwvyuhaswaroopaya Namaha", m: "Manifest arrangements" },
+        { s: "Om Sarvabhootadharaya Namaha", m: "Support of all beings" },
+        { s: "Om Ekachaitanyaswaroopaya Namaha", m: "One consciousness essence" },
+        { s: "Om Sarvavyaptasthitaya Namaha", m: "Established everywhere" },
+        { s: "Om Chaitanyapradaya Namaha", m: "Giver of consciousness" },
+        { s: "Om Sarvabhootekadrishtaye Namaha", m: "Unity in all beings" },
+        { s: "Om Vishwavyaptachakshine Namaha", m: "Universe witness" },
+        { s: "Om Ekaswaroopadarshakaya Namaha", m: "Revealer of oneness" },
+        { s: "Om Sarvabhavabodhaya Namaha", m: "Awareness of all states" },
+        { s: "Om Chaitanyavistarakaya Namaha", m: "Expander of consciousness" },
+        { s: "Om Vishwaroopadarshine Namaha", m: "Seer of universal form" },
+        { s: "Om Ekabhavapradaya Namaha", m: "Giver of unity feeling" },
+        { s: "Om Sarvachaitanyabodhakaya Namaha", m: "Universal awareness" },
+        { s: "Om Vishwaswaroopapradaya Namaha", m: "Revealer of universal form" },
+        { s: "Om Ekasattabodhaya Namaha", m: "Reveals single existence" },
+        { s: "Om Sarvavyaptadarshakaya Namaha", m: "Revealer of all pervasiveness" },
+        { s: "Om Vishwadharadarshakaya Namaha", m: "Universal support" },
+        { s: "Om Ekachaitanyabodhakaya Namaha", m: "Awakener of consciousness" },
+        { s: "Om Sarvabhootasamanvayaya Namaha", m: "Harmonizer of all beings" },
+        { s: "Om Chaitanyasthirakaraya Namaha", m: "Stabilizer of awareness" },
+        { s: "Om Vishwavyaptaswaroopaya Namaha", m: "Form that pervades all" },
+        { s: "Om Ekaswaroopasthitaya Namaha", m: "Established as oneness" },
+        { s: "Om Sarvabhavavistarakaya Namaha", m: "Expander of all existence" },
+        { s: "Om Chaitanyaprakashakaya Namaha", m: "Illuminator of consciousness" },
+        { s: "Om Vishwadarshanapradaya Namaha", m: "Universal vision" },
+        { s: "Om Ekadrishtipradaya Namaha", m: "Giver of unified vision" },
+        { s: "Om Sarvabhootapremapradaya Namaha", m: "Love towards all beings" },
+        { s: "Om Chaitanyasampannaya Namaha", m: "Full of consciousness" },
+        { s: "Om Vishwaroopasthitaya Namaha", m: "Established as the universe" },
+        { s: "Om Ekasattaswaroopaya Namaha", m: "Embodiment of one existence" },
+        { s: "Om Sarvavyaptabhavaya Namaha", m: "Feeling of all pervasiveness" },
+        { s: "Om Chaitanyavikasaya Namaha", m: "Expansion of awareness" },
+        { s: "Om Vishwabhavapradaya Namaha", m: "Giver of universal feeling" },
+        { s: "Om Ekachaitanyasthitaya Namaha", m: "Established as consciousness" },
+        { s: "Om Sarvabhootekatvabodhaya Namaha", m: "Unity in all beings" },
+        { s: "Om Chaitanyasanchalakaya Namaha", m: "Mover of consciousness" },
+        { s: "Om Vishwavyaptadarshine Namaha", m: "Seer of pervasiveness" },
+        { s: "Om Ekaswaroopapradaya Namaha", m: "Realization of oneness" },
+        { s: "Om Sarvabhavasamanvayaya Namaha", m: "Integrator of all states" },
+        { s: "Om Chaitanyabodhaya Namaha", m: "Pure awareness" },
+        { s: "Om Vishwaroopaprakashaya Namaha", m: "Revealer of universal form" },
+        { s: "Om Ekadrishtiswaroopaya Namaha", m: "Embodiment of unified vision" },
+        { s: "Om Sarvabhootachaitanyaya Namaha", m: "Consciousness in all beings" },
+        { s: "Om Chaitanyavardhanaya Namaha", m: "Increaser of awareness" },
+        { s: "Om Vishwadarshanaswaroopaya Namaha", m: "Universal vision form" },
+        { s: "Om Ekasattadarshakaya Namaha", m: "Revealer of one existence" },
+        { s: "Om Sarvavyaptabodhaya Namaha", m: "Awareness of all pervasiveness" },
+        { s: "Om Chaitanyapravahaya Namaha", m: "Flow of consciousness" },
+        { s: "Om Vishwaroopabodhakaya Namaha", m: "Awakener of universal form" },
+        { s: "Om Ekachaitanyadarshaya Namaha", m: "Vision of one consciousness" },
+        { s: "Om Sarvabhootekatvasthitaya Namaha", m: "Established as unity in all" },
+        { s: "Om Chaitanyaprakashaya Namaha", m: "Light of consciousness" },
+        { s: "Om Vishwavyaptachaitanyaya Namaha", m: "All pervading awareness" },
+        { s: "Om Ekasattapradaya Namaha", m: "Giver of one existence" },
+        { s: "Om Sarvabhavabodhakaraya Namaha", m: "Awakener of all existence" },
+        { s: "Om Chaitanyaswaroopaya Namaha", m: "Embodiment of consciousness" },
+        { s: "Om Vishwaroopaswaroopaya Namaha", m: "Essence of the universe" },
+        { s: "Om Ekabhavasthitaya Namaha", m: "Established in unity" },
+        { s: "Om Sarvavyaptasthiraya Namaha", m: "Present everywhere" },
+        { s: "Om Chaitanyanandaya Namaha", m: "Bliss of consciousness" },
+        { s: "Om Vishwachaitanyaswaroopaya Namaha", m: "Universal consciousness" },
+        { s: "Om Ekasattachaitanyaya Namaha", m: "One existence consciousness" },
+        { s: "Om Sarvabhootekatvapradaya Namaha", m: "Giver of unity realization" }
+      ]
+    },
+    {
+      title: "Creation Energy",
+      desc: "Connecting with the Shakti that architects the cosmos.",
+      names: [
+        { s: "Om Srishtikartre Namaha", m: "Creator of the universe" },
+        { s: "Om Jagatprabhave Namaha", m: "Source of the world" },
+        { s: "Om Brahmandanirmatakaya Namaha", m: "Maker of the cosmos" },
+        { s: "Om Srishtishaktidharaaya Namaha", m: "Holder of creative power" },
+        { s: "Om Jagadutpattikaraya Namaha", m: "Originator of creation" },
+        { s: "Om Sthitikartre Namaha", m: "Sustainer of existence" },
+        { s: "Om Jagatpalakaya Namaha", m: "Protector of the world" },
+        { s: "Om Sthitishaktaye Namaha", m: "Sustaining power" },
+        { s: "Om Vishwadharaya Namaha", m: "Support of all" },
+        { s: "Om Jeevanaposhakaya Namaha", m: "Nourisher of life" },
+        { s: "Om Samharakaraya Namaha", m: "Dissolver of creation" },
+        { s: "Om Layakartre Namaha", m: "Absorber of everything" },
+        { s: "Om Samharashaktidharaaya Namaha", m: "Holder of dissolving power" },
+        { s: "Om Kaalaroopaya Namaha", m: "Embodiment of time" },
+        { s: "Om Pralayakaraya Namaha", m: "Ender of cycles" },
+        { s: "Om Panchakrityakaraya Namaha", m: "Performer of cosmic acts" },
+        { s: "Om Srishtisthitilayakartre Namaha", m: "Creator, sustainer, dissolver" },
+        { s: "Om Jagadvyapine Namaha", m: "Pervading creation" },
+        { s: "Om Vishwakarmane Namaha", m: "Cosmic architect" },
+        { s: "Om Jagatyantrakaraya Namaha", m: "Controller of the universe" },
+        { s: "Om Srishtibeejaya Namaha", m: "Seed of creation" },
+        { s: "Om Jeevabeejaya Namaha", m: "Seed of life" },
+        { s: "Om Karanaswaroopaya Namaha", m: "Cause of all causes" },
+        { s: "Om Jagadadhishthatraya Namaha", m: "Ruler of creation" },
+        { s: "Om Vishwashaktidharaaya Namaha", m: "Holder of universal power" },
+        { s: "Om Srishtivistarakaya Namaha", m: "Expander of creation" },
+        { s: "Om Jeevanashaktipradaya Namaha", m: "Giver of life energy" },
+        { s: "Om Jagadvyavasthapakaya Namaha", m: "Organizer of the universe" },
+        { s: "Om Karmachakranirmatakaya Namaha", m: "Creator of karmic cycles" },
+        { s: "Om Vishwadharakaya Namaha", m: "One who holds everything" },
+        { s: "Om Srishtipravartakaya Namaha", m: "Initiator of creation" },
+        { s: "Om Jeevanachakrakartre Namaha", m: "Creator of life cycles" },
+        { s: "Om Jagatpravahakaraya Namaha", m: "Universal flow maintainer" },
+        { s: "Om Karmaphalapradaya Namaha", m: "Giver of karmic results" },
+        { s: "Om Vishwasanchalakaya Namaha", m: "Mover of the universe" },
+        { s: "Om Srishtikramanirmatakaya Namaha", m: "Designer of creation order" },
+        { s: "Om Jeevanavikasaya Namaha", m: "Evolver of life" },
+        { s: "Om Jagatpravartakaya Namaha", m: "Activator of the world" },
+        { s: "Om Karmabandhanirmatakaya Namaha", m: "Maker of karmic links" },
+        { s: "Om Vishwavyuhakaraya Namaha", m: "Arranger of the universe" },
+        { s: "Om Srishtisankalpaya Namaha", m: "Will behind creation" },
+        { s: "Om Jeevanasankalpaya Namaha", m: "Will behind life" },
+        { s: "Om Jagatsankalpaya Namaha", m: "Will behind existence" },
+        { s: "Om Karmasankalpaya Namaha", m: "Will behind action" },
+        { s: "Om Vishwasankalpaya Namaha", m: "Universal intention" },
+        { s: "Om Srishtichaitanyaya Namaha", m: "Consciousness in creation" },
+        { s: "Om Jeevachaitanyaya Namaha", m: "Consciousness in beings" },
+        { s: "Om Jagachaitanyaya Namaha", m: "Awareness in the universe" },
+        { s: "Om Karmachaitanyaya Namaha", m: "Awareness within action" },
+        { s: "Om Vishwachaitanyadharaaya Namaha", m: "Holder of consciousness" },
+        { s: "Om Srishtipranavaya Namaha", m: "Sound of creation" },
+        { s: "Om Jeevanapranaya Namaha", m: "Life breath" },
+        { s: "Om Jagatpranaya Namaha", m: "Breath of the universe" },
+        { s: "Om Karmapranaya Namaha", m: "Breath within action" },
+        { s: "Om Vishwapranaya Namaha", m: "Universal life force" },
+        { s: "Om Srishtidhvaniroopaya Namaha", m: "Sound form of creation" },
+        { s: "Om Jeevananadaya Namaha", m: "Sound of life" },
+        { s: "Om Jagadspandaya Namaha", m: "Vibration of the universe" },
+        { s: "Om Karmaspandaya Namaha", m: "Vibration within action" },
+        { s: "Om Vishwaspandaya Namaha", m: "Universal vibration" },
+        { s: "Om Srishtitarangaya Namaha", m: "Wave of creation" },
+        { s: "Om Jeevatarangaya Namaha", m: "Wave of life" },
+        { s: "Om Jagattarangaaya Namaha", m: "Wave of existence" },
+        { s: "Om Karmatarangaya Namaha", m: "Wave of action" },
+        { s: "Om Vishwatarangaya Namaha", m: "Universal wave" },
+        { s: "Om Srishtipravahaya Namaha", m: "Flow of creation" },
+        { s: "Om Jeevanapravahaya Namaha", m: "Flow of life" },
+        { s: "Om Jagatpravahaya Namaha", m: "Flow of the universe" },
+        { s: "Om Karmapravahaya Namaha", m: "Flow of action" },
+        { s: "Om Vishwapravahaya Namaha", m: "Universal flow" },
+        { s: "Om Srishtishaktiswaroopaya Namaha", m: "Creative power essence" },
+        { s: "Om Jeevashaktiswaroopaya Namaha", m: "Life power essence" },
+        { s: "Om Jagatshaktiswaroopaya Namaha", m: "Universal power essence" },
+        { s: "Om Karmashaktiswaroopaya Namaha", m: "Action power essence" },
+        { s: "Om Vishwashaktiswaroopaya Namaha", m: "Cosmic power essence" },
+        { s: "Om Srishtibijaroopaya Namaha", m: "Seed form of creation" },
+        { s: "Om Jeevabijaroopaya Namaha", m: "Seed of life" },
+        { s: "Om Jagadbijaaya Namaha", m: "Seed of the universe" },
+        { s: "Om Karmabijaroopaya Namaha", m: "Seed of action" },
+        { s: "Om Vishwabijaroopaya Namaha", m: "Cosmic seed" },
+        { s: "Om Srishtigarbhaaya Namaha", m: "Womb of creation" },
+        { s: "Om Jeevagarbhaaya Namaha", m: "Womb of life" },
+        { s: "Om Jagadgarbhaaya Namaha", m: "Womb of the universe" },
+        { s: "Om Karmagarbhaaya Namaha", m: "Womb of action" },
+        { s: "Om Vishwagarbhaaya Namaha", m: "Womb of all" },
+        { s: "Om Srishtidharaaya Namaha", m: "Holder of creation" },
+        { s: "Om Jeevadharaaya Namaha", m: "Holder of life" },
+        { s: "Om Jagaddharaaya Namaha", m: "Holder of the universe" },
+        { s: "Om Karmadharaaya Namaha", m: "Holder of action" },
+        { s: "Om Vishwadharaaya Namaha", m: "Holder of all" },
+        { s: "Om Srishtikaranaya Namaha", m: "Cause of creation" },
+        { s: "Om Jeevakaranaya Namaha", m: "Cause of life" },
+        { s: "Om Jagatkaranaya Namaha", m: "Cause of the universe" },
+        { s: "Om Karmakaranaya Namaha", m: "Cause of action" },
+        { s: "Om Vishwakaranaya Namaha", m: "Cause of all" },
+        { s: "Om Srishtinirmatakaya Namaha", m: "Designer of creation" },
+        { s: "Om Jeevanirmatakaya Namaha", m: "Designer of life" },
+        { s: "Om Jagannirmatakaya Namaha", m: "Designer of the universe" },
+        { s: "Om Karmanirmatakaya Namaha", m: "Designer of action" },
+        { s: "Om Vishwanirmatakaya Namaha", m: "Designer of all" },
+        { s: "Om Srishtiyojakaya Namaha", m: "Planner of creation" },
+        { s: "Om Jeevayojakaya Namaha", m: "Planner of life" },
+        { s: "Om Jagadyojakaya Namaha", m: "Planner of universe" },
+        { s: "Om Karmayojakaya Namaha", m: "Planner of action" },
+        { s: "Om Vishwayojakaya Namaha", m: "Planner of all" },
+        { s: "Om Srishtisanchalakaya Namaha", m: "Mover of creation" },
+        { s: "Om Jeevasanchalakaya Namaha", m: "Mover of life" },
+        { s: "Om Jagatsanchalakaya Namaha", m: "Mover of the universe" }
+      ]
+    },
+    {
+      title: "Compassion & Love",
+      desc: "Where power transforms into tender, intimate divine love.",
+      names: [
+        { s: "Om Karunamurtaye Namaha", m: "Embodiment of compassion" },
+        { s: "Om Dayasagaraya Namaha", m: "Ocean of kindness" },
+        { s: "Om Bhaktavatsalaya Namaha", m: "Loves devotees deeply" },
+        { s: "Om Premaswaroopaya Namaha", m: "Embodiment of love" },
+        { s: "Om Anukampakaya Namaha", m: "Full of empathy" },
+        { s: "Om Kripadharayine Namaha", m: "Holder of grace" },
+        { s: "Om Hridayasparshine Namaha", m: "Touches the heart" },
+        { s: "Om Bhaktabandhave Namaha", m: "Friend of devotees" },
+        { s: "Om Snehamayaya Namaha", m: "Filled with affection" },
+        { s: "Om Karunadrishtaye Namaha", m: "Compassionate gaze" },
+        { s: "Om Premapradaya Namaha", m: "Giver of love" },
+        { s: "Om Hridayanivasaya Namaha", m: "Lives in the heart" },
+        { s: "Om Bhaktapriyakaya Namaha", m: "Dear to devotees" },
+        { s: "Om Dayapoorakaya Namaha", m: "Fulfiller with compassion" },
+        { s: "Om Karunaswaroopaya Namaha", m: "Essence of mercy" },
+        { s: "Om Premavardhanaya Namaha", m: "Increases love" },
+        { s: "Om Hridayaprasadaya Namaha", m: "Gives inner peace" },
+        { s: "Om Bhaktarakshanaya Namaha", m: "Protector of devotees" },
+        { s: "Om Dayapradaya Namaha", m: "Giver of compassion" },
+        { s: "Om Karunapravahaya Namaha", m: "Flow of mercy" },
+        { s: "Om Premapravahaya Namaha", m: "Flow of love" },
+        { s: "Om Hridayashodhakaya Namaha", m: "Purifier of heart" },
+        { s: "Om Bhaktasukhadaya Namaha", m: "Giver of joy to devotees" },
+        { s: "Om Dayaswaroopaya Namaha", m: "Form of kindness" },
+        { s: "Om Karunavistarakaya Namaha", m: "Expander of compassion" },
+        { s: "Om Premabodhakaya Namaha", m: "Awakener of love" },
+        { s: "Om Hridayavikasaya Namaha", m: "Expands the heart" },
+        { s: "Om Bhaktahridayviharine Namaha", m: "Moves in devotees’ hearts" },
+        { s: "Om Dayachaitanyaya Namaha", m: "Compassion consciousness" },
+        { s: "Om Karunaprakashaya Namaha", m: "Light of mercy" },
+        { s: "Om Premasanchayaya Namaha", m: "Gathers love" },
+        { s: "Om Hridayasthirakaraya Namaha", m: "Stabilizes the heart" },
+        { s: "Om Bhaktanandaya Namaha", m: "Bliss of devotees" },
+        { s: "Om Dayavardhanaya Namaha", m: "Increaser of compassion" },
+        { s: "Om Karunadharaaya Namaha", m: "Holder of mercy" },
+        { s: "Om Premamurtaye Namaha", m: "Embodiment of love" },
+        { s: "Om Hridayachaitanyaya Namaha", m: "Consciousness in heart" },
+        { s: "Om Bhaktapremavardhanaya Namaha", m: "Increaser of devotee love" },
+        { s: "Om Dayapravartakaya Namaha", m: "Initiator of compassion" },
+        { s: "Om Karunassthitaya Namaha", m: "Established in mercy" },
+        { s: "Om Premavistarakaya Namaha", m: "Expander of love" },
+        { s: "Om Hridayamangalaya Namaha", m: "Auspicious heart presence" },
+        { s: "Om Bhaktasaukhyapradaya Namaha", m: "Comfort to devotees" },
+        { s: "Om Dayasindhave Namaha", m: "Ocean of compassion" },
+        { s: "Om Karunamritaya Namaha", m: "Nectar of mercy" },
+        { s: "Om Premamritaya Namaha", m: "Nectar of love" },
+        { s: "Om Hridayamritaya Namaha", m: "Nectar within heart" },
+        { s: "Om Bhaktanugrahakaraya Namaha", m: "Blesser of devotees" },
+        { s: "Om Dayamritaya Namaha", m: "Nectar of kindness" },
+        { s: "Om Karunapoorakaya Namaha", m: "Fulfiller through mercy" },
+        { s: "Om Premasampoorakaya Namaha", m: "Completer through love" },
+        { s: "Om Hridayapoorakaya Namaha", m: "Fills the heart" },
+        { s: "Om Bhaktapoorakaya Namaha", m: "Completes devotees" },
+        { s: "Om Dayasampoorakaya Namaha", m: "Completer with compassion" },
+        { s: "Om Karunapradipaya Namaha", m: "Lamp of mercy" },
+        { s: "Om Premapradipaya Namaha", m: "Lamp of love" },
+        { s: "Om Hridayapradipaya Namaha", m: "Lamp of the heart" },
+        { s: "Om Bhaktapradipaya Namaha", m: "Light for devotees" },
+        { s: "Om Dayapradipaya Namaha", m: "Lamp of kindness" },
+        { s: "Om Karunajyotishe Namaha", m: "Light of compassion" },
+        { s: "Om Premajyotishe Namaha", m: "Light of love" },
+        { s: "Om Hridayajyotishe Namaha", m: "Light within the heart" },
+        { s: "Om Bhaktajyotishe Namaha", m: "Guiding light of devotees" },
+        { s: "Om Dayajyotishe Namaha", m: "Light of kindness" },
+        { s: "Om Karunadeepaya Namaha", m: "Flame of mercy" },
+        { s: "Om Premadeepaya Namaha", m: "Flame of love" },
+        { s: "Om Hridayadeepaya Namaha", m: "Flame in the heart" },
+        { s: "Om Bhaktadeepaya Namaha", m: "Guiding flame for devotees" },
+        { s: "Om Dayadeepaya Namaha", m: "Flame of compassion" },
+        { s: "Om Karunapravahaya Namaha", m: "Flow of mercy" },
+        { s: "Om Premapravahaya Namaha", m: "Flow of love" },
+        { s: "Om Hridayapravahaya Namaha", m: "Flow within the heart" },
+        { s: "Om Bhaktapravahaya Namaha", m: "Flow towards devotees" },
+        { s: "Om Dayapravahaya Namaha", m: "Flow of compassion" },
+        { s: "Om Karunasagaraya Namaha", m: "Ocean of mercy" },
+        { s: "Om Premasagaraya Namaha", m: "Ocean of love" },
+        { s: "Om Hridayasagaraya Namaha", m: "Ocean within heart" },
+        { s: "Om Bhaktasagaraya Namaha", m: "Ocean for devotees" },
+        { s: "Om Dayasagaraya Namaha", m: "Ocean of kindness" },
+        { s: "Om Karunadharayine Namaha", m: "Holder of mercy" },
+        { s: "Om Premadharayine Namaha", m: "Holder of love" },
+        { s: "Om Hridayadharayine Namaha", m: "Holder of the heart" },
+        { s: "Om Bhaktadharayine Namaha", m: "Supporter of devotees" },
+        { s: "Om Dayadharayine Namaha", m: "Holder of compassion" },
+        { s: "Om Karunaspandaya Namaha", m: "Vibration of mercy" },
+        { s: "Om Premaspandaya Namaha", m: "Vibration of love" },
+        { s: "Om Hridayaspandaya Namaha", m: "Heartbeat of the heart" },
+        { s: "Om Bhaktaspandaya Namaha", m: "Pulse within devotees" },
+        { s: "Om Dayaspandaya Namaha", m: "Vibration of kindness" },
+        { s: "Om Karunachaitanyaya Namaha", m: "Compassion consciousness" },
+        { s: "Om Premachaitanyaya Namaha", m: "Consciousness of love" },
+        { s: "Om Hridayachaitanyaya Namaha", m: "Awareness in the heart" },
+        { s: "Om Bhaktachaitanyaya Namaha", m: "Consciousness in devotees" },
+        { s: "Om Dayachaitanyaya Namaha", m: "Awareness of kindness" },
+        { s: "Om Karunamritaya Namaha", m: "Nectar of mercy" },
+        { s: "Om Premamritaya Namaha", m: "Nectar of love" },
+        { s: "Om Hridayamritaya Namaha", m: "Nectar of the heart" },
+        { s: "Om Bhaktamritaya Namaha", m: "Nectar for devotees" },
+        { s: "Om Dayamritaya Namaha", m: "Nectar of compassion" },
+        { s: "Om Karunavardhanaya Namaha", m: "Increaser of mercy" },
+        { s: "Om Premavardhanaya Namaha", m: "Increaser of love" },
+        { s: "Om Hridayavardhanaya Namaha", m: "Expander of heart" },
+        { s: "Om Bhaktavardhanaya Namaha", m: "Increaser of devotee strength" },
+        { s: "Om Dayavardhanaya Namaha", m: "Increaser of compassion" },
+        { s: "Om Karunapoornaaya Namaha", m: "Full of mercy" },
+        { s: "Om Premapoornaaya Namaha", m: "Full of love" },
+        { s: "Om Hridayapoornaaya Namaha", m: "Fills heart completely" },
+        { s: "Om Dayapoornaaya Namaha", m: "Full of compassion" }
+      ]
+    },
+    {
+      title: "Completion & Final Blessing",
+      desc: "Cosmic integration into a complete state of grace and wholeness.",
+      names: [
+        { s: "Om Poornaswaroopaya Namaha", m: "Embodiment of completeness" },
+        { s: "Om Sarvapoornaya Namaha", m: "Complete in all" },
+        { s: "Om Poornachaitanyaya Namaha", m: "Complete consciousness" },
+        { s: "Om Sarvasampoorakaya Namaha", m: "Fulfiller of everything" },
+        { s: "Om Poornanandaya Namaha", m: "Complete bliss" },
+        { s: "Om Sarvasampannaya Namaha", m: "Fully endowed" },
+        { s: "Om Poornabodhaya Namaha", m: "Complete awareness" },
+        { s: "Om Sarvapoornatvapradaya Namaha", m: "Giver of completeness" },
+        { s: "Om Poornasthitaye Namaha", m: "State of wholeness" },
+        { s: "Om Sarvasiddhipradaya Namaha", m: "Giver of all attainments" },
+        { s: "Om Poornasankalpaya Namaha", m: "Complete will" },
+        { s: "Om Sarvakaryasiddhikaraya Namaha", m: "Accomplisher of all actions" },
+        { s: "Om Poornakaryakartre Namaha", m: "Doer of complete action" },
+        { s: "Om Sarvaphalapradaya Namaha", m: "Giver of all results" },
+        { s: "Om Poornakrupaya Namaha", m: "Complete grace" },
+        { s: "Om Sarvanugrahakaraya Namaha", m: "Giver of blessings to all" },
+        { s: "Om Poornarakshakaya Namaha", m: "Complete protector" },
+        { s: "Om Sarvasharanaya Namaha", m: "Refuge of all" },
+        { s: "Om Poornapalanaya Namaha", m: "Complete sustainer" },
+        { s: "Om Sarvahitakaraya Namaha", m: "Doer of good for all" },
+        { s: "Om Poornadayakaya Namaha", m: "Giver of completeness" },
+        { s: "Om Sarvamangalaroopaya Namaha", m: "Form of all auspiciousness" },
+        { s: "Om Poornamangalaaya Namaha", m: "Complete auspiciousness" },
+        { s: "Om Sarvashubhapradaya Namaha", m: "Giver of all goodness" },
+        { s: "Om Poornashantaye Namaha", m: "Complete peace" },
+        { s: "Om Sarvashantipradaya Namaha", m: "Giver of peace to all" },
+        { s: "Om Poornasukhadaya Namaha", m: "Giver of complete happiness" },
+        { s: "Om Sarvanandapradaya Namaha", m: "Giver of bliss to all" },
+        { s: "Om Poornaprasannaya Namaha", m: "Fully pleased" },
+        { s: "Om Sarvaprasannaya Namaha", m: "Pleased with all" },
+        { s: "Om Poornahridayaya Namaha", m: "Complete heart" },
+        { s: "Om Sarvahridayavasine Namaha", m: "Residing in all hearts" },
+        { s: "Om Poornadarshakaya Namaha", m: "Reveals completeness" },
+        { s: "Om Sarvadarshakaya Namaha", m: "Seer of all" },
+        { s: "Om Poornasakshine Namaha", m: "Complete witness" },
+        { s: "Om Sarvasakshine Namaha", m: "Witness of everything" },
+        { s: "Om Poornachaitanyasthitaya Namaha", m: "Established in full awareness" },
+        { s: "Om Sarvachaitanyasthitaya Namaha", m: "Present in all consciousness" },
+        { s: "Om Poornaswaroopasthitaya Namaha", m: "Established in completeness" },
+        { s: "Om Sarvaswaroopasthitaya Namaha", m: "Present in all forms" },
+        { s: "Om Poornabrahmane Namaha", m: "Complete absolute reality" },
+        { s: "Om Sarvabrahmaswaroopaya Namaha", m: "Form of all reality" },
+        { s: "Om Poornaparamaatmane Namaha", m: "Complete supreme self" },
+        { s: "Om Sarvaparamaatmane Namaha", m: "Self present in all" },
+        { s: "Om Poornachaitanyaghanaya Namaha", m: "Dense consciousness" },
+        { s: "Om Sarvachaitanyamurtaye Namaha", m: "Embodiment of awareness" },
+        { s: "Om Poornavishwaroopaya Namaha", m: "Complete universal form" },
+        { s: "Om Sarvavishwaroopaya Namaha", m: "Form of all universes" },
+        { s: "Om Poornvyapine Namaha", m: "Fully all-pervading one" },
+        { s: "Om Sarvavyapine Namaha", m: "Present everywhere" },
+        { s: "Om Poornaswaroopaya Namaha", m: "Complete essence" },
+        { s: "Om Sarvaswaroopaya Namaha", m: "Essence of all forms" },
+        { s: "Om Poornasiddhaye Namaha", m: "Complete perfection" },
+        { s: "Om Sarvasiddhaye Namaha", m: "All attainments" },
+        { s: "Om Poornasthitaye Namaha", m: "State of completeness" },
+        { s: "Om Sarvasthitaye Namaha", m: "Present in all states" },
+        { s: "Om Poornasampannaya Namaha", m: "Complete fulfillment" },
+        { s: "Om Sarvasampannaya Namaha", m: "Endowed with everything" },
+        { s: "Om Poornabodhaya Namaha", m: "Complete awareness" },
+        { s: "Om Sarvabodhaya Namaha", m: "Awareness in all" },
+        { s: "Om Poornadarshakaya Namaha", m: "Revealer of completeness" },
+        { s: "Om Sarvadarshakaya Namaha", m: "Seer of all" },
+        { s: "Om Poornasakshine Namaha", m: "Complete witness" },
+        { s: "Om Sarvasakshine Namaha", m: "Witness of everything" },
+        { s: "Om Poornaprakashaya Namaha", m: "Complete illumination" },
+        { s: "Om Sarvaprakashaya Namaha", m: "Light in all" },
+        { s: "Om Poornajyotishe Namaha", m: "Complete light" },
+        { s: "Om Sarvajyotishe Namaha", m: "Light of all" },
+        { s: "Om Poornatejase Namaha", m: "Complete radiance" },
+        { s: "Om Sarvatejase Namaha", m: "Radiance in all" },
+        { s: "Om Poornashantaye Namaha", m: "Complete peace" },
+        { s: "Om Sarvashantaye Namaha", m: "Peace in all" },
+        { s: "Om Poornanandaya Namaha", m: "Complete bliss" },
+        { s: "Om Sarvanandaya Namaha", m: "Bliss in all" },
+        { s: "Om Poornaprasannaya Namaha", m: "Complete serenity" },
+        { s: "Om Sarvaprasannaya Namaha", m: "Universal serenity" },
+        { s: "Om Poornahridayaya Namaha", m: "Complete heart" },
+        { s: "Om Sarvahridayavasine Namaha", m: "Residing in all hearts" },
+        { s: "Om Poornachaitanyasthitaya Namaha", m: "Established in awareness" },
+        { s: "Om Sarvchaitanyasthitaya Namaha", m: "Present in all consciousness" },
+        { s: "Om Poornaswaroopasthitaya Namaha", m: "Established in completeness" },
+        { s: "Om Sarvaswaroopasthitaya Namaha", m: "Present in all forms" },
+        { s: "Om Poornavyapakasthitaya Namaha", m: "Fully pervading" },
+        { s: "Om Sarvavyapakasthitaya Namaha", m: "Pervading everything" },
+        { s: "Om Poornaparamaya Namaha", m: "Ultimate completeness" },
+        { s: "Om Sarvaparamaaya Namaha", m: "Supreme in all" },
+        { s: "Om Poornatattvaya Namaha", m: "Complete truth" },
+        { s: "Om Sarvatattvaya Namaha", m: "Essence of all truth" },
+        { s: "Om Poornabrahmaswaroopaya Namaha", m: "Form of absolute" },
+        { s: "Om Sarvabrahmaswaroopaya Namaha", m: "Form of all reality" },
+        { s: "Om Poornachaitanyaroopaya Namaha", m: "Form of consciousness" },
+        { s: "Om Sarvachaitanyaroopaya Namaha", m: "Form of all awareness" },
+        { s: "Om Poornavyapakaraya Namaha", m: "Fully pervades" },
+        { s: "Om Sarvavyapakaraya Namaha", m: "Pervades all" },
+        { s: "Om Poornaniranjanaya Namaha", m: "Pure complete one" },
+        { s: "Om Sarvaniranjanaya Namaha", m: "Pure one in all" },
+        { s: "Om Poornashuddhaya Namaha", m: "Complete purity" },
+        { s: "Om Sarvashuddhaya Namaha", m: "Purity in all" },
+        { s: "Om Poornanirmalaya Namaha", m: "Completely pure one" },
+        { s: "Om Sarvanirmalaya Namaha", m: "Pure essence in all" },
+        { s: "Om Poornasatyaaya Namaha", m: "Complete truth" },
+        { s: "Om Sarvasatyaaya Namaha", m: "Truth in all" },
+        { s: "Om Poornaswatantraya Namaha", m: "Complete independence" },
+        { s: "Om Sarvaswatantraya Namaha", m: "Freedom in all" },
+        { s: "Om Poornamangalaaya Namaha", m: "Complete auspiciousness" },
+        { s: "Om Sarvamangalaaya Namaha", m: "Auspiciousness in all" },
+        { s: "Om Poornakalyanaya Namaha", m: "Complete well being" },
+        { s: "Om Sarvakalyanaya Namaha", m: "Welfare of all" },
+        { s: "Om Poornarakshakaya Namaha", m: "Complete protector" },
+        { s: "Om Sarvarakshakaya Namaha", m: "Protector of all" },
+        { s: "Om Poornadayamaya Namaha", m: "Full of compassion" },
+        { s: "Om Sarvadayamaya Namaha", m: "Compassion in all" },
+        { s: "Om Poornapremamaya Namaha", m: "Full of love" },
+        { s: "Om Sarvapremamaya Namaha", m: "Love in all" },
+        { s: "Om Poornasharanaya Namaha", m: "Complete refuge" },
+        { s: "Om Sarvasharanaya Namaha", m: "Refuge of all" },
+        { s: "Om Poornanathaya Namaha", m: "Complete lord" },
+        { s: "Om Sarvanathaya Namaha", m: "Lord of all" },
+        { s: "Om Poorneshwaraya Namaha", m: "Complete supreme lord" },
+        { s: "Om Sarveshwaraya Namaha", m: "Lord of all" },
+        { s: "Om Poornadevaaya Namaha", m: "Complete divine" },
+        { s: "Om Sarvadevaaya Namaha", m: "Divine present in all" },
+        { s: "Om Poornaswamine Namaha", m: "Complete master" },
+        { s: "Om Sarvaswamine Namaha", m: "Master of all" },
+        { s: "Om Poornagurave Namaha", m: "Complete teacher" },
+        { s: "Om Sarvagurave Namaha", m: "Teacher of all" },
+        { s: "Om Poornaprabhuve Namaha", m: "Complete lord" },
+        { s: "Om Sarvaprabhuve Namaha", m: "Lord of all" },
+        { s: "Om Poornashaktaye Namaha", m: "Complete power" },
+        { s: "Om Sarvashaktaye Namaha", m: "Power in all" },
+        { s: "Om Poornaswaroopaya Namaha", m: "Complete essence" },
+        { s: "Om Sarvaswaroopaya Namaha", m: "Essence of all" },
+        { s: "Om Poornachaitanyaya Namaha", m: "Complete consciousness" },
+        { s: "Om Sarvachaitanyaya Namaha", m: "Consciousness in all" },
+        { s: "Om Poornanandaya Namaha", m: "Complete bliss" },
+        { s: "Om Sarvanandaya Namaha", m: "Bliss in all" },
+        { s: "Om Poornasiddhaye Namaha", m: "Complete perfection" },
+        { s: "Om Sarvasiddhaye Namaha", m: "All attainments" },
+        { s: "Om Poornamuktaye Namaha", m: "Complete liberation" },
+        { s: "Om Sarvamuktaye Namaha", m: "Liberation for all" },
+        { s: "Om Poornaprasannaya Namaha", m: "Fully pleased" },
+        { s: "Om Sarvaprasannaya Namaha", m: "Pleased with all" },
+        { s: "Om Poornakripaya Namaha", m: "Complete grace" },
+        { s: "Om Vishnumayaprasannaya Namaha", m: "Lord Vishnumaya who is ever gracious" }
+      ]
+    }
+  ];
+
+  // 5. RENDER CHAPTER CARDS
+  const chapterGrid = document.getElementById('chapterGrid');
+  sahasraPhases.forEach((phase, i) => {
+    let card = document.createElement('div');
+    card.className = 'chapter-card';
+    card.onclick = () => openSahasra(i);
+    card.innerHTML = `<div class="chapter-name">${phase.title}</div><div class="chapter-desc">Phase ${i+1}: ${phase.names.length} Sacred Names</div>`;
+    chapterGrid.appendChild(card);
+  });
+
+  // 6. MODAL DISPLAY LOGIC
+  function openSahasra(idx) {
+    const modal = document.getElementById("sahasraModal");
+    const display = document.getElementById("sahasraDisplay");
+    let globalStartNum = 1;
+    for (let i = 0; i < idx; i++) { globalStartNum += sahasraPhases[i].names.length; }
+    document.getElementById("modalTitle").innerText = sahasraPhases[idx].title;
+    document.getElementById("modalPhase").innerText = `Phase ${idx + 1}`;
+    display.innerHTML = "";
+    sahasraPhases[idx].names.forEach((nameObj, i) => {
+      display.innerHTML += `<div class="name-card"><div class="name-number">NAMA ${globalStartNum + i}</div><div class="name-sanskrit cinzel">${nameObj.s}</div><div class="name-meaning">${nameObj.m}</div></div>`;
+    });
+    modal.style.display = "block";
+    document.body.style.overflow = "hidden";
+  }
+
+  function closeSahasra() {
+    document.getElementById("sahasraModal").style.display = "none";
+    document.body.style.overflow = "auto"; // Re-enables scrolling on the main page
+  }
+
+  // 7. CHAT MODAL LOGIC
   const chatFab = document.getElementById("chatFab");
   const chatModal = document.getElementById("chatModal");
   const closeChatModal = document.getElementById("closeChatModal");
-
-  chatFab.onclick = function() {
-    chatModal.style.display = "block";
-  };
-  
-  closeChatModal.onclick = function() {
-    chatModal.style.display = "none";
-  };
-  
+  chatFab.onclick = () => chatModal.style.display = "block";
+  closeChatModal.onclick = () => chatModal.style.display = "none";
+// This logic handles closing BOTH the Chat and the Sahasranama modal when clicking outside
   window.onclick = function(event) {
+    const sahasraModal = document.getElementById("sahasraModal");
+    const chatModal = document.getElementById("chatModal");
+    
+    if (event.target === sahasraModal) {
+      closeSahasra();
+    }
     if (event.target === chatModal) {
       chatModal.style.display = "none";
     }

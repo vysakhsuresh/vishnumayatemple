@@ -34,11 +34,9 @@
     font-family: 'Cinzel', serif;
   }
 
-/* Optimized Floating Buttons */
-/* Optimized Floating Action Buttons */
+  /* Optimized Floating Action Buttons */
   .fab-home, .fab-chat, .fab-coffee {
     position: fixed;
-    /* Lifted significantly to clear the mobile browser's 'active' zone */
     bottom: 45px; 
     width: 50px;
     height: 50px;
@@ -54,40 +52,30 @@
     box-shadow: 0 4px 15px rgba(0,0,0,0.5);
     z-index: 9999;
     transition: transform 0.3s, box-shadow 0.3s, color 0.3s;
-    /* Fix for iOS/Android bottom bars */
     padding-bottom: env(safe-area-inset-bottom);
   }
 
-  /* Desktop/Default Positions */
+  /* Desktop Positions */
   .fab-home { left: 30px; }
-  .fab-coffee { left: 95px; }
+  .fab-coffee { left: 95px; } 
   .fab-chat { right: 30px; }
 
-  /* Mobile-Specific Stability Fix */
-  @media (max-width: 768px) {
-    .fab-home, .fab-chat, .fab-coffee {
-      /* Higher positioning ensures they never sit 'behind' the browser UI */
-      bottom: 55px; 
-    }
-    
-    /* On mobile, stacking the coffee button above Home prevents horizontal clutter */
-    .fab-coffee {
-      left: 30px;
-      bottom: 120px; 
-    }
-  }
-  /* Matching Buy Me a Coffee FAB */
- 
-
-  .fab-coffee:hover {
+  .fab-home:hover, .fab-chat:hover, .fab-coffee:hover {
     transform: translateY(-5px);
     box-shadow: 0 10px 20px rgba(234, 179, 84, 0.2);
     color: var(--gold-light);
   }
 
-  /* Responsive adjustment for mobile */
+  /* Mobile-Specific Fix (Max-width 768px) */
   @media (max-width: 768px) {
-    .fab-coffee { bottom: 90px; left: 30px; } /* Stack above Home on mobile */
+    .fab-home, .fab-chat, .fab-coffee {
+      bottom: 55px; 
+    }
+    
+    .fab-coffee {
+      left: 30px;
+      bottom: 120px; 
+    }
   }
 
   /* Custom Scrollbar */
@@ -132,9 +120,9 @@
   .nav-links a:hover { color: var(--gold-mid); }
 
   /* Section Styling */
-section {
+  section {
     min-height: 100vh;
-    min-height: 100svh; /* Keeps bottom stable on mobile scroll */
+    min-height: 100svh; 
     padding: 120px 10%;
     display: flex;
     flex-direction: column;
@@ -160,7 +148,7 @@ section {
     line-height: 1.6;
   }
 
-  /* Scroll Reveal Classes (The "Apple" Effect) */
+  /* Scroll Reveal Classes */
   .reveal {
     opacity: 0;
     transform: translateY(60px);
@@ -304,23 +292,6 @@ section {
     color: var(--text-muted);
   }
 
-  /* Floating Buttons & Modal (Sanctum Theme) */
-
-
-  .fab-home:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 20px rgba(234, 179, 84, 0.2);
-    color: var(--gold-light);
-  }
-
-
-
-  .fab-chat:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 20px rgba(234, 179, 84, 0.2);
-    color: var(--gold-light);
-  }
-
   /* Chat Modal Styling */
   #chatModal {
     display: none;
@@ -389,7 +360,6 @@ section {
     color: var(--gold-light);
   }
 
-  /* Responsive Design */
   @media (max-width: 768px) {
     .nav-links { display: none; }
     .picker-container { flex-direction: column; }
@@ -481,7 +451,7 @@ section {
     <p class="section-subtitle text-center">The 108 Sacred Names of Lord Vishnumaya. Scroll to explore the divine attributes.</p>
     
     <div class="ashtotharam-grid" id="namesGrid">
-      </div>
+    </div>
   </div>
 </section>
 
@@ -517,14 +487,13 @@ section {
 </div>
 
 <script>
-  // --- 1. SCROLL REVEAL ANIMATIONS (The Phone/Apple Effect) ---
   function revealOnScroll() {
     var reveals = document.querySelectorAll('.reveal');
     var windowHeight = window.innerHeight;
     
     reveals.forEach(reveal => {
       var elementTop = reveal.getBoundingClientRect().top;
-      var elementVisible = 150; // trigger point
+      var elementVisible = 150;
       
       if (elementTop < windowHeight - elementVisible) {
         reveal.classList.add('active');
@@ -532,30 +501,24 @@ section {
     });
   }
   
-  // Trigger once on load, then on scroll
   window.addEventListener('scroll', revealOnScroll);
   revealOnScroll();
 
-  // --- 2. INTERACTIVE VERSE PICKER ---
   function openVerse(evt, verseName) {
-    // Hide all contents
     var contents = document.getElementsByClassName("verse-content");
     for (var i = 0; i < contents.length; i++) {
       contents[i].classList.remove("active");
     }
     
-    // Remove active class from all buttons
     var btns = document.getElementsByClassName("picker-btn");
     for (var i = 0; i < btns.length; i++) {
       btns[i].className = btns[i].className.replace(" active", "");
     }
     
-    // Show current tab, and add "active" to the button
     document.getElementById(verseName).classList.add("active");
     evt.currentTarget.className += " active";
   }
 
-  // --- 3. POPULATE 108 NAMES ---
   const namesGrid = document.getElementById('namesGrid');
   const sacredNames = [
     { s: "Om Vishnumayaya Namaha", m: "Salutations to Lord Vishnumaya" },
@@ -679,7 +642,6 @@ section {
     namesGrid.appendChild(card);
   });
 
-  // --- 4. CHAT MODAL LOGIC ---
   const chatFab = document.getElementById("chatFab");
   const chatModal = document.getElementById("chatModal");
   const closeChatModal = document.getElementById("closeChatModal");

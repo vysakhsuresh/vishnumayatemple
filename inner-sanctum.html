@@ -8,6 +8,10 @@
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Noto+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 <style>
+
+/* Add this to your :root or body */
+
+
   :root {
     --bg-color: #0a0702;
     --gold-light: #FFF6CF;
@@ -244,6 +248,32 @@
     overflow: hidden;
     box-shadow: 0 20px 40px rgba(0,0,0,0.5);
   }
+  
+  /* Verse Range Badge Styling */
+.verse-range-badge {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  font-size: 0.7rem;
+  font-family: 'Noto Sans', sans-serif;
+  color: var(--gold-dark);
+  border: 1px solid rgba(234, 179, 84, 0.2);
+  padding: 2px 8px;
+  border-radius: 12px;
+  letter-spacing: 1px;
+  background: rgba(10, 7, 2, 0.4);
+  transition: 0.3s;
+}
+
+.chapter-card:hover .verse-range-badge {
+  border-color: var(--gold-mid);
+  color: var(--gold-mid);
+  background: rgba(234, 179, 84, 0.1);
+}
+
+.chapter-card {
+  position: relative; /* Required for the absolute badge to work */
+}
 
   .picker-nav {
     width: 30%;
@@ -528,10 +558,9 @@
 </section>
 
 
-<section id="sahasranamam">
-  <div class="reveal">
-    <h2 class="section-title text-center">Sri Vishnumaya Sahasranamam</h2>
-    <p class="section-subtitle text-center">The 1008 Sacred Names organized into nine phases of spiritual evolution.</p>
+<section id="sahasranamam" class="reveal"> <div class="text-center">
+    <h2 class="section-title">Sri Vishnumaya Sahasranamam</h2>
+    <p class="section-subtitle">1008 Sacred Names organized into nine gateways of cosmic power.</p>
     
     <div class="chapter-grid" id="chapterGrid">
        </div>
@@ -539,14 +568,20 @@
 </section>
 
 
-<div id="sahasraModal" style="display: none; position: fixed; z-index: 10001; left: 0; top: 0; width: 100%; height: 100%; background: rgba(10, 7, 2, 0.98); backdrop-filter: blur(15px); overflow-y: auto; padding: 100px 5%;">
-  <span onclick="closeSahasra()" style="position: fixed; top: 30px; right: 40px; font-size: 3rem; color: var(--gold-mid); cursor: pointer; z-index: 10002;">&times;</span>
-  <div class="text-center" style="margin-bottom: 50px;">
-    <h2 id="modalTitle" class="section-title"></h2>
-    <p id="modalPhase" class="cinzel" style="color: var(--gold-dark); letter-spacing: 3px;"></p>
+<div id="sahasraModal" style="display: none; position: fixed; z-index: 10001; left: 0; top: 0; width: 100%; height: 100%; background: var(--bg-color); overflow-y: auto;">
+  <div style="position: sticky; top: 0; background: rgba(10,7,2,0.95); padding: 20px; z-index: 10; border-bottom: 1px solid rgba(234, 179, 84, 0.2); display: flex; justify-content: space-between; align-items: center; backdrop-filter: blur(10px);">
+    <div style="text-align: left;">
+        <h2 id="modalTitle" class="cinzel" style="color: var(--gold-mid); margin: 0; font-size: 1.5rem;"></h2>
+        <p id="modalPhase" class="cinzel" style="color: var(--gold-dark); font-size: 0.8rem; letter-spacing: 2px; margin: 0;"></p>
+    </div>
+    <button onclick="closeSahasra()" style="background: rgba(234, 179, 84, 0.1); border: 1px solid var(--gold-mid); color: var(--gold-mid); padding: 10px 20px; border-radius: 5px; cursor: pointer; font-family: 'Cinzel';">
+        <i class="fas fa-arrow-left"></i> BACK TO CHAPTERS
+    </button>
   </div>
-  <div class="ashtotharam-grid" id="sahasraDisplay">
-     </div>
+
+  <div style="padding: 40px 10%;">
+    <div class="ashtotharam-grid" id="sahasraDisplay" style="gap: 30px;"> </div>
+  </div>
 </div>
 
 
@@ -1794,40 +1829,76 @@
   ];
 
   // 5. RENDER CHAPTER CARDS
+// 5. RENDER CHAPTER CARDS (CLEANER ZEN LAYOUT)
   const chapterGrid = document.getElementById('chapterGrid');
+  let runningTotal = 0; 
+
   sahasraPhases.forEach((phase, i) => {
     let card = document.createElement('div');
     card.className = 'chapter-card';
     card.onclick = () => openSahasra(i);
-    card.innerHTML = `<div class="chapter-name">${phase.title}</div><div class="chapter-desc">Phase ${i+1}: ${phase.names.length} Sacred Names</div>`;
+    
+    const startVerse = runningTotal + 1;
+    const endVerse = runningTotal + phase.names.length;
+    runningTotal += phase.names.length;
+
+    card.innerHTML = `
+      <div class="verse-range-badge">${startVerse} — ${endVerse}</div>
+      <div class="chapter-name" style="margin-top: 10px;">${phase.title}</div>
+      <div class="chapter-desc" style="color: var(--gold-dark); font-weight: bold; margin-bottom: 8px; font-size: 0.8rem; letter-spacing: 1px;">
+        PHASE 0${i+1}
+      </div>
+      <div class="chapter-desc">${phase.desc}</div>
+    `;
     chapterGrid.appendChild(card);
   });
 
   // 6. MODAL DISPLAY LOGIC
-function openSahasra(idx) {
+// 6. MODAL DISPLAY LOGIC (FIXED SEQUENTIAL NUMBERING)
+  function openSahasra(idx) {
     const modal = document.getElementById("sahasraModal");
-    const modalContent = modal.querySelector('.modal-content'); // Select the scrolling part
     const display = document.getElementById("sahasraDisplay");
-    let globalStartNum = 1;
-    for (let i = 0; i < idx; i++) { globalStartNum += sahasraPhases[i].names.length; }
-    document.getElementById("modalTitle").innerText = sahasraPhases[idx].title;
-    document.getElementById("modalPhase").innerText = `Phase ${idx + 1}`;
-    display.innerHTML = "";
-    sahasraPhases[idx].names.forEach((nameObj, i) => {
-      display.innerHTML += `<div class="name-card"><div class="name-number">NAMA ${globalStartNum + i}</div><div class="name-sanskrit cinzel">${nameObj.s}</div><div class="name-meaning">${nameObj.m}</div></div>`;
-    });
-modal.style.display = "block";
-    document.body.style.overflow = "hidden"; // Stops main page from moving
+    const phaseData = sahasraPhases[idx];
     
-    // FORCE SCROLL TO TOP ON LOAD
-    modalContent.scrollTop = 0; 
-}
+    // Set Header Text
+    document.getElementById("modalTitle").innerText = phaseData.title;
+    document.getElementById("modalPhase").innerText = `PHASE ${idx + 1}`;
+    
+    // Clear previous content
+    display.innerHTML = ""; 
+    
+    // FIXED: Calculate the exact starting number based on previous chapters' lengths
+    let countBefore = 0;
+    for (let j = 0; j < idx; j++) {
+      countBefore += sahasraPhases[j].names.length;
+    }
+    
+    // Render the cards
+    phaseData.names.forEach((data, index) => {
+      let card = document.createElement('div');
+      card.className = 'name-card';
+      
+      // The number is now the sum of previous names + current index + 1
+      let nameNumber = countBefore + index + 1; 
+      
+      card.innerHTML = `
+        <div class="name-number">NAMA ${nameNumber}</div>
+        <div class="name-sanskrit cinzel">${data.s}</div>
+        <div class="name-meaning">${data.m}</div>
+      `;
+      display.appendChild(card);
+    });
+    
+    // Show Modal
+    modal.style.display = "block";
+    document.body.style.overflow = "hidden"; 
+    modal.scrollTop = 0;
+  }
 
   function closeSahasra() {
     document.getElementById("sahasraModal").style.display = "none";
-    document.body.style.overflow = "auto"; // Re-enables scrolling on the main page
+    document.body.style.overflow = "auto";
   }
-
   // 7. CHAT MODAL LOGIC
   const chatFab = document.getElementById("chatFab");
   const chatModal = document.getElementById("chatModal");
@@ -1846,6 +1917,15 @@ modal.style.display = "block";
       chatModal.style.display = "none";
     }
   };
+  
+  
+  // 4. IMPROVED FAB NAVIGATION
+  // Instead of index.html, use #sanctum to keep them on the page if they are already in the sanctum
+  const homeFab = document.querySelector('.fab-home');
+  homeFab.setAttribute('href', '#sanctum');
+
+  // Re-init Reveal logic to include the new Sahasranamam section
+  window.addEventListener('scroll', revealOnScroll);
 </script>
 
 </body>

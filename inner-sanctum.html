@@ -469,7 +469,7 @@
     .picker-btn.active { border-left: none; border-bottom: 4px solid var(--gold-mid); }
     .picker-content-area { width: 100%; padding: 30px 20px; }
     .section-title { font-size: 2.2rem; }
-  }
+  }	
 </style>
 </head>
 <body>
@@ -488,6 +488,21 @@
   <div class="reveal reveal-scale">
     <div style="font-size: 4rem; color: var(--gold-mid); margin-bottom: 20px;">ॐ</div>
     <h1 class="section-title">The Inner Sanctum</h1>
+
+			<div id="presenceCounter" style="margin-top: 15px; display: flex; align-items: center; justify-content: center; gap: 10px; opacity: 0; transition: opacity 1s ease;">
+			  <span style="width: 8px; height: 8px; background: #25D366; border-radius: 50%; box-shadow: 0 0 10px #25D366; animation: pulse 2s infinite;"></span>
+			  <span id="global-seeker-count" class="cinzel" style="color: var(--gold-mid); font-size: 1.1rem; letter-spacing: 2px;">0</span>
+			  <span class="cinzel" style="color: var(--text-muted); font-size: 0.9rem; letter-spacing: 1px;">Souls in Meditation</span>
+			</div>
+			
+			<style>
+			@keyframes pulse {
+			  0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7); }
+			  70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(37, 211, 102, 0); }
+			  100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); }
+			}
+			</style>
+	  
     <p class="section-subtitle">
       You have crossed the threshold. Feel the resonance of the divine presence. 
       Lord Vishnumaya, the embodiment of cosmic magic and martial grace, resides within the silence of your devotion.
@@ -1922,6 +1937,67 @@
 
   // Re-init Reveal logic to include the new Sahasranamam section
   window.addEventListener('scroll', revealOnScroll);
+</script>
+
+
+<script type="module">
+  // Using ESM imports for direct browser usage
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js";
+  import { getDatabase, ref, onValue, push, onDisconnect, set, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-database.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyAypg9Eb227oILx8tH6g0Ym-FjDRlChio0",
+    authDomain: "vishnumaya-temple-ae56c.firebaseapp.com",
+    databaseURL: "https://vishnumaya-temple-ae56c-default-rtdb.firebaseio.com",
+    projectId: "vishnumaya-temple-ae56c",
+    storageBucket: "vishnumaya-temple-ae56c.firebasestorage.app",
+    messagingSenderId: "511118784629",
+    appId: "1:511118784629:web:9eff0645016a4d2276203c",
+    measurementId: "G-0VJ6D2QXJ4"
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const db = getDatabase(app);
+
+  // 1. Setup Presence References
+  const sessionsRef = ref(db, "global_presence/sessions");
+  const connectedRef = ref(db, ".info/connected");
+
+  // 2. Handle Connection
+  onValue(connectedRef, (snap) => {
+    if (snap.val() === true) {
+      // Create a unique temporary session for this visitor
+      const mySessionRef = push(sessionsRef);
+      
+      // Determine current language from URL (supports your multi-lang routing)
+      const currentPath = window.location.pathname;
+      const lang = currentPath.split('/')[1] || 'en';
+
+      set(mySessionRef, {
+        lang: lang,
+        last_active: serverTimestamp()
+      });
+
+      // Automatic cleanup: if user closes tab, remove them from count
+      onDisconnect(mySessionRef).remove();
+      
+      // Reveal the counter smoothly
+      document.getElementById('presenceCounter').style.opacity = "1";
+    }
+  });
+
+  // 3. Listen for Global Total
+  onValue(sessionsRef, (snapshot) => {
+    const sessions = snapshot.val();
+    const count = sessions ? Object.keys(sessions).length : 0;
+    
+    // UI Update (Number only, text is handled by your HTML/Lang engine)
+    const counterDisplay = document.getElementById('global-seeker-count');
+    if (counterDisplay) {
+        counterDisplay.innerText = count;
+    }
+  });
 </script>
 
 </body>

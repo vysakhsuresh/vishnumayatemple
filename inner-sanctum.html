@@ -587,17 +587,18 @@
 
 
 <footer>
-	<div id="presenceContainer" style="margin-bottom: 25px; text-align: center; opacity: 0; transition: opacity 1s ease;">
-    <div style="display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 8px;">
-      <span style="width: 7px; height: 7px; background: #25D366; border-radius: 50%; box-shadow: 0 0 8px #25D366; animation: pulse 2s infinite;"></span>
-      <span id="global-seeker-count" class="cinzel" style="color: var(--gold-mid); font-size: 1rem; letter-spacing: 2px;">0</span>
-      <span class="cinzel" style="color: var(--gold-light); font-size: 0.8rem; letter-spacing: 1px; opacity: 0.8;">Souls in Meditation</span>
+   <div id="presenceContainer" style="margin-bottom: 30px; text-align: center; opacity: 0; transition: opacity 1.5s ease;">
+    
+    <div style="display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 10px;">
+      <span style="width: 8px; height: 8px; background: #25D366; border-radius: 50%; box-shadow: 0 0 12px #25D366; animation: pulse 2s infinite;"></span>
+      <span id="global-seeker-count" class="cinzel" style="color: var(--gold-mid); font-size: 1.1rem; letter-spacing: 2px; font-weight: 600;">0</span>
+      <span class="cinzel" style="color: var(--gold-light); font-size: 0.85rem; letter-spacing: 1px; opacity: 0.9;">Souls in Meditation</span>
     </div>
     
-    <div style="display: flex; align-items: center; justify-content: center; gap: 8px;">
-      <i class="fas fa-eye" style="color: var(--gold-dark); font-size: 0.6rem;"></i>
-      <span id="lifetime-visitor-count" class="cinzel" style="color: var(--gold-dark); font-size: 0.75rem; letter-spacing: 1px;">0</span>
-      <span class="cinzel" style="color: var(--text-muted); font-size: 0.65rem; letter-spacing: 1px;">Lifetime Pilgrims</span>
+    <div style="display: flex; align-items: center; justify-content: center; gap: 8px; padding: 5px 15px; background: rgba(234, 179, 84, 0.03); border-radius: 20px; width: fit-content; margin: 0 auto; border: 1px solid rgba(234, 179, 84, 0.05);">
+      <i class="fas fa-dharmachakra" style="color: var(--gold-dark); font-size: 0.7rem; animation: rotate 10s linear infinite;"></i>
+      <span id="lifetime-visitor-count" class="cinzel" style="color: var(--gold-dark); font-size: 0.85rem; letter-spacing: 1.5px;">0</span>
+      <span class="cinzel" style="color: var(--text-muted); font-size: 0.7rem; letter-spacing: 1px; text-transform: uppercase;">Lifetime Pilgrims</span>
     </div>
   </div>
   <p>May the Grace of the Lord Vishnumaya protect and guide you.</p>
@@ -608,8 +609,12 @@
 <style>
 @keyframes pulse {
   0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7); }
-  70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(37, 211, 102, 0); }
+  70% { transform: scale(1); box-shadow: 0 0 0 8px rgba(37, 211, 102, 0); }
   100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); }
+}
+@keyframes rotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }
 </style>
 
@@ -1946,7 +1951,6 @@
   window.addEventListener('scroll', revealOnScroll);
 </script>
 
-
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js";
   import { getDatabase, ref, onValue, push, onDisconnect, set, serverTimestamp, runTransaction } 
@@ -1963,40 +1967,52 @@
     measurementId: "G-0VJ6D2QXJ4"
   };
 
+  // Initialize
   const app = initializeApp(firebaseConfig);
   const db = getDatabase(app);
 
+  // References
   const sessionsRef = ref(db, "global_presence/sessions");
   const lifetimeRef = ref(db, "global_presence/lifetime_stats/total_visitors");
   const connectedRef = ref(db, ".info/connected");
 
   onValue(connectedRef, (snap) => {
     if (snap.val() === true) {
-      // 1. Live Presence (Temporary)
+      // 1. Join the Live Presence
       const mySessionRef = push(sessionsRef);
-      set(mySessionRef, { active: true });
+      set(mySessionRef, { active: true, timestamp: serverTimestamp() });
+      
+      // Remove from live count when tab closes
       onDisconnect(mySessionRef).remove();
 
-      // 2. Lifetime Count (Permanent)
-      if (!sessionStorage.getItem('temple_visited')) {
-        runTransaction(lifetimeRef, (current) => {
-          return (current || 0) + 1;
+      // 2. Increment Lifetime Pilgrims
+      // We use localStorage so a refresh doesn't count as a "new" person
+      // But a new visit (closing browser and coming back later) will.
+      if (!sessionStorage.getItem('temple_pilgrim_verified')) {
+        runTransaction(lifetimeRef, (currentValue) => {
+          return (currentValue || 0) + 1;
         });
-        sessionStorage.setItem('temple_visited', 'true');
+        // Mark as counted for this session
+        sessionStorage.setItem('temple_pilgrim_verified', 'true');
       }
-      
+
+      // Show the container smoothly
       document.getElementById('presenceContainer').style.opacity = "1";
     }
   });
 
-  // UI Listeners
+  // Listener: Update Live Souls Count
   onValue(sessionsRef, (snapshot) => {
-    const count = snapshot.val() ? Object.keys(snapshot.val()).length : 0;
+    const sessions = snapshot.val();
+    const count = sessions ? Object.keys(sessions).length : 0;
+    // We display count + a sacred base if desired (e.g., 10), or just raw count
     document.getElementById('global-seeker-count').innerText = count;
   });
 
+  // Listener: Update Lifetime Pilgrims Count
   onValue(lifetimeRef, (snapshot) => {
     const total = snapshot.val() || 0;
+    // Format number with commas (e.g., 1,234)
     document.getElementById('lifetime-visitor-count').innerText = total.toLocaleString();
   });
 </script>

@@ -488,21 +488,7 @@
   <div class="reveal reveal-scale">
     <div style="font-size: 4rem; color: var(--gold-mid); margin-bottom: 20px;">ॐ</div>
     <h1 class="section-title">The Inner Sanctum</h1>
-
-			<div id="presenceCounter" style="margin-top: 15px; display: flex; align-items: center; justify-content: center; gap: 10px; opacity: 0; transition: opacity 1s ease;">
-			  <span style="width: 8px; height: 8px; background: #25D366; border-radius: 50%; box-shadow: 0 0 10px #25D366; animation: pulse 2s infinite;"></span>
-			  <span id="global-seeker-count" class="cinzel" style="color: var(--gold-mid); font-size: 1.1rem; letter-spacing: 2px;">0</span>
-			  <span class="cinzel" style="color: var(--text-muted); font-size: 0.9rem; letter-spacing: 1px;">Souls in Meditation</span>
-			</div>
-			
-			<style>
-			@keyframes pulse {
-			  0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7); }
-			  70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(37, 211, 102, 0); }
-			  100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); }
-			}
-			</style>
-	  
+  
     <p class="section-subtitle">
       You have crossed the threshold. Feel the resonance of the divine presence. 
       Lord Vishnumaya, the embodiment of cosmic magic and martial grace, resides within the silence of your devotion.
@@ -601,10 +587,31 @@
 
 
 <footer>
+	<div id="presenceContainer" style="margin-bottom: 25px; text-align: center; opacity: 0; transition: opacity 1s ease;">
+    <div style="display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 8px;">
+      <span style="width: 7px; height: 7px; background: #25D366; border-radius: 50%; box-shadow: 0 0 8px #25D366; animation: pulse 2s infinite;"></span>
+      <span id="global-seeker-count" class="cinzel" style="color: var(--gold-mid); font-size: 1rem; letter-spacing: 2px;">0</span>
+      <span class="cinzel" style="color: var(--gold-light); font-size: 0.8rem; letter-spacing: 1px; opacity: 0.8;">Souls in Meditation</span>
+    </div>
+    
+    <div style="display: flex; align-items: center; justify-content: center; gap: 8px;">
+      <i class="fas fa-eye" style="color: var(--gold-dark); font-size: 0.6rem;"></i>
+      <span id="lifetime-visitor-count" class="cinzel" style="color: var(--gold-dark); font-size: 0.75rem; letter-spacing: 1px;">0</span>
+      <span class="cinzel" style="color: var(--text-muted); font-size: 0.65rem; letter-spacing: 1px;">Lifetime Pilgrims</span>
+    </div>
+  </div>
   <p>May the Grace of the Lord Vishnumaya protect and guide you.</p>
   <p style="margin-top: 10px; font-size: 0.8rem; color: #555;">Vishnumaya Divine Space</p>
   <p style="margin-top: 10px; font-size: 0.8rem; color: #555;">© 2025 - 2026 Layerbit . All rights reserved.</p>
 </footer>
+
+<style>
+@keyframes pulse {
+  0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7); }
+  70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(37, 211, 102, 0); }
+  100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); }
+}
+</style>
 
 <a href="index.html" class="fab-home" title="Return Home">
   <i class="fas fa-home"></i>
@@ -1941,9 +1948,9 @@
 
 
 <script type="module">
-  // Using ESM imports for direct browser usage
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js";
-  import { getDatabase, ref, onValue, push, onDisconnect, set, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-database.js";
+  import { getDatabase, ref, onValue, push, onDisconnect, set, serverTimestamp, runTransaction } 
+  from "https://www.gstatic.com/firebasejs/10.0.0/firebase-database.js";
 
   const firebaseConfig = {
     apiKey: "AIzaSyAypg9Eb227oILx8tH6g0Ym-FjDRlChio0",
@@ -1956,47 +1963,41 @@
     measurementId: "G-0VJ6D2QXJ4"
   };
 
-  // Initialize Firebase
   const app = initializeApp(firebaseConfig);
   const db = getDatabase(app);
 
-  // 1. Setup Presence References
   const sessionsRef = ref(db, "global_presence/sessions");
+  const lifetimeRef = ref(db, "global_presence/lifetime_stats/total_visitors");
   const connectedRef = ref(db, ".info/connected");
 
-  // 2. Handle Connection
   onValue(connectedRef, (snap) => {
     if (snap.val() === true) {
-      // Create a unique temporary session for this visitor
+      // 1. Live Presence (Temporary)
       const mySessionRef = push(sessionsRef);
-      
-      // Determine current language from URL (supports your multi-lang routing)
-      const currentPath = window.location.pathname;
-      const lang = currentPath.split('/')[1] || 'en';
-
-      set(mySessionRef, {
-        lang: lang,
-        last_active: serverTimestamp()
-      });
-
-      // Automatic cleanup: if user closes tab, remove them from count
+      set(mySessionRef, { active: true });
       onDisconnect(mySessionRef).remove();
+
+      // 2. Lifetime Count (Permanent)
+      if (!sessionStorage.getItem('temple_visited')) {
+        runTransaction(lifetimeRef, (current) => {
+          return (current || 0) + 1;
+        });
+        sessionStorage.setItem('temple_visited', 'true');
+      }
       
-      // Reveal the counter smoothly
-      document.getElementById('presenceCounter').style.opacity = "1";
+      document.getElementById('presenceContainer').style.opacity = "1";
     }
   });
 
-  // 3. Listen for Global Total
+  // UI Listeners
   onValue(sessionsRef, (snapshot) => {
-    const sessions = snapshot.val();
-    const count = sessions ? Object.keys(sessions).length : 0;
-    
-    // UI Update (Number only, text is handled by your HTML/Lang engine)
-    const counterDisplay = document.getElementById('global-seeker-count');
-    if (counterDisplay) {
-        counterDisplay.innerText = count;
-    }
+    const count = snapshot.val() ? Object.keys(snapshot.val()).length : 0;
+    document.getElementById('global-seeker-count').innerText = count;
+  });
+
+  onValue(lifetimeRef, (snapshot) => {
+    const total = snapshot.val() || 0;
+    document.getElementById('lifetime-visitor-count').innerText = total.toLocaleString();
   });
 </script>
 

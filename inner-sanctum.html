@@ -1967,52 +1967,44 @@
     measurementId: "G-0VJ6D2QXJ4"
   };
 
-  // Initialize
   const app = initializeApp(firebaseConfig);
   const db = getDatabase(app);
 
-  // References
   const sessionsRef = ref(db, "global_presence/sessions");
   const lifetimeRef = ref(db, "global_presence/lifetime_stats/total_visitors");
   const connectedRef = ref(db, ".info/connected");
 
   onValue(connectedRef, (snap) => {
     if (snap.val() === true) {
-      // 1. Join the Live Presence
+      // 1. Join Live Presence
       const mySessionRef = push(sessionsRef);
       set(mySessionRef, { active: true, timestamp: serverTimestamp() });
-      
-      // Remove from live count when tab closes
       onDisconnect(mySessionRef).remove();
 
-      // 2. Increment Lifetime Pilgrims
-      // We use localStorage so a refresh doesn't count as a "new" person
-      // But a new visit (closing browser and coming back later) will.
-      if (!sessionStorage.getItem('temple_pilgrim_verified')) {
-        runTransaction(lifetimeRef, (currentValue) => {
-          return (currentValue || 0) + 1;
-        });
-        // Mark as counted for this session
-        sessionStorage.setItem('temple_pilgrim_verified', 'true');
-      }
+      // 2. INCREMENT LIFETIME IMMEDIATELY ON EVERY LOAD
+      // Removed the 'if (!sessionStorage)' check so it fires every time
+      runTransaction(lifetimeRef, (currentValue) => {
+        return (currentValue || 0) + 1;
+      }).then(() => {
+          console.log("Pilgrimage recorded.");
+      }).catch((err) => {
+          console.error("Connection lag:", err);
+      });
 
-      // Show the container smoothly
       document.getElementById('presenceContainer').style.opacity = "1";
     }
   });
 
-  // Listener: Update Live Souls Count
+  // Listener for Live Count
   onValue(sessionsRef, (snapshot) => {
     const sessions = snapshot.val();
     const count = sessions ? Object.keys(sessions).length : 0;
-    // We display count + a sacred base if desired (e.g., 10), or just raw count
     document.getElementById('global-seeker-count').innerText = count;
   });
 
-  // Listener: Update Lifetime Pilgrims Count
+  // Listener for Lifetime Count
   onValue(lifetimeRef, (snapshot) => {
     const total = snapshot.val() || 0;
-    // Format number with commas (e.g., 1,234)
     document.getElementById('lifetime-visitor-count').innerText = total.toLocaleString();
   });
 </script>

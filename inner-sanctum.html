@@ -589,11 +589,11 @@
 <footer>
    <div id="presenceContainer" style="margin-bottom: 30px; text-align: center; opacity: 0; transition: opacity 1.5s ease;">
     
-    <div style="display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 10px;">
-      <span style="width: 8px; height: 8px; background: #25D366; border-radius: 50%; box-shadow: 0 0 12px #25D366; animation: pulse 2s infinite;"></span>
-      <span id="global-seeker-count" class="cinzel" style="color: var(--gold-mid); font-size: 1.1rem; letter-spacing: 2px; font-weight: 600;">0</span>
-      <span class="cinzel" style="color: var(--gold-light); font-size: 0.85rem; letter-spacing: 1px; opacity: 0.9;">Souls in Meditation</span>
-    </div>
+	<div style="display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 10px;">
+	  <span style="width: 8px; height: 8px; background: #25D366; border-radius: 50%; box-shadow: 0 0 12px #25D366; animation: pulse 2s infinite;"></span>
+	  <span id="global-seeker-count" class="cinzel" style="color: var(--gold-mid); font-size: 1.1rem; letter-spacing: 2px; font-weight: 600;">0</span>
+	  <span id="soul-text" class="cinzel" style="color: var(--gold-light); font-size: 0.85rem; letter-spacing: 1px; opacity: 0.9;">Souls in Meditation</span>
+	</div>
     
     <div style="display: flex; align-items: center; justify-content: center; gap: 8px; padding: 5px 15px; background: rgba(234, 179, 84, 0.03); border-radius: 20px; width: fit-content; margin: 0 auto; border: 1px solid rgba(234, 179, 84, 0.05);">
       <i class="fas fa-dharmachakra" style="color: var(--gold-dark); font-size: 0.7rem; animation: rotate 10s linear infinite;"></i>
@@ -1995,12 +1995,22 @@
     }
   });
 
-  // Listener for Live Count
-  onValue(sessionsRef, (snapshot) => {
-    const sessions = snapshot.val();
-    const count = sessions ? Object.keys(sessions).length : 0;
-    document.getElementById('global-seeker-count').innerText = count;
-  });
+// Updated Listener for Live Souls Count with Grammar Logic
+onValue(sessionsRef, (snapshot) => {
+  const sessions = snapshot.val();
+  const count = sessions ? Object.keys(sessions).length : 0;
+  
+  // Update the Number
+  document.getElementById('global-seeker-count').innerText = count;
+
+  // Update the Grammar (Singular vs Plural)
+  const soulLabel = document.getElementById('soul-text');
+  if (count === 1) {
+    soulLabel.innerText = "Soul in Meditation";
+  } else {
+    soulLabel.innerText = "Souls in Meditation";
+  }
+});
 
   // Listener for Lifetime Count
   onValue(lifetimeRef, (snapshot) => {

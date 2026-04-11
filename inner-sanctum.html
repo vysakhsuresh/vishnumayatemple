@@ -41,6 +41,28 @@
     border: 1px solid rgba(234, 179, 84, 0.1);
   }
 
+/* Fix for the 100-150 names inside the Sahasranamam chapters */
+#sahasraDisplay {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 25px; /* This creates the space between the cards */
+    padding-bottom: 50px;
+}
+
+/* Ensures cards look consistent inside the modal */
+#sahasraDisplay .name-card {
+    height: 100%;
+    margin-bottom: 0; 
+}
+
+@media (max-width: 600px) {
+    #sahasraDisplay {
+        grid-template-columns: 1fr; /* Single column on small screens */
+        gap: 15px;
+    }
+}
+
+
   /* Modal Content Scroll Fix */
   .modal-content {
     background-color: var(--bg-color);

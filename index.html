@@ -185,18 +185,32 @@
     white-space: nowrap;
   }
 
-  /* BULLETPROOF FONT ASSIGNMENTS */
-  .lang-ml .temple-title, .lang-ml .sacred-tagline, .lang-ml .divine-btn { 
+/* BULLETPROOF FONT ASSIGNMENTS */
+  
+  /* Malayalam */
+  .lang-ml .temple-title, .lang-ml .divine-btn { 
       font-family: 'Noto Serif Malayalam', serif; 
       font-weight: 600; 
   }
+  .lang-ml .sacred-tagline {
+      font-family: 'Noto Serif Malayalam', serif; 
+      font-weight: 400; /* Corrected to normal weight */
+  }
+
+  /* Hindi */
   .lang-hi .temple-title, .lang-hi .sacred-tagline, .lang-hi .divine-btn { 
       font-family: 'Tiro Devanagari Hindi', serif; 
       font-weight: 400; 
   }
-  .lang-ta .temple-title, .lang-ta .sacred-tagline, .lang-ta .divine-btn { 
+
+  /* Tamil */
+  .lang-ta .temple-title, .lang-ta .divine-btn { 
       font-family: 'Noto Sans Tamil', sans-serif; 
       font-weight: 600; 
+  }
+  .lang-ta .sacred-tagline {
+      font-family: 'Noto Sans Tamil', sans-serif; 
+      font-weight: 400; /* Corrected to normal weight */
   }
 
   /* Specific handling for titles to allow wrapping on mobile */

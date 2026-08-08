@@ -172,12 +172,17 @@
     /* --- PURE GOLD TRANSITION --- */
     background: linear-gradient(to right, #FFD700 0%, #FFE44D 25%, #FFD700 50%, #FFE44D 75%, #FFD700 100%);
     background-size: 200% auto;
+    
+    /* Bulletproof text clipping */
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
+    -webkit-text-fill-color: transparent;
+    
     animation: titleShine 8s linear infinite; 
     
-    text-shadow: 2px 4px 10px rgba(0,0,0,0.9), 0 0 15px rgba(255, 215, 0, 0.5);
+    /* THE FIX: Replaced text-shadow with filter to prevent dark bleed bugs */
+    filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.9)) drop-shadow(0 0 12px rgba(255, 215, 0, 0.4));
     
     line-height: 1.1; 
     padding: 0.15em 0; 
@@ -561,4 +566,3 @@
 
 </body>
 </html>
-

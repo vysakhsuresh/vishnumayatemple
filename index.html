@@ -169,20 +169,29 @@
     position: relative;
     z-index: 10;
     
-    /* --- DIVINE EMBER & PURE GOLD TRANSITION --- */
-    background: linear-gradient(to right, #D4AF37 0%, #FF8C00 20%, #FFDF00 40%, #FFFFFF 50%, #FFDF00 60%, #FF8C00 80%, #D4AF37 100%);
+    /* --- ANTIQUE FOREST GOLD TRANSITION --- */
+    background: linear-gradient(
+      to right, 
+      #6A4E23 0%,   
+      #A8823A 20%,  
+      #E2C77D 40%,  
+      #F9EAB8 50%,  
+      #E2C77D 60%,  
+      #A8823A 80%,  
+      #6A4E23 100%  
+    );
     background-size: 200% auto;
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
-    animation: titleShine 5s linear infinite; 
+    animation: titleShine 8s linear infinite; 
     
-    /* Glowing aura */
-    text-shadow: 3px 3px 10px rgba(0,0,0,0.9), 0 0 25px rgba(255, 215, 0, 0.6), 0 0 10px rgba(255, 255, 255, 0.4);
+    /* Deep 3D grounding shadow - No neon glow */
+    text-shadow: 2px 4px 12px rgba(0,0,0,0.9), 0px 0px 20px rgba(0,0,0,0.6);
     
     line-height: 1.1; 
     padding: 0.15em 0; 
-    margin-bottom: 5px; /* Clean, safe space below the title */
+    margin-bottom: 5px; 
     white-space: nowrap;
   }
 
@@ -401,7 +410,6 @@
   const bodyEl = document.body;
   const langBtns = document.querySelectorAll(".lang-btn");
   
-  // Create a timer variable to clear any stuck transitions
   let transitionTimer;
 
   function setLanguage(lang) {

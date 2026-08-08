@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Vishnumaya Temple — Divine Presence</title>
 <link rel="icon" href="assets/favicon.ico" type="image/x-icon">
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Noto+Sans+Devanagari:wght@400;500&family=Noto+Sans+Malayalam:wght@400;500&family=Noto+Sans+Tamil:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Noto+Serif+Malayalam:wght@400;600&family=Tiro+Devanagari+Hindi:ital@0;1&family=Noto+Sans+Tamil:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 <style>
   * {
@@ -29,7 +29,6 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    /* Changed 'center center' to 'center 15%' to shift the faces lower down the screen */
     background: url('assets/vishnumaya.jpg') no-repeat center 15%/cover;
     background-attachment: fixed;
   }
@@ -41,7 +40,6 @@
     left: 0;
     width: 100%;
     height: 100%;
-    /* Darkens edges, keeps center slightly brighter */
     background: radial-gradient(circle at 50% 50%, rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0.5) 60%, rgba(0, 0, 0, 0.8) 100%);
     z-index: 1;
   }
@@ -78,7 +76,7 @@
   .particle:nth-child(4) { left: 75%; width: 6px; height: 6px; animation-duration: 11s; animation-delay: 1s; }
   .particle:nth-child(5) { left: 85%; width: 3px; height: 3px; animation-duration: 14s; animation-delay: 3s; }
 
-  /* TOP HEADER BAR (Matches Image exactly) */
+  /* TOP HEADER BAR */
   .top-header-area {
     position: relative;
     z-index: 20;
@@ -108,7 +106,7 @@
 
   .om-divider .om-symbol {
     font-size: 32px;
-    font-family: 'Noto Sans Devanagari', serif;
+    font-family: 'Tiro Devanagari Hindi', serif;
     background: linear-gradient(to bottom, #FFE8A1 0%, #D4AF37 50%, #AA7C11 100%);
     -webkit-background-clip: text;
     background-clip: text;
@@ -116,7 +114,7 @@
     filter: drop-shadow(0px 2px 4px rgba(0,0,0,0.8));
   }
 
-  /* LANGUAGE BAR - Image Style */
+  /* LANGUAGE BAR */
   .lang-bar {
     position: absolute;
     right: 40px;
@@ -158,46 +156,76 @@
     text-align: center;
     width: 100%;
     padding: 0 20px;
-    margin-top: 40px; /* Space below header */
+    margin-top: 40px; 
   }
 
-  /* SHARP, PRO TITLE (Edges won't cut off due to clamp) */
+  /* SHARP, PRO TITLE */
   .temple-title {
     font-family: 'Cinzel', serif;
     font-size: clamp(2.2rem, 6vw, 4.5rem);
-    font-weight: 600; /* Slightly bolder to hold the gold color better */
+    font-weight: 600; 
     letter-spacing: clamp(2px, 1vw, 6px);
-    margin-bottom: 8px;
     text-transform: uppercase;
-    /* --- NEW BRIGHT GOLDEN GRADIENT --- */
-    background: linear-gradient(to bottom, #FFF8DC 0%, #FFD700 45%, #DAA520 100%);
+    position: relative;
+    z-index: 10;
+    
+    /* --- DIVINE EMBER & PURE GOLD TRANSITION --- */
+    background: linear-gradient(to right, #D4AF37 0%, #FF8C00 20%, #FFDF00 40%, #FFFFFF 50%, #FFDF00 60%, #FF8C00 80%, #D4AF37 100%);
+    background-size: 200% auto;
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
-    /* Added a golden glow to the shadow */
-    text-shadow: 2px 2px 8px rgba(0,0,0,0.9), 0 0 15px rgba(255, 215, 0, 0.3);
-    line-height: 1.2;
+    animation: titleShine 5s linear infinite; 
+    
+    /* Glowing aura */
+    text-shadow: 3px 3px 10px rgba(0,0,0,0.9), 0 0 25px rgba(255, 215, 0, 0.6), 0 0 10px rgba(255, 255, 255, 0.4);
+    
+    line-height: 1.1; 
+    padding: 0.15em 0; 
+    margin-bottom: 5px; /* Clean, safe space below the title */
     white-space: nowrap;
   }
 
-  /* Language-specific fonts */
-  .lang-ml .temple-title { font-family: 'Noto Sans Malayalam', serif; font-weight: 600; letter-spacing: 1px; white-space: normal;}
-  .lang-hi .temple-title { font-family: 'Noto Sans Devanagari', serif; font-weight: 600; letter-spacing: 1px; white-space: normal;}
-  .lang-ta .temple-title { font-family: 'Noto Sans Tamil', serif; font-weight: 600; letter-spacing: 1px; white-space: normal;}
+  /* BULLETPROOF FONT ASSIGNMENTS (Applies to Title, Tagline, AND Button) */
+  .lang-ml .temple-title, .lang-ml .sacred-tagline, .lang-ml .divine-btn { 
+      font-family: 'Noto Serif Malayalam', serif; 
+      font-weight: 600; 
+  }
+  .lang-hi .temple-title, .lang-hi .sacred-tagline, .lang-hi .divine-btn { 
+      font-family: 'Tiro Devanagari Hindi', serif; 
+      font-weight: 400; 
+  }
+  .lang-ta .temple-title, .lang-ta .sacred-tagline, .lang-ta .divine-btn { 
+      font-family: 'Noto Sans Tamil', sans-serif; 
+      font-weight: 600; 
+  }
+
+  /* Specific handling for titles to allow wrapping on mobile */
+  .lang-ml .temple-title, .lang-hi .temple-title, .lang-ta .temple-title { 
+      white-space: normal; 
+      letter-spacing: 1px;
+  }
+
+  /* Smooth Opacity Transitions attached via CSS, not JS inline styles */
+  #dynamicTitle, #dynamicTagline, #btnText {
+      transition: opacity 0.3s ease-in-out;
+  }
 
   /* TAGLINE */
   .sacred-tagline {
     font-family: 'Cinzel', serif;
     font-size: clamp(1rem, 2.5vw, 1.4rem);
     font-weight: 400;
-    color: #E8D3A2;
-    text-shadow: 1px 1px 4px rgba(0,0,0,0.9);
+    color: #FFFDE4; 
+    text-shadow: 2px 2px 8px rgba(0,0,0,1), 0 0 10px rgba(0,0,0,0.8);
     letter-spacing: 1px;
     max-width: 90%;
     margin: 0 auto;
+    position: relative; 
+    z-index: 20; 
   }
 
-  /* BOTTOM AREA (Button & Link) */
+  /* BOTTOM AREA */
   .bottom-area {
     position: relative;
     z-index: 15;
@@ -209,15 +237,15 @@
     padding-bottom: 30px;
   }
 
-  /* IMAGE-ACCURATE BUTTON */
+  /* BUTTON */
   .divine-btn {
     padding: 12px 40px;
     font-size: clamp(0.9rem, 2vw, 1.1rem);
     font-weight: 400;
     font-family: 'Cinzel', serif;
-    background: rgba(30, 20, 10, 0.75); /* Dark transparent fill */
-    border: 1px solid #C19A5B; /* Sharp gold border */
-    border-radius: 4px; /* Slight rounding like the image */
+    background: rgba(30, 20, 10, 0.75); 
+    border: 1px solid #C19A5B; 
+    border-radius: 4px; 
     color: #FCE19B;
     letter-spacing: 1.5px;
     cursor: pointer;
@@ -266,7 +294,7 @@
     .top-header-area { flex-direction: column; padding: 15px 20px; gap: 15px; }
     .om-divider { position: relative; left: auto; transform: none; }
     .lang-bar { position: relative; right: auto; width: 100%; justify-content: center; }
-    .temple-title { white-space: normal; line-height: 1.3; }
+    .temple-title { white-space: normal; line-height: 1.2; }
   }
 
   /* Animations */
@@ -276,7 +304,6 @@
     text-align: center;
     width: 100%;
     padding: 0 20px;
-    /* Reduced from 40px to 10px to pull the text higher up */
     margin-top: 10px; 
   }
   .bottom-area { animation-delay: 0.4s; }
@@ -284,6 +311,12 @@
   @keyframes elegantFadeIn {
     from { opacity: 0; transform: translateY(15px); }
     to { opacity: 1; transform: translateY(0); }
+  }
+  
+  @keyframes titleShine {
+    to {
+      background-position: 200% center; 
+    }
   }
 
 </style>
@@ -341,7 +374,7 @@
   const translations = {
     en: {
       title: "VISHNUMAYA",
-      tagline: "He is not worshipped, He is experienced",
+      tagline: "He is not just worshipped, He is experienced",
       button: "Enter the Divine Space"
     },
     ml: {
@@ -367,6 +400,9 @@
   const btnSpan = document.getElementById("btnText");
   const bodyEl = document.body;
   const langBtns = document.querySelectorAll(".lang-btn");
+  
+  // Create a timer variable to clear any stuck transitions
+  let transitionTimer;
 
   function setLanguage(lang) {
     if (!translations[lang]) return;
@@ -376,26 +412,31 @@
     // Update active button state
     langBtns.forEach(b => b.classList.remove('active'));
     document.querySelector(`[data-lang="${lang}"]`).classList.add('active');
-
-    bodyEl.className = '';
-    if (lang === 'ml') bodyEl.classList.add('lang-ml');
-    else if (lang === 'hi') bodyEl.classList.add('lang-hi');
-    else if (lang === 'ta') bodyEl.classList.add('lang-ta');
-    else bodyEl.classList.add('lang-en');
     
-    // Smooth text transition
+    // Wipe out the timer if user clicks extremely fast to prevent invisible text ghosting
+    clearTimeout(transitionTimer);
+    
+    // Smooth text transition (Fade out)
     titleEl.style.opacity = "0";
     taglineEl.style.opacity = "0";
+    btnSpan.style.opacity = "0";
     
-    setTimeout(() => {
+    // Wait for fade out, then swap text AND class at the exact same time
+    transitionTimer = setTimeout(() => {
+      bodyEl.className = '';
+      if (lang === 'ml') bodyEl.classList.add('lang-ml');
+      else if (lang === 'hi') bodyEl.classList.add('lang-hi');
+      else if (lang === 'ta') bodyEl.classList.add('lang-ta');
+      else bodyEl.classList.add('lang-en');
+
       titleEl.innerText = data.title;
       taglineEl.innerHTML = data.tagline;
       btnSpan.innerText = data.button;
       
-      titleEl.style.transition = "opacity 0.4s ease";
-      taglineEl.style.transition = "opacity 0.4s ease";
+      // Fade back in
       titleEl.style.opacity = "1";
       taglineEl.style.opacity = "1";
+      btnSpan.style.opacity = "1";
     }, 300);
   }
 
@@ -459,7 +500,7 @@
     }
     
     modalCard.innerHTML = `
-      <div style="font-size: 3rem; color: #D4AF37; margin-bottom: 15px;">ॐ</div>
+      <div style="font-size: 3rem; color: #D4AF37; margin-bottom: 15px; font-family: 'Tiro Devanagari Hindi', serif;">ॐ</div>
       <h2 style="color: #FFFDE4; font-size: 1.6rem; margin-bottom: 20px; font-weight: 500; letter-spacing: 1px;">${modalTitle}</h2>
       <p style="color: #D4C3A3; line-height: 1.6; font-size: 1rem; margin-bottom: 35px; font-family: inherit;">${modalMsg}</p>
       <button id="modalEnterDeepBtn" style="background: rgba(30,20,10,0.8); border: 1px solid #C19A5B; padding: 12px 30px; border-radius: 4px; color: #FCE19B; font-family: 'Cinzel', serif; font-size: 0.95rem; cursor: pointer; transition: all 0.3s;">${closeBtnText}</button>
